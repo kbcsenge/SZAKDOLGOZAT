@@ -3,6 +3,10 @@ import {AppComponent} from "./app.component";
 import {BrowserModule} from "@angular/platform-browser";
 import { provideFirebaseApp, getApp, initializeApp } from '@angular/fire/app';
 import { getFirestore, provideFirestore } from '@angular/fire/firestore';
+import {HomepageComponent} from "./homepage/homepage.component";
+import {GameComponent} from "./game/game.component";
+import {SettingsComponent} from "./settings/settings.component";
+
 
 const firebaseConfig = {
   apiKey: "AIzaSyDnve51xQ0a7GLLMdhsAv0i-6Y1oJj_Mcg",
@@ -15,7 +19,10 @@ const firebaseConfig = {
 };
 @NgModule({
   declarations:[
-    AppComponent
+    AppComponent,
+    HomepageComponent,
+    GameComponent,
+    SettingsComponent
   ],
   imports:[
     BrowserModule,
