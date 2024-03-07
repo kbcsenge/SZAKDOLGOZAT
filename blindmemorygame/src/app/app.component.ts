@@ -10,6 +10,6 @@ import {HomepageComponent} from "./homepage/homepage.component";
   styleUrl: './app.component.scss'
 })
 export class AppComponent {
-  title = 'blindmemmorygame';
+  title = 'blindmemorygame';
 
 }
