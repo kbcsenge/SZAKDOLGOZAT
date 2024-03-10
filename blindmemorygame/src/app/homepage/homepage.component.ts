@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import {Router} from "@angular/router";
-import {GameComponent} from "../game/game.component";
 
 @Component({
   selector: 'app-homepage',
@@ -22,5 +21,8 @@ export class HomepageComponent {
 
   gotohome(){
     this.router.navigate(['/']);
+  }
+  gotoresults(){
+    this.router.navigate(['/rankings']);
   }
 }

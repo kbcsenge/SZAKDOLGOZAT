@@ -1,1 +1,29 @@
+.game{
+  border: rgba(13, 35, 65, 0.3) 7px solid;
+  border-radius: 20px;
+  background: rgba(90, 90, 145, 0.4);
+  position: fixed;
+  top: 55%;
+  left: 30%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  color: white;
+  font-size: 50px;
+  padding: 10px 60px 10px 60px;
+}
 
+h1{
+  color: white;
+  font-size: 60px;
+  text-align: center;
+  margin-top: 0;
+  margin-bottom: 30px;
+}
+
+.data{
+  position: fixed;
+  top: 55%;
+  left: 70%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+}

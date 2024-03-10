@@ -6,6 +6,7 @@ import { getFirestore, provideFirestore } from '@angular/fire/firestore';
 import {HomepageComponent} from "./homepage/homepage.component";
 import {GameComponent} from "./game/game.component";
 import {SettingsComponent} from "./settings/settings.component";
+import {RangkingsComponent} from "./rangkings/rangkings.component";
 
 
 const firebaseConfig = {
@@ -22,7 +23,8 @@ const firebaseConfig = {
     AppComponent,
     HomepageComponent,
     GameComponent,
-    SettingsComponent
+    SettingsComponent,
+    RangkingsComponent
   ],
   imports:[
     BrowserModule,
