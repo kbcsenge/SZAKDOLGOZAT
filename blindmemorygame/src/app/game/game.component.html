@@ -2,14 +2,20 @@
   <img style="height: 100px; width: auto"src="./assets/icon.png" alt="icon" (click)="gotohome()">
   <h1 class="title">3x4-es játéktér</h1>
 </div>
-
 <div class="game">
-  <img style="width: 700px; height: 700px;"src="./assets/game.png" alt="game">
+  <table>
+    <tr *ngFor="let row of rows; let i = index">
+      <ng-container *ngFor="let card of row; let j = index">
+        <td class="card">
+          <img [src]="flipped[i][j] ? card : './assets/cards/flip.png'" (click)="selectCard(i, j)">
+        </td>
+      </ng-container>
+    </tr>
+  </table>
 </div>
-
 <div class="data">
-  <h1>Pontszám: 100</h1>
+  <h1>Pontszám: {{points}}</h1>
   <br>
   <br>
-  <h1>Hátralévő idő: 600s</h1>
+  <h1>Hátralévő idő: {{timer}}</h1>
 </div>

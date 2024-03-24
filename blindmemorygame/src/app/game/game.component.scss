@@ -9,7 +9,16 @@
   text-align: center;
   color: white;
   font-size: 50px;
-  padding: 10px 60px 10px 60px;
+  padding: 10px 10px 10px 10px;
+  margin-left: 1%;
+  margin-right: 5%;
+  max-height: 70%;
+  max-width: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+
 }
 
 .title{
@@ -25,11 +34,24 @@ h1{
   margin-bottom: 30px;
 }
 
-
 .data{
   position: fixed;
   top: 55%;
   left: 70%;
   transform: translate(-50%, -50%);
   text-align: center;
+  margin-left: 3%;
+}
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+.card img {
+  max-width: 40%;
+  max-height: 100%;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  box-sizing: border-box;
 }

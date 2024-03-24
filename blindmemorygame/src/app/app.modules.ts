@@ -7,6 +7,8 @@ import {HomepageComponent} from "./homepage/homepage.component";
 import {GameComponent} from "./game/game.component";
 import {SettingsComponent} from "./settings/settings.component";
 import {RangkingsComponent} from "./rangkings/rangkings.component";
+import {SuccessComponent} from "./game/success/success.component";
+import {RetryComponent} from "./game/retry/retry.component";
 
 
 const firebaseConfig = {
@@ -24,7 +26,9 @@ const firebaseConfig = {
     HomepageComponent,
     GameComponent,
     SettingsComponent,
-    RangkingsComponent
+    RangkingsComponent,
+    SuccessComponent,
+    RetryComponent
   ],
   imports:[
     BrowserModule,
