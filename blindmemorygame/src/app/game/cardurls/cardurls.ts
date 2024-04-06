@@ -4,7 +4,7 @@ export const cardpictures  =[
   "cards/candy.png",
   "cards/car.png",
   "cards/cloud.png",
-  "cards/flip.png",
+  "cards/dog.png",
   "cards/flow.png",
   "cards/rose.png",
   "cards/sun.png",

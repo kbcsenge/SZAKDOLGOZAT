@@ -27,18 +27,11 @@ export class GameComponent implements OnInit, OnDestroy{
   cards: string[]=[]
 
    constructor(private cardservice: CardService, private router: Router) {
-    this.cardservice.getImage('cards/flip.png').subscribe(data=>{
-      this.flipping=data
-    })
    }
 
   ngOnInit() {
-    this.randomizeCards();
-    const imageObservables = cardpictures.map(card => this.cardservice.getImage(card));
-    forkJoin(imageObservables).subscribe(images => {
-      this.cards = images;
-      this.randomizeCards();
-    });
+    this.setUpCards();
+    this.startTimer();
   }
 
 
@@ -64,8 +57,8 @@ export class GameComponent implements OnInit, OnDestroy{
   }
 
   selectCard(row: number, col: number) {
-    if(this.gameOver){
-      return;
+    if(this.gameOver || (this.selectedCards.length === 1 && this.selectedCards[0].row === row && this.selectedCards[0].col === col)){
+      return
     }
     this.flipped[row][col] = true;
     this.selectedCards.push({row, col});
@@ -77,7 +70,7 @@ export class GameComponent implements OnInit, OnDestroy{
           this.flipped[this.selectedCards[0].row][this.selectedCards[0].col] = false;
           this.flipped[this.selectedCards[1].row][this.selectedCards[1].col] = false;
           this.selectedCards = [];
-        }, 300);
+        }, 800);
       } else {
         this.matches++;
         this.points+=50;
@@ -119,6 +112,18 @@ export class GameComponent implements OnInit, OnDestroy{
   }
   ngOnDestroy(){
     this.stopTimer();
+  }
+  setUpCards(){
+    this.cardservice.getImage('cards/flip.png').subscribe(data=>{
+      this.flipping=data
+    })
+    const imageObservables = cardpictures.map(card => this.cardservice.getImage(card));
+    forkJoin(imageObservables).subscribe(images => {
+      this.cards = images;
+      this.randomizeCards();
+    }, error => {
+      console.error('Error loading images', error);
+    });
   }
 }
 
