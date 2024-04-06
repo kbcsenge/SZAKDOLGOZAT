@@ -1,0 +1,50 @@
+.alertwindow{
+  border: rgba(13, 35, 65, 0.3) 7px solid;
+  border-radius: 20px;
+  background: rgba(90, 90, 145, 0.4);
+  position: fixed;
+  top: 50%;
+  left: 50%;
+
+  transform: translate(-50%, -50%);
+  text-align: center;
+  color: white;
+  font-size: 50px;
+  padding: 10px 60px 10px 60px;
+}
+
+button{
+  background: darkblue;
+  opacity: 80%;
+  border-radius: 20px;
+  font-size: 60px;
+  color: white;
+  padding: 20px 40px 20px 40px;
+  font-size: 30px;
+}
+
+p{
+  border-bottom: rgba(13, 35, 65, 0.3) 7px solid;
+}
+label{
+  font-size: 30px;
+  padding-bottom: 50px;
+}
+input{
+  border: rgba(13, 35, 65, 0.3) 7px solid;
+  border-radius: 20px;
+  background: rgba(90, 90, 145, 0.4);
+  position: relative;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  color: white;
+  font-size: 50px;
+  padding: 10px 60px 10px 60px;
+}
+
+.inputfield{
+  display: flex;
+  flex-direction: column;
+}
