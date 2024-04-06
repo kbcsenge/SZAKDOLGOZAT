@@ -8,46 +8,23 @@
     <th>Név</th>
     <th>Pontszám</th>
     <th>Idő</th>
+    <th>Dátum</th>
     <tbody>
-    <tr>
+    <tr *ngFor="let ranking of rankings | async; index as i">
       <td>
-        1.
+        {{i + 1}}.
       </td>
       <td>
-        Kiscica
+        {{ranking.name}}
       </td>
       <td>
-        2000
+        {{ranking.points}}
       </td>
       <td>
-        10s
-      </td>
-    </tr>
-    <tr>
-      <td>
-        2.
+        {{ranking.time}}
       </td>
       <td>
-        Kiskuta
-      </td>
-      <td>
-        1000
-      </td>
-      <td>
-        20s
-      </td>
-    </tr><tr>
-      <td>
-        3.
-      </td>
-      <td>
-        Noname
-      </td>
-      <td>
-        100
-      </td>
-      <td>
-        30s
+        {{ranking.date.toDate() | date:'yyyy.MM.dd. HH:mm:ss':'UTC'}}
       </td>
     </tr>
     </tbody>

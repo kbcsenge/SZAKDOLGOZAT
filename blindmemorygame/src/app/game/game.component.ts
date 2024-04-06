@@ -4,6 +4,7 @@ import {AsyncPipe, NgFor} from "@angular/common";
 import {forkJoin} from "rxjs";
 import {CardService} from "../services/card.service";
 import {cardpictures} from "./cardurls/cardurls";
+import {GameService} from "../services/game.service";
 
 @Component({
   selector: 'app-game',
@@ -22,11 +23,12 @@ export class GameComponent implements OnInit, OnDestroy{
   points: number = 0;
   gameOver: boolean= false;
   timer: number = 90;
+  pastTime: number=0;
   matches: number= 0;
   intervalId: NodeJS.Timeout | null=null;
   cards: string[]=[]
 
-   constructor(private cardservice: CardService, private router: Router) {
+   constructor(private cardservice: CardService,private gameService: GameService, private router: Router) {
    }
 
   ngOnInit() {
@@ -57,7 +59,7 @@ export class GameComponent implements OnInit, OnDestroy{
   }
 
   selectCard(row: number, col: number) {
-    if(this.gameOver || (this.selectedCards.length === 1 && this.selectedCards[0].row === row && this.selectedCards[0].col === col)){
+    if(this.gameOver || (this.selectedCards.length === 1 && this.selectedCards[0].row === row && this.selectedCards[0].col === col || this.flipped[row][col] || this.selectedCards.length === 2)){
       return
     }
     this.flipped[row][col] = true;
@@ -74,6 +76,7 @@ export class GameComponent implements OnInit, OnDestroy{
       } else {
         this.matches++;
         this.points+=50;
+        this.gameService.changePoints(this.points);
         this.selectedCards = [];
         if(this.matches==6){
           this.success();
@@ -85,6 +88,8 @@ export class GameComponent implements OnInit, OnDestroy{
     if (!this.gameOver) {
       this.intervalId = setInterval(() => {
         this.timer--;
+        this.pastTime++;
+        this.gameService.changeTimer(this.pastTime);
         if (this.timer === 0) {
           this.gameOver = true;
           this.stopTimer();
