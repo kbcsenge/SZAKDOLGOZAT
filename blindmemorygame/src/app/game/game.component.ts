@@ -5,6 +5,9 @@ import {forkJoin} from "rxjs";
 import {CardService} from "../services/card.service";
 import {cardpictures} from "./cardurls/cardurls";
 import {GameService} from "../services/game.service";
+import {RetryComponent} from "./retry/retry.component";
+import {MatDialog} from "@angular/material/dialog";
+import {SuccessComponent} from "./success/success.component";
 
 @Component({
   selector: 'app-game',
@@ -28,7 +31,7 @@ export class GameComponent implements OnInit, OnDestroy{
   intervalId: NodeJS.Timeout | null=null;
   cards: string[]=[]
 
-   constructor(private cardservice: CardService,private gameService: GameService, private router: Router) {
+   constructor(private cardservice: CardService,private gameService: GameService, private router: Router, public dialog: MatDialog) {
    }
 
   ngOnInit() {
@@ -94,7 +97,7 @@ export class GameComponent implements OnInit, OnDestroy{
           this.gameOver = true;
           this.stopTimer();
           clearInterval(this.intervalId!);
-          this.router.navigate(['/fail']);
+          this.retryDialog();
         }
       }, 1000);
     }
@@ -109,7 +112,7 @@ export class GameComponent implements OnInit, OnDestroy{
   success(): void {
     this.stopTimer();
     this.gameOver = true;
-    this.router.navigate(['/success']);
+    this.successDialog();
   }
 
   gotohome() {
@@ -128,6 +131,21 @@ export class GameComponent implements OnInit, OnDestroy{
       this.randomizeCards();
     }, error => {
       console.error('Error loading images', error);
+    });
+  }
+  retryDialog(): void {
+    const dialogRef = this.dialog.open(RetryComponent);
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+    });
+  }
+
+  successDialog(): void{
+    const dialogRef = this.dialog.open(SuccessComponent);
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
     });
   }
 }
