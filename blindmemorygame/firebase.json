@@ -1,9 +1,17 @@
 {
-  "hosting": [
-    {
-      "target": "blindmemorygame",
-      "source": ".",
-      "frameworksBackend": {}
-    }
-  ]
+  "hosting": {
+    "public": "dist/blindmemorygame/browser",
+    "site": "blindmemorygame-szakdolgozat",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "rewrites": [
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
+    ]
+  }
 }
