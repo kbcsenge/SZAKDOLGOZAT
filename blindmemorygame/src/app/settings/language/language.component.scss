@@ -1,0 +1,35 @@
+.alertwindow{
+  border: rgba(13, 35, 65, 0.3) 7px solid;
+  border-radius: 20px;
+  background: rgb(90, 90, 145);
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  width: 40%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  color: white;
+  font-size: 50px;
+  padding: 10px 60px 10px 60px;
+}
+
+button{
+  background: darkblue;
+  opacity: 80%;
+  border-radius: 20px;
+  font-size: 60px;
+  color: white;
+  padding: 20px 40px 20px 40px;
+  font-size: 30px;
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+p{
+  border-bottom: rgba(13, 35, 65, 0.3) 7px solid;
+}
+
+.biggertext{
+  height: 50px ;
+  width: 50px;
+}

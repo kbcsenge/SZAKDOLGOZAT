@@ -1,1 +1,20 @@
-<p>boardsize works!</p>
+<div class="alertwindow" style="display: flex; flex-direction: column; align-items: center;">
+  <p>Játéktér mérete</p>
+  <div>
+    <div style="display: flex; align-items: center; margin-bottom: 10px;">
+      <label style="width: 200px;">3x4</label>
+      <mat-slide-toggle #toggle3x4 style="flex-grow: 1; margin-left: 20px;" (change)="toggle4x4.checked = false; toggle4x5.checked = false" checked></mat-slide-toggle>
+    </div>
+    <div style="display: flex; align-items: center; margin-bottom: 10px;">
+      <label style="width: 200px;">4x4</label>
+      <mat-slide-toggle #toggle4x4 style="flex-grow: 1; margin-left: 20px;" (change)="toggle3x4.checked = false; toggle4x5.checked = false"></mat-slide-toggle>
+    </div>
+    <div style="display: flex; align-items: center;margin-bottom: 10px;">
+      <label style="width: 200px;">4x5</label>
+      <mat-slide-toggle #toggle4x5 style="flex-grow: 1; margin-left: 20px;" (change)="toggle3x4.checked = false; toggle4x4.checked = false"></mat-slide-toggle>
+    </div>
+  </div>
+  <br>
+  <button (click)="submit()">Ok</button>
+  <br>
+</div>

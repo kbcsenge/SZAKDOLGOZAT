@@ -12,7 +12,8 @@ import { TimeComponent } from './settings/time/time.component';
 import { NumberofplayersComponent } from './settings/numberofplayers/numberofplayers.component';
 import { LanguageComponent } from './settings/language/language.component';
 import { VolumeandspeedComponent } from './settings/volumeandspeed/volumeandspeed.component';
-
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatSliderModule } from '@angular/material/slider';
 @NgModule({
   declarations: [
     AppComponent,
@@ -25,6 +26,8 @@ import { VolumeandspeedComponent } from './settings/volumeandspeed/volumeandspee
   imports: [
     BrowserModule,
     AppRoutingModule,
+    MatSlideToggleModule,
+    MatSliderModule,
     AngularFireModule.initializeApp(environment.firebaseConfig),
     provideFirestore(() => getFirestore()),
     provideStorage(() => getStorage())

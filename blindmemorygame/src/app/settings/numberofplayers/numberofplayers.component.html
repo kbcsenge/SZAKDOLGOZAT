@@ -1,1 +1,15 @@
-<p>numberofplayers works!</p>
+<div class="alertwindow" style="display: flex; flex-direction: column; align-items: center;">
+  <p>Játékosok száma</p>
+  <div>
+    <div style="display: flex; align-items: center; margin-bottom: 10px;">
+      <label style="width: 500px;">Egyszemélyes játék</label>
+      <mat-slide-toggle #toggleOne style="flex-grow: 1; margin-left: 20px;" (change)="toggleTwo.checked = !toggleOne.checked" checked></mat-slide-toggle>
+    </div>
+    <div style="display: flex; align-items: center;margin-bottom: 10px;">
+      <label style="width: 500px;">Kétszemélyes játék</label>
+      <mat-slide-toggle #toggleTwo style="flex-grow: 1; margin-left: 20px;" (change)="toggleOne.checked = !toggleTwo.checked"></mat-slide-toggle>
+    </div>
+  </div>
+  <br>
+  <button (click)="submit()">Ok</button>
+</div>
