@@ -3,11 +3,11 @@
   <div>
     <div style="display: flex; align-items: center; margin-bottom: 10px;">
       <label style="width: 200px;">Magyar</label>
-      <mat-slide-toggle #magyarToggle style="flex-grow: 1; margin-left: 20px;" (change)="angolToggle.checked = !magyarToggle.checked" checked></mat-slide-toggle>
+      <mat-slide-toggle #toggleHu style="flex-grow: 1; margin-left: 20px;" (change)="toggleEn.checked = !toggleHu.checked" checked></mat-slide-toggle>
     </div>
     <div style="display: flex; align-items: center;margin-bottom: 10px;">
       <label style="width: 200px;">Angol</label>
-      <mat-slide-toggle #angolToggle style="flex-grow: 1; margin-left: 20px;" (change)="magyarToggle.checked = !angolToggle.checked"></mat-slide-toggle>
+      <mat-slide-toggle #toggleEn style="flex-grow: 1; margin-left: 20px;" (change)="toggleHu.checked = !toggleEn.checked"></mat-slide-toggle>
     </div>
   </div>
   <br>
