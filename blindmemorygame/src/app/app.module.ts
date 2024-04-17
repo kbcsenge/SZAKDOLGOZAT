@@ -14,6 +14,10 @@ import { LanguageComponent } from './settings/language/language.component';
 import { VolumeandspeedComponent } from './settings/volumeandspeed/volumeandspeed.component';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatSliderModule } from '@angular/material/slider';
+import {SharedModule} from "./shared/shared.module";
+import {WebSpeechModule} from "./web-speech/web-speech.module";
+
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -28,6 +32,8 @@ import { MatSliderModule } from '@angular/material/slider';
     AppRoutingModule,
     MatSlideToggleModule,
     MatSliderModule,
+    SharedModule,
+    WebSpeechModule,
     AngularFireModule.initializeApp(environment.firebaseConfig),
     provideFirestore(() => getFirestore()),
     provideStorage(() => getStorage())
