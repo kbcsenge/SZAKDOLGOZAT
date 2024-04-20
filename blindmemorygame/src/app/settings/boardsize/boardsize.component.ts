@@ -1,19 +1,64 @@
-import { Component, Inject } from '@angular/core';
+import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Router } from '@angular/router';
+import {map, tap} from "rxjs/operators";
+import {merge, Observable} from "rxjs";
+import {SpeechEvent} from "../../model/speech-event";
+import {SpeechNotification} from "../../model/speech-notification";
+import {SpeechRecognizerService} from "../../services/speech-recognizer.service";
+import {SpeechSynthesizerService} from "../../services/speech-synthesizer.service";
+import {defaultLanguage} from "../../model/languages";
 
 @Component({
   selector: 'app-boardsize',
   templateUrl: './boardsize.component.html',
   styleUrl: './boardsize.component.scss'
 })
-export class BoardsizeComponent {
-  constructor(private router: Router, public dialogRef: MatDialogRef<BoardsizeComponent>, @Inject(MAT_DIALOG_DATA) public data: any) {}
+export class BoardsizeComponent implements OnInit{
+  transcript$?: Observable<string>;
+  listening$?: Observable<boolean>;
+  constructor(public dialogRef: MatDialogRef<BoardsizeComponent>,
+              @Inject(MAT_DIALOG_DATA) public data: any,
+              private speechrecognition: SpeechRecognizerService,
+              private speechSynthesizer: SpeechSynthesizerService) {}
+  ngOnInit(): void {
+    this.speechSynthesizer.speak(
+      'Játéktér beállítás megnyitva', defaultLanguage
+    );
+    this.speechrecognition.initialize(defaultLanguage);
+    this.initRecognition();
+    this.speechrecognition.start()
+  }
+
 
   submit() {
-    this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
-      this.router.navigate(['/settings']);
-      this.dialogRef.close();
-    });
+    this.dialogRef.close();
+  }
+
+  private initRecognition(): void {
+    this.transcript$ = this.speechrecognition.onResult().pipe(
+      tap((notification) => {
+        this.processNotification(notification);
+      }),
+      map((notification) => notification.content || '')
+    );
+    this.transcript$.subscribe();
+    this.listening$ = merge(
+      this.speechrecognition.onStart(),
+      this.speechrecognition.onEnd()
+    ).pipe(map((notification) => notification.event === SpeechEvent.Start));
+  }
+  private processNotification(notification: SpeechNotification<string>): void {
+    if (notification.event === SpeechEvent.FinalContent) {
+      const message = notification.content?.trim() || '';
+      let regexSubmit= new RegExp('.*mentés.*')
+      let testSubmit = regexSubmit.test(message);
+      if(testSubmit){
+        this.speechSynthesizer.speak(
+          'Játéktér beállítása mentve', defaultLanguage
+        );
+        this.submit();
+      }
+    }
   }
 }

@@ -14,8 +14,17 @@ import { LanguageComponent } from './settings/language/language.component';
 import { VolumeandspeedComponent } from './settings/volumeandspeed/volumeandspeed.component';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatSliderModule } from '@angular/material/slider';
-import {SharedModule} from "./shared/shared.module";
-import {WebSpeechModule} from "./web-speech/web-speech.module";
+import {CommonModule} from "@angular/common";
+import {MatFormFieldModule} from "@angular/material/form-field";
+import {MatInputModule} from "@angular/material/input";
+import {MatButtonModule} from "@angular/material/button";
+import {MatCardModule} from "@angular/material/card";
+import {MatIconModule} from "@angular/material/icon";
+import {MatToolbarModule} from "@angular/material/toolbar";
+import {MatSelectModule} from "@angular/material/select";
+import {MatListModule} from "@angular/material/list";
+import {MatSidenavModule} from "@angular/material/sidenav";
+import {MatDialogModule} from "@angular/material/dialog";
 
 
 @NgModule({
@@ -32,8 +41,20 @@ import {WebSpeechModule} from "./web-speech/web-speech.module";
     AppRoutingModule,
     MatSlideToggleModule,
     MatSliderModule,
-    SharedModule,
-    WebSpeechModule,
+    CommonModule,
+    MatInputModule,
+    CommonModule,
+    MatButtonModule,
+    MatCardModule,
+    MatInputModule,
+    MatFormFieldModule,
+    MatIconModule,
+    MatToolbarModule,
+    MatSelectModule,
+    MatListModule,
+    MatSidenavModule,
+    MatDialogModule,
+    MatFormFieldModule,
     AngularFireModule.initializeApp(environment.firebaseConfig),
     provideFirestore(() => getFirestore()),
     provideStorage(() => getStorage())

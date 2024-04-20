@@ -1,13 +1,19 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Router} from "@angular/router";
 import {AsyncPipe, NgFor} from "@angular/common";
-import {forkJoin} from "rxjs";
+import {forkJoin, merge, Observable} from "rxjs";
 import {CardService} from "../services/card.service";
 import {cardpictures} from "./cardurls/cardurls";
 import {GameService} from "../services/game.service";
 import {RetryComponent} from "./retry/retry.component";
 import {MatDialog} from "@angular/material/dialog";
 import {SuccessComponent} from "./success/success.component";
+import {map, tap} from "rxjs/operators";
+import {SpeechEvent} from "../model/speech-event";
+import {SpeechNotification} from "../model/speech-notification";
+import {defaultLanguage} from "../model/languages";
+import {SpeechRecognizerService} from "../services/speech-recognizer.service";
+import {SpeechSynthesizerService} from "../services/speech-synthesizer.service";
 
 @Component({
   selector: 'app-game',
@@ -30,13 +36,32 @@ export class GameComponent implements OnInit, OnDestroy{
   matches: number= 0;
   intervalId: NodeJS.Timeout | null=null;
   cards: string[]=[]
+  transcript$?: Observable<string>;
+  listening$?: Observable<boolean>;
 
-   constructor(private cardservice: CardService,private gameService: GameService, private router: Router, public dialog: MatDialog) {
+   constructor(private cardservice: CardService,
+               private gameService: GameService,
+               private router: Router, public dialog: MatDialog,
+               private speechrecognition: SpeechRecognizerService,
+               private speechSynthesizer: SpeechSynthesizerService) {
    }
 
   ngOnInit() {
+    this.speechSynthesizer.speak(
+      'Játék megnyitva. Ez egy 3-szor 4-es játéktábla. Rendelkezésre álló idő: 90 másodperc. Sok sikert!', defaultLanguage,
+      () => {
+        this.speechrecognition.initialize(defaultLanguage);
+        this.initRecognition();
+        this.speechrecognition.start()
+        this.startTimer();
+      }
+    );
     this.setUpCards();
-    this.startTimer();
+  }
+
+  ngOnDestroy(){
+    this.stopTimer();
+    this.speechSynthesizer.stop();
   }
 
 
@@ -118,9 +143,6 @@ export class GameComponent implements OnInit, OnDestroy{
   gotohome() {
     this.router.navigate(['/']);
   }
-  ngOnDestroy(){
-    this.stopTimer();
-  }
   setUpCards(){
     this.cardservice.getImage('cards/flip.png').subscribe(data=>{
       this.flipping=data
@@ -147,6 +169,42 @@ export class GameComponent implements OnInit, OnDestroy{
     dialogRef.afterClosed().subscribe(result => {
       console.log('The dialog was closed');
     });
+  }
+
+  private initRecognition(): void {
+    this.transcript$ = this.speechrecognition.onResult().pipe(
+      tap((notification) => {
+        this.processNotification(notification);
+      }),
+      map((notification) => notification.content || '')
+    );
+    this.transcript$.subscribe();
+    this.listening$ = merge(
+      this.speechrecognition.onStart(),
+      this.speechrecognition.onEnd()
+    ).pipe(map((notification) => notification.event === SpeechEvent.Start));
+  }
+  private processNotification(notification: SpeechNotification<string>): void {
+    if (notification.event === SpeechEvent.FinalContent) {
+      const message = notification.content?.trim() || '';
+      let regexHome = new RegExp('.*főoldalra.*')
+      let testHome = regexHome.test(message);
+      let regexPonit = new RegExp('.*pont.*')
+      let testPoint = regexPonit.test(message);
+      if(testHome){
+        this.gotohome();
+      }
+      if(message=='mennyi idő van hátra'){
+        this.speechSynthesizer.speak(
+          this.timer.toString()+'másodperc van hátra', defaultLanguage
+        );
+      }
+      if(testPoint){
+        this.speechSynthesizer.speak(
+          this.points.toString()+"pontod van", defaultLanguage
+        );
+      }
+    }
   }
 }
 

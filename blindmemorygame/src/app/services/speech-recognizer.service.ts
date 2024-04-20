@@ -1,9 +1,7 @@
 import { Injectable, NgZone } from '@angular/core';
 import { Observable } from 'rxjs';
-
-import { SpeechNotification } from '../../model/speech-notification';
-import { SpeechError } from '../../model/speech-error';
-import { SpeechEvent } from '../../model/speech-event';
+import {SpeechNotification} from "../model/speech-notification";
+import {SpeechEvent} from "../model/speech-event";
 
 declare var webkitSpeechRecognition: any;
 
@@ -11,6 +9,7 @@ declare var webkitSpeechRecognition: any;
   providedIn: 'root',
 })
 export class SpeechRecognizerService {
+
   recognition!: typeof webkitSpeechRecognition;
   language!: string;
   isListening = false;
@@ -101,37 +100,4 @@ export class SpeechRecognizerService {
     });
   }
 
-  onError(): Observable<SpeechNotification<never>> {
-    return new Observable(observer => {
-      this.recognition.onerror = (event: any) => {
-        const eventError: string = event.error;
-        console.log('error', eventError);
-        let error: SpeechError;
-        switch (eventError) {
-          case 'no-speech':
-            error = SpeechError.NoSpeech;
-            break;
-          case 'audio-capture':
-            error = SpeechError.AudioCapture;
-            break;
-          case 'not-allowed':
-            error = SpeechError.NotAllowed;
-            break;
-          default:
-            error = SpeechError.Unknown;
-            break;
-        }
-
-        this.ngZone.run(() => {
-          observer.next({
-            error
-          });
-        });
-      };
-    });
-  }
-
-  stop(): void {
-    this.recognition.stop();
-  }
 }
