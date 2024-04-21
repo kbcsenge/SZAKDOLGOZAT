@@ -1,7 +1,7 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {AfterViewInit, Component, OnDestroy, OnInit} from '@angular/core';
 import {Router} from "@angular/router";
 import {AsyncPipe, NgFor} from "@angular/common";
-import {forkJoin, merge, Observable} from "rxjs";
+import {forkJoin, merge, Observable, take} from "rxjs";
 import {CardService} from "../services/card.service";
 import {cardpictures} from "./cardurls/cardurls";
 import {GameService} from "../services/game.service";
@@ -23,7 +23,7 @@ import {SpeechSynthesizerService} from "../services/speech-synthesizer.service";
   styleUrl: './game.component.scss'
 })
 
-export class GameComponent implements OnInit, OnDestroy{
+export class GameComponent implements OnInit, OnDestroy, AfterViewInit{
 
   flipping?: string;
   rows: string[][] = [];
@@ -47,16 +47,10 @@ export class GameComponent implements OnInit, OnDestroy{
    }
 
   ngOnInit() {
-    this.speechSynthesizer.speak(
-      'Játék megnyitva. Ez egy 3-szor 4-es játéktábla. Rendelkezésre álló idő: 90 másodperc. Sok sikert!', defaultLanguage,
-      () => {
-        this.speechrecognition.initialize(defaultLanguage);
-        this.initRecognition();
-        this.speechrecognition.start()
-        this.startTimer();
-      }
-    );
     this.setUpCards();
+    this.speechrecognition.initialize(defaultLanguage);
+    this.initRecognition();
+    this.speechrecognition.start()
   }
 
   ngOnDestroy(){
@@ -156,9 +150,12 @@ export class GameComponent implements OnInit, OnDestroy{
     });
   }
   retryDialog(): void {
+    this.speechSynthesizer.speak(
+      'Nem sikerült az összes párt megtalálni!', defaultLanguage
+    );
     const dialogRef = this.dialog.open(RetryComponent);
 
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().pipe(take(1)).subscribe(result => {
       console.log('The dialog was closed');
     });
   }
@@ -205,6 +202,15 @@ export class GameComponent implements OnInit, OnDestroy{
         );
       }
     }
+  }
+
+  ngAfterViewInit(): void {
+    this.speechSynthesizer.speak(
+      'Játék megnyitva. Ez egy 3-szor 4-es játéktábla. Rendelkezésre álló idő: 90 másodperc. Sok sikert!', defaultLanguage,
+      () => {
+        this.startTimer();
+      }
+    );
   }
 }
 

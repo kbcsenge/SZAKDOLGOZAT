@@ -1,6 +1,5 @@
 import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { Router } from '@angular/router';
 import {map, tap} from "rxjs/operators";
 import {merge, Observable} from "rxjs";
 import {SpeechEvent} from "../../model/speech-event";
@@ -14,7 +13,7 @@ import {defaultLanguage} from "../../model/languages";
   templateUrl: './boardsize.component.html',
   styleUrl: './boardsize.component.scss'
 })
-export class BoardsizeComponent implements OnInit{
+export class BoardsizeComponent implements OnInit, OnDestroy{
   transcript$?: Observable<string>;
   listening$?: Observable<boolean>;
   constructor(public dialogRef: MatDialogRef<BoardsizeComponent>,
@@ -30,6 +29,9 @@ export class BoardsizeComponent implements OnInit{
     this.speechrecognition.start()
   }
 
+  ngOnDestroy() {
+    this.speechSynthesizer.stop();
+  }
 
   submit() {
     this.dialogRef.close();
@@ -54,9 +56,6 @@ export class BoardsizeComponent implements OnInit{
       let regexSubmit= new RegExp('.*mentés.*')
       let testSubmit = regexSubmit.test(message);
       if(testSubmit){
-        this.speechSynthesizer.speak(
-          'Játéktér beállítása mentve', defaultLanguage
-        );
         this.submit();
       }
     }

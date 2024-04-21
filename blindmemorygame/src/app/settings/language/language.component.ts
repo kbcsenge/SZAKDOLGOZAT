@@ -1,7 +1,5 @@
-import {Component, Inject, OnInit, ViewChild} from '@angular/core';
+import {Component, Inject, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { Router } from '@angular/router';
-import { MatSlideToggle } from '@angular/material/slide-toggle';
 import {map, tap} from "rxjs/operators";
 import {merge, Observable} from "rxjs";
 import {SpeechEvent} from "../../model/speech-event";
@@ -15,7 +13,7 @@ import {SpeechSynthesizerService} from "../../services/speech-synthesizer.servic
   templateUrl: './language.component.html',
   styleUrls: ['./language.component.scss']
 })
-export class LanguageComponent implements OnInit{
+export class LanguageComponent implements OnInit, OnDestroy{
   transcript$?: Observable<string>;
   listening$?: Observable<boolean>;
   constructor(public dialogRef: MatDialogRef<LanguageComponent>,
@@ -30,6 +28,11 @@ export class LanguageComponent implements OnInit{
     this.initRecognition();
     this.speechrecognition.start()
   }
+
+  ngOnDestroy(): void {
+    this.speechSynthesizer.stop();
+  }
+
   submit() {
     this.dialogRef.close();
   }
@@ -52,9 +55,6 @@ export class LanguageComponent implements OnInit{
       let regexSubmit= new RegExp('.*mentés.*')
       let testSubmit = regexSubmit.test(message);
       if(testSubmit){
-        this.speechSynthesizer.speak(
-          'Nyelv beállítása mentve', defaultLanguage
-        );
         this.submit();
       }
     }

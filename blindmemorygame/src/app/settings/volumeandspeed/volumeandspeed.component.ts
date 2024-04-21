@@ -1,6 +1,5 @@
 import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
 import {MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { Router } from '@angular/router';
 import {map, tap} from "rxjs/operators";
 import {merge, Observable} from "rxjs";
 import {SpeechEvent} from "../../model/speech-event";
@@ -57,9 +56,6 @@ export class VolumeandspeedComponent implements OnInit, OnDestroy{
       let regexSubmit= new RegExp('.*mentés.*')
       let testSubmit = regexSubmit.test(message);
       if(testSubmit){
-        this.speechSynthesizer.speak(
-          'Hangerő és lejátszási sebesség beállítása mentve', defaultLanguage
-        );
         this.submit();
       }
     }

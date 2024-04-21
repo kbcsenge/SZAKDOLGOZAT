@@ -1,6 +1,5 @@
-import {Component, Inject, OnInit} from '@angular/core';
+import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { Router } from '@angular/router';
 import {map, tap} from "rxjs/operators";
 import {merge, Observable} from "rxjs";
 import {SpeechEvent} from "../../model/speech-event";
@@ -14,7 +13,7 @@ import {SpeechSynthesizerService} from "../../services/speech-synthesizer.servic
   templateUrl: './numberofplayers.component.html',
   styleUrl: './numberofplayers.component.scss'
 })
-export class NumberofplayersComponent implements OnInit {
+export class NumberofplayersComponent implements OnInit, OnDestroy {
   transcript$?: Observable<string>;
   listening$?: Observable<boolean>;
   constructor(public dialogRef: MatDialogRef<NumberofplayersComponent>,
@@ -29,6 +28,10 @@ export class NumberofplayersComponent implements OnInit {
     this.speechrecognition.initialize(defaultLanguage);
     this.initRecognition();
     this.speechrecognition.start()
+  }
+
+  ngOnDestroy(): void {
+    this.speechSynthesizer.stop();
   }
 
   submit() {
@@ -53,9 +56,6 @@ export class NumberofplayersComponent implements OnInit {
       let regexSubmit= new RegExp('.*mentés.*')
       let testSubmit = regexSubmit.test(message);
       if(testSubmit){
-        this.speechSynthesizer.speak(
-          'Játékosok számának beállítása mentve', defaultLanguage
-        );
         this.submit();
       }
     }

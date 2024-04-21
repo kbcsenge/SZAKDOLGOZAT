@@ -49,7 +49,9 @@ export class SettingsComponent implements OnInit, OnDestroy{
     const dialogRef = this.dialog.open(LanguageComponent);
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
+      this.speechSynthesizer.speak(
+        'Nyelv beállítása mentve', defaultLanguage
+      );
       this.reInit();
     });
 
@@ -58,33 +60,38 @@ export class SettingsComponent implements OnInit, OnDestroy{
     const dialogRef = this.dialog.open(VolumeandspeedComponent);
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
+      this.speechSynthesizer.speak(
+        'Hangerő és lejátszási sebesség beállítása mentve', defaultLanguage
+      );
       this.reInit();
     });
   }
   nofpDialog(): void{
     const dialogRef = this.dialog.open(NumberofplayersComponent);
-
     dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
+      this.speechSynthesizer.speak(
+        'Játékosok számának beállítása mentve', defaultLanguage
+      );
       this.reInit();
     });
   }
 
   boardsizeDialog(): void{
     const dialogRef = this.dialog.open(BoardsizeComponent);
-
     dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
+      this.speechSynthesizer.speak(
+        'Játéktér beállítása mentve', defaultLanguage
+      );
       this.reInit();
     });
   }
 
   timeDialog(): void{
     const dialogRef = this.dialog.open(TimeComponent);
-
     dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
+      this.speechSynthesizer.speak(
+        'Játékidő beállítása mentve', defaultLanguage
+      );
       this.reInit();
     });
   }

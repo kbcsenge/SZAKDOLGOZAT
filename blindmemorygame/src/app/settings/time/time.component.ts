@@ -1,6 +1,5 @@
-import {Component, Inject, OnInit} from '@angular/core';
+import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
 import {MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { Router } from '@angular/router';
 import {map, tap} from "rxjs/operators";
 import {merge, Observable} from "rxjs";
 import {SpeechEvent} from "../../model/speech-event";
@@ -14,7 +13,7 @@ import {SpeechSynthesizerService} from "../../services/speech-synthesizer.servic
   templateUrl: './time.component.html',
   styleUrl: './time.component.scss'
 })
-export class TimeComponent implements OnInit {
+export class TimeComponent implements OnInit, OnDestroy {
   transcript$?: Observable<string>;
   listening$?: Observable<boolean>;
   constructor(public dialogRef: MatDialogRef<TimeComponent>,
@@ -24,12 +23,17 @@ export class TimeComponent implements OnInit {
   }
   ngOnInit(): void {
     this.speechSynthesizer.speak(
-      'Idő beállítás megnyitva', defaultLanguage
+      'Játékidő beállítás megnyitva', defaultLanguage
     );
     this.speechrecognition.initialize(defaultLanguage);
     this.initRecognition();
     this.speechrecognition.start()
   }
+
+  ngOnDestroy(): void {
+    this.speechSynthesizer.stop();
+  }
+
   submit() {
     this.dialogRef.close();
   }
@@ -52,9 +56,6 @@ export class TimeComponent implements OnInit {
       let regexSubmit= new RegExp('.*mentés.*')
       let testSubmit = regexSubmit.test(message);
       if(testSubmit){
-        this.speechSynthesizer.speak(
-          'Idő beállítása mentve', defaultLanguage
-        );
         this.submit();
       }
     }
