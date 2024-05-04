@@ -40,6 +40,12 @@ export class SpeechRecognizerService {
 
     this.recognition.start();
     this.isListening = true;
+
+    this.recognition.onend = () => {
+      if (this.isListening) {
+        this.recognition.start();
+      }
+    };
   }
 
   onStart(): Observable<SpeechNotification<never>> {

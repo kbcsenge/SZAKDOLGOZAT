@@ -22,7 +22,6 @@ import {SpeechSynthesizerService} from "../services/speech-synthesizer.service";
   templateUrl: './game.component.html',
   styleUrl: './game.component.scss'
 })
-
 export class GameComponent implements OnInit, OnDestroy, AfterViewInit{
 
   flipping?: string;
@@ -38,6 +37,12 @@ export class GameComponent implements OnInit, OnDestroy, AfterViewInit{
   cards: string[]=[]
   transcript$?: Observable<string>;
   listening$?: Observable<boolean>;
+  numbersInWords : {[key: string]: number} = {
+    első: 1,
+    második: 2,
+    harmadik: 3,
+    negyedik: 4
+  };
 
    constructor(private cardservice: CardService,
                private gameService: GameService,
@@ -188,6 +193,8 @@ export class GameComponent implements OnInit, OnDestroy, AfterViewInit{
       let testHome = regexHome.test(message);
       let regexPonit = new RegExp('.*pont.*')
       let testPoint = regexPonit.test(message);
+      let regexSelectCard = new RegExp('^([a-záéíóöőúüű]+) ([a-záéíóöőúüű]+)$');
+      let testGame = regexSelectCard.exec(message)
       if(testHome){
         this.gotohome();
       }
@@ -200,6 +207,11 @@ export class GameComponent implements OnInit, OnDestroy, AfterViewInit{
         this.speechSynthesizer.speak(
           this.points.toString()+"pontod van", defaultLanguage
         );
+      }
+      if (testGame) {
+        let row = this.numbersInWords[testGame[1]] - 1;
+        let col = this.numbersInWords[testGame[2]] - 1;
+        this.selectCard(row, col);
       }
     }
   }
