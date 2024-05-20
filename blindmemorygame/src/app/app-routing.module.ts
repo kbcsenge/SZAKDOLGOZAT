@@ -6,15 +6,17 @@ import {SuccessComponent} from "./game/success/success.component";
 import {RetryComponent} from "./game/retry/retry.component";
 import {RankingsComponent} from "./rangkings/rankings.component";
 import {HomepageComponent} from "./homepage/homepage.component";
+import {SetlanguageComponent} from "./setlanguage/setlanguage.component";
 
 
 export const routes: Routes = [
-  { path: 'game', component: GameComponent },
-  { path: 'settings', component: SettingsComponent },
-  { path: 'rankings', component: RankingsComponent },
+  { path: 'game', component: GameComponent},
+  { path: 'settings', component: SettingsComponent},
+  { path: 'rankings', component: RankingsComponent},
   { path : 'success' , component: SuccessComponent},
   { path : 'fail' , component: RetryComponent},
-  { path : '' , component: HomepageComponent},
+  { path : 'home' , component: HomepageComponent},
+  { path : '' , component: SetlanguageComponent}
 
 ];
 

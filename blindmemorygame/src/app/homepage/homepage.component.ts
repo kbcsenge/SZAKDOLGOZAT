@@ -1,12 +1,15 @@
-import {AfterViewInit, Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Router} from "@angular/router";
-import {defaultLanguage} from "../model/languages";
 import {merge, Observable} from "rxjs";
 import {SpeechRecognizerService} from "../services/speech-recognizer.service";
 import {map, tap} from "rxjs/operators";
 import {SpeechEvent} from "../model/speech-event";
 import {SpeechNotification} from "../model/speech-notification";
 import {SpeechSynthesizerService} from "../services/speech-synthesizer.service";
+import {LanguageService} from "../services/language.service";
+import {VolumeandspeedComponent} from "../settings/volumeandspeed/volumeandspeed.component";
+import {HelperComponent} from "../helper/helper.component";
+import {MatDialog} from "@angular/material/dialog";
 
 @Component({
   selector: 'app-homepage',
@@ -17,19 +20,25 @@ import {SpeechSynthesizerService} from "../services/speech-synthesizer.service";
   styleUrl: './homepage.component.scss'
 })
 export class HomepageComponent implements OnInit, OnDestroy{
+  currentLanguage='';
   transcript$?: Observable<string>;
   listening$?: Observable<boolean>;
   constructor(private router: Router,
               private speechrecognition: SpeechRecognizerService,
-              private speechSynthesizer: SpeechSynthesizerService) {
+              private speechSynthesizer: SpeechSynthesizerService,
+              private languageService: LanguageService,
+              public dialog: MatDialog,) {
+    this.languageService.getLanguage().subscribe(language => {
+      this.currentLanguage=language;
+    });
   }
 
 
   ngOnInit(): void {
     this.speechSynthesizer.speak(
-      'Szia! Ez egy beszédfelismerő játék vakok és látássérültek számára!', defaultLanguage
+      'Szia! Ez egy beszédfelismerő játék vakok és látássérültek számára!', this.currentLanguage
     );
-    this.speechrecognition.initialize(defaultLanguage);
+    this.speechrecognition.initialize(this.currentLanguage);
     this.initRecognition();
     this.speechrecognition.start()
   }
@@ -47,7 +56,7 @@ export class HomepageComponent implements OnInit, OnDestroy{
   }
 
   gotohome(){
-    this.router.navigate(['/']);
+    this.router.navigate(['/home']);
   }
   gotoresults(){
     this.router.navigate(['/rankings']);
@@ -71,9 +80,11 @@ export class HomepageComponent implements OnInit, OnDestroy{
       let regexSettings = new RegExp('.*beállítás.*')
       let regexGame = new RegExp('.*játék.*')
       let regexRanglist = new RegExp('.*ranglist.*')
+      let regexHelp = new RegExp('.*segítség.*')
       let testSettings = regexSettings.test(message);
       let testGame = regexGame.test(message);
       let testRanglist = regexRanglist.test(message);
+      let testHelp = regexHelp.test(message);
       if(testSettings){
         this.gotosettings();
       }
@@ -83,6 +94,25 @@ export class HomepageComponent implements OnInit, OnDestroy{
       if(testRanglist){
         this.gotoresults();
       }
+      if(testHelp){
+        this.gotohelp();
+      }
     }
+  }
+
+  gotohelp(): void{
+    const dialogRef = this.dialog.open(HelperComponent);
+
+    dialogRef.afterClosed().subscribe(result => {
+      this.speechSynthesizer.speak(
+        'Segítség ablak bezárva', this.currentLanguage
+      );
+      this.reInit();
+    });
+  }
+  reInit(){
+    this.speechrecognition.initialize(this.currentLanguage);
+    this.initRecognition();
+    this.speechrecognition.start()
   }
 }

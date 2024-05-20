@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import {MatSliderChange} from "@angular/material/slider";
 
 @Injectable({
   providedIn: 'root',
@@ -12,11 +13,21 @@ export class SpeechSynthesizerService {
 
   initSynthesis(): void {
     this.speechSynthesizer = new SpeechSynthesisUtterance();
-    this.speechSynthesizer.volume = 1;
-    this.speechSynthesizer.rate = 1;
     this.speechSynthesizer.pitch = 0.5;
   }
+  setVolume(value: number){
+    this.speechSynthesizer.volume=value;
+  }
 
+  setRate(value: number){
+    this.speechSynthesizer.rate = value;
+  }
+  getVolume(){
+    return  this.speechSynthesizer.volume;
+  }
+  getRate(){
+    return  this.speechSynthesizer.rate;
+  }
   speak(message: string, language: string, callback?: () => void): void {
     this.speechSynthesizer.lang = language;
     this.speechSynthesizer.text = message;

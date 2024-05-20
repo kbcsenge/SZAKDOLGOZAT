@@ -6,7 +6,7 @@ import {merge, Observable} from "rxjs";
 import {SpeechEvent} from "../../model/speech-event";
 import {SpeechNotification} from "../../model/speech-notification";
 import {SpeechRecognizerService} from "../../services/speech-recognizer.service";
-import {defaultLanguage} from "../../model/languages";
+import {LanguageService} from "../../services/language.service";
 
 @Component({
   selector: 'app-retry',
@@ -16,19 +16,23 @@ import {defaultLanguage} from "../../model/languages";
   styleUrl: './retry.component.scss'
 })
 export class RetryComponent {
-
+  currentLanguage='';
   transcript$?: Observable<string>;
   listening$?: Observable<boolean>;
   constructor(private router: Router,
               public dialogRef: MatDialogRef<RetryComponent>,
               @Inject(MAT_DIALOG_DATA) public data: any,
-              private speechrecognition: SpeechRecognizerService) {
+              private speechrecognition: SpeechRecognizerService,
+              private languageService: LanguageService) {
+    this.languageService.getLanguage().subscribe(language => {
+      this.currentLanguage=language;
+    });
   }
 
   ngOnInit(): void {
-    this.speechrecognition.initialize(defaultLanguage);
-    this.initRecognition();
-    this.speechrecognition.start()
+      this.speechrecognition.initialize(this.currentLanguage);
+      this.initRecognition();
+      this.speechrecognition.start();
   }
   retrygame() {
     this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
@@ -38,7 +42,7 @@ export class RetryComponent {
   }
 
   gotohome(){
-    this.router.navigate(['/']);
+    this.router.navigate(['/home']);
     this.dialogRef.close();
   }
 

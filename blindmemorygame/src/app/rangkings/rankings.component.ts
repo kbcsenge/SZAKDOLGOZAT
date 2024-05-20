@@ -7,9 +7,9 @@ import {CommonModule} from "@angular/common";
 import {map, tap} from "rxjs/operators";
 import {SpeechEvent} from "../model/speech-event";
 import {SpeechNotification} from "../model/speech-notification";
-import {defaultLanguage} from "../model/languages";
 import {SpeechRecognizerService} from "../services/speech-recognizer.service";
 import {SpeechSynthesizerService} from "../services/speech-synthesizer.service";
+import {LanguageService} from "../services/language.service";
 
 @Component({
   selector: 'app-rangkings',
@@ -19,23 +19,28 @@ import {SpeechSynthesizerService} from "../services/speech-synthesizer.service";
   styleUrl: './rangkings.component.scss'
 })
 export class RankingsComponent implements OnInit, OnDestroy{
+  currentLanguage='';
   transcript$?: Observable<string>;
   listening$?: Observable<boolean>;
   rankings: Observable<Ranking[]>;
   constructor(private router: Router,
               private firestore: AngularFirestore,
               private speechrecognition: SpeechRecognizerService,
-              private speechSynthesizer: SpeechSynthesizerService)
+              private speechSynthesizer: SpeechSynthesizerService,
+              private languageService: LanguageService)
   {
     this.rankings = firestore.collection<Ranking>('rankings').valueChanges();
+    this.languageService.getLanguage().subscribe(language => {
+      this.currentLanguage=language;
+    });
   }
 
   ngOnInit(): void {
     this.rankings.subscribe(data => console.log(data));
     this.speechSynthesizer.speak(
-      'Ranglista megnyitva', defaultLanguage
+      'Ranglista megnyitva', this.currentLanguage
     );
-    this.speechrecognition.initialize(defaultLanguage);
+    this.speechrecognition.initialize(this.currentLanguage);
     this.initRecognition();
     this.speechrecognition.start()
   }
@@ -45,7 +50,7 @@ export class RankingsComponent implements OnInit, OnDestroy{
   }
 
   gotohome(){
-    this.router.navigate(['/']);
+    this.router.navigate(['/home']);
   }
   private initRecognition(): void {
     this.transcript$ = this.speechrecognition.onResult().pipe(

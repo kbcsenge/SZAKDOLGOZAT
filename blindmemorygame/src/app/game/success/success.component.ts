@@ -30,7 +30,7 @@ export class SuccessComponent implements OnInit{
   }
 
   gotohome(){
-    this.router.navigate(['/']);
+    this.router.navigate(['/home']);
     this.dialogRef.close();
   }
   retrygame() {

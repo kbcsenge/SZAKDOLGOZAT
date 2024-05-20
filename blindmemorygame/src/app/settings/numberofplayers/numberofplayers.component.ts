@@ -4,9 +4,9 @@ import {map, tap} from "rxjs/operators";
 import {merge, Observable} from "rxjs";
 import {SpeechEvent} from "../../model/speech-event";
 import {SpeechNotification} from "../../model/speech-notification";
-import {defaultLanguage} from "../../model/languages";
 import {SpeechRecognizerService} from "../../services/speech-recognizer.service";
 import {SpeechSynthesizerService} from "../../services/speech-synthesizer.service";
+import {LanguageService} from "../../services/language.service";
 
 @Component({
   selector: 'app-numberofplayers',
@@ -14,18 +14,23 @@ import {SpeechSynthesizerService} from "../../services/speech-synthesizer.servic
   styleUrl: './numberofplayers.component.scss'
 })
 export class NumberofplayersComponent implements OnInit, OnDestroy {
+  currentLanguage='';
   transcript$?: Observable<string>;
   listening$?: Observable<boolean>;
   constructor(public dialogRef: MatDialogRef<NumberofplayersComponent>,
               @Inject(MAT_DIALOG_DATA) public data: any,
               private speechrecognition: SpeechRecognizerService,
-              private speechSynthesizer: SpeechSynthesizerService) {
+              private speechSynthesizer: SpeechSynthesizerService,
+              private languageService: LanguageService) {
+    this.languageService.getLanguage().subscribe(language => {
+      this.currentLanguage=language;
+    });
   }
   ngOnInit(): void {
     this.speechSynthesizer.speak(
-      'Játékosok száma beállítás megnyitva', defaultLanguage
+      'Játékosok száma beállítás megnyitva', this.currentLanguage
     );
-    this.speechrecognition.initialize(defaultLanguage);
+    this.speechrecognition.initialize(this.currentLanguage);
     this.initRecognition();
     this.speechrecognition.start()
   }

@@ -10,7 +10,6 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
 import { BoardsizeComponent } from './settings/boardsize/boardsize.component';
 import { TimeComponent } from './settings/time/time.component';
 import { NumberofplayersComponent } from './settings/numberofplayers/numberofplayers.component';
-import { LanguageComponent } from './settings/language/language.component';
 import { VolumeandspeedComponent } from './settings/volumeandspeed/volumeandspeed.component';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatSliderModule } from '@angular/material/slider';
@@ -25,6 +24,8 @@ import {MatSelectModule} from "@angular/material/select";
 import {MatListModule} from "@angular/material/list";
 import {MatSidenavModule} from "@angular/material/sidenav";
 import {MatDialogModule} from "@angular/material/dialog";
+import { SetlanguageComponent } from './setlanguage/setlanguage.component';
+import { HelperComponent } from './helper/helper.component';
 
 
 @NgModule({
@@ -33,8 +34,9 @@ import {MatDialogModule} from "@angular/material/dialog";
     BoardsizeComponent,
     TimeComponent,
     NumberofplayersComponent,
-    LanguageComponent,
-    VolumeandspeedComponent
+    VolumeandspeedComponent,
+    SetlanguageComponent,
+    HelperComponent
   ],
   imports: [
     BrowserModule,

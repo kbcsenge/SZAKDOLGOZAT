@@ -1,12 +1,14 @@
-import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
+import {Component, ElementRef, Inject, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import {map, tap} from "rxjs/operators";
 import {merge, Observable} from "rxjs";
 import {SpeechEvent} from "../../model/speech-event";
 import {SpeechNotification} from "../../model/speech-notification";
-import {defaultLanguage} from "../../model/languages";
 import {SpeechRecognizerService} from "../../services/speech-recognizer.service";
 import {SpeechSynthesizerService} from "../../services/speech-synthesizer.service";
+import {LanguageService} from "../../services/language.service";
+import {MatSliderChange} from "@angular/material/slider";
+import {MatSlideToggle} from "@angular/material/slide-toggle";
 
 @Component({
   selector: 'app-volumeandspeed',
@@ -14,19 +16,26 @@ import {SpeechSynthesizerService} from "../../services/speech-synthesizer.servic
   styleUrl: './volumeandspeed.component.scss'
 })
 export class VolumeandspeedComponent implements OnInit, OnDestroy{
+  @ViewChild('volumeInput') volumeInput?: ElementRef;
+  @ViewChild('rateInput') rateInput?: ElementRef;
+  currentLanguage='';
   transcript$?: Observable<string>;
   listening$?: Observable<boolean>;
   constructor(public dialogRef: MatDialogRef<VolumeandspeedComponent>,
               @Inject(MAT_DIALOG_DATA) public data: any,
               private speechrecognition: SpeechRecognizerService,
-              private speechSynthesizer: SpeechSynthesizerService) {
+              public speechSynthesizer: SpeechSynthesizerService,
+              private languageService: LanguageService) {
+    this.languageService.getLanguage().subscribe(language => {
+      this.currentLanguage=language;
+    });
   }
 
   ngOnInit(): void {
     this.speechSynthesizer.speak(
-      'Hangerő és lejátszási sebesség beállítása megnyitva', defaultLanguage
+      'Hangerő és lejátszási sebesség beállítása megnyitva', this.currentLanguage
     );
-    this.speechrecognition.initialize(defaultLanguage);
+    this.speechrecognition.initialize(this.currentLanguage);
     this.initRecognition();
     this.speechrecognition.start()
   }
@@ -35,6 +44,10 @@ export class VolumeandspeedComponent implements OnInit, OnDestroy{
   }
 
   submit() {
+    this.speechSynthesizer.setVolume(Number(this.volumeInput?.nativeElement.value));
+    this.speechSynthesizer.setRate(Number(this.rateInput?.nativeElement.value));
+    console.log(this.speechSynthesizer.getRate())
+    console.log(this.speechSynthesizer.getVolume())
     this.dialogRef.close();
   }
   private initRecognition(): void {
@@ -59,5 +72,13 @@ export class VolumeandspeedComponent implements OnInit, OnDestroy{
         this.submit();
       }
     }
+  }
+
+  formatLabel(value: number): string {
+    if (value >= 1000) {
+      return Math.round(value / 1000) + 'k';
+    }
+
+    return `${value}`;
   }
 }

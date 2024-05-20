@@ -2,7 +2,6 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import {Router} from "@angular/router";
 import { BoardsizeComponent } from './boardsize/boardsize.component';
-import { LanguageComponent } from './language/language.component';
 import { NumberofplayersComponent } from './numberofplayers/numberofplayers.component';
 import { TimeComponent } from './time/time.component';
 import { VolumeandspeedComponent } from './volumeandspeed/volumeandspeed.component';
@@ -10,9 +9,9 @@ import {map, tap} from "rxjs/operators";
 import {merge, Observable} from "rxjs";
 import {SpeechEvent} from "../model/speech-event";
 import {SpeechNotification} from "../model/speech-notification";
-import {defaultLanguage} from "../model/languages";
 import {SpeechRecognizerService} from "../services/speech-recognizer.service";
 import {SpeechSynthesizerService} from "../services/speech-synthesizer.service";
+import {LanguageService} from "../services/language.service";
 
 @Component({
   selector: 'app-settings',
@@ -22,19 +21,23 @@ import {SpeechSynthesizerService} from "../services/speech-synthesizer.service";
   styleUrl: './settings.component.scss'
 })
 export class SettingsComponent implements OnInit, OnDestroy{
-
+  currentLanguage='';
   transcript$?: Observable<string>;
   listening$?: Observable<boolean>;
   constructor(private router: Router,
               public dialog: MatDialog,
               private speechrecognition: SpeechRecognizerService,
-              private speechSynthesizer: SpeechSynthesizerService) {
+              private speechSynthesizer: SpeechSynthesizerService,
+              private languageService: LanguageService) {
+    this.languageService.getLanguage().subscribe(language => {
+      this.currentLanguage=language;
+    });
   }
   ngOnInit() {
     this.speechSynthesizer.speak(
-      'Beállítások megnyitva', defaultLanguage
+      'Beállítások megnyitva', this.currentLanguage
     );
-    this.speechrecognition.initialize(defaultLanguage);
+    this.speechrecognition.initialize(this.currentLanguage);
     this.initRecognition();
     this.speechrecognition.start()
   }
@@ -43,25 +46,15 @@ export class SettingsComponent implements OnInit, OnDestroy{
   }
 
   gotohome(){
-    this.router.navigate(['/']);
+    this.router.navigate(['/home']);
   }
-  langueageDialog(): void{
-    const dialogRef = this.dialog.open(LanguageComponent);
 
-    dialogRef.afterClosed().subscribe(result => {
-      this.speechSynthesizer.speak(
-        'Nyelv beállítása mentve', defaultLanguage
-      );
-      this.reInit();
-    });
-
-  }
   vandsDialog(): void{
     const dialogRef = this.dialog.open(VolumeandspeedComponent);
 
     dialogRef.afterClosed().subscribe(result => {
       this.speechSynthesizer.speak(
-        'Hangerő és lejátszási sebesség beállítása mentve', defaultLanguage
+        'Hangerő és lejátszási sebesség beállítása mentve', this.currentLanguage
       );
       this.reInit();
     });
@@ -70,7 +63,7 @@ export class SettingsComponent implements OnInit, OnDestroy{
     const dialogRef = this.dialog.open(NumberofplayersComponent);
     dialogRef.afterClosed().subscribe(result => {
       this.speechSynthesizer.speak(
-        'Játékosok számának beállítása mentve', defaultLanguage
+        'Játékosok számának beállítása mentve', this.currentLanguage
       );
       this.reInit();
     });
@@ -80,7 +73,7 @@ export class SettingsComponent implements OnInit, OnDestroy{
     const dialogRef = this.dialog.open(BoardsizeComponent);
     dialogRef.afterClosed().subscribe(result => {
       this.speechSynthesizer.speak(
-        'Játéktér beállítása mentve', defaultLanguage
+        'Játéktér beállítása mentve', this.currentLanguage
       );
       this.reInit();
     });
@@ -90,7 +83,7 @@ export class SettingsComponent implements OnInit, OnDestroy{
     const dialogRef = this.dialog.open(TimeComponent);
     dialogRef.afterClosed().subscribe(result => {
       this.speechSynthesizer.speak(
-        'Játékidő beállítása mentve', defaultLanguage
+        'Játékidő beállítása mentve', this.currentLanguage
       );
       this.reInit();
     });
@@ -112,10 +105,8 @@ export class SettingsComponent implements OnInit, OnDestroy{
   private processNotification(notification: SpeechNotification<string>): void {
     if (notification.event === SpeechEvent.FinalContent) {
       const message = notification.content?.trim() || '';
-      let regexHome = new RegExp('.*főoldalra.*')
+      let regexHome = new RegExp('.*főoldal.*')
       let testHome = regexHome.test(message);
-      let regexLanguage = new RegExp('.*nyelv.*')
-      let testLanguage = regexLanguage.test(message);
       let regexBoard = new RegExp('.*játékmező.*')
       let testBoard = regexBoard.test(message);
       let regexPlayers= new RegExp('.*játékosok.*')
@@ -128,9 +119,6 @@ export class SettingsComponent implements OnInit, OnDestroy{
       let testSpeed = regexSpeed.test(message);
       if(testHome){
         this.gotohome();
-      }
-      if(testLanguage){
-        this.langueageDialog();
       }
       if(testPlayers){
         this.nofpDialog();
@@ -147,7 +135,9 @@ export class SettingsComponent implements OnInit, OnDestroy{
     }
   }
   reInit(){
-    this.ngOnInit();
+    this.speechrecognition.initialize(this.currentLanguage);
+    this.initRecognition();
+    this.speechrecognition.start()
   }
 }
 
