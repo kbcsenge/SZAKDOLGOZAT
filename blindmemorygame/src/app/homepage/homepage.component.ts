@@ -10,6 +10,7 @@ import {LanguageService} from "../services/language.service";
 import {VolumeandspeedComponent} from "../settings/volumeandspeed/volumeandspeed.component";
 import {HelperComponent} from "../helper/helper.component";
 import {MatDialog} from "@angular/material/dialog";
+import {GameService} from "../services/game.service";
 
 @Component({
   selector: 'app-homepage',
@@ -27,7 +28,8 @@ export class HomepageComponent implements OnInit, OnDestroy{
               private speechrecognition: SpeechRecognizerService,
               private speechSynthesizer: SpeechSynthesizerService,
               private languageService: LanguageService,
-              public dialog: MatDialog,) {
+              public dialog: MatDialog,
+              private gameservice: GameService) {
     this.languageService.getLanguage().subscribe(language => {
       this.currentLanguage=language;
     });
@@ -47,8 +49,12 @@ export class HomepageComponent implements OnInit, OnDestroy{
     this.speechSynthesizer.stop();
   }
 
-  gotogame(){
-    this.router.navigate(['/game']);
+  gotogame() {
+    if (this.gameservice.isSinglePlayer) {
+      this.router.navigate(['/game']);
+    } else {
+      this.router.navigate(['/twoplayergame']);
+    }
   }
 
   gotosettings(){

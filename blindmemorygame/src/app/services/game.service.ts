@@ -18,4 +18,14 @@ export class GameService {
   changePoints(points: number) {
     this.pointsSource.next(points);
   }
+
+  singlePlayer?: boolean | undefined = true;
+
+  get isSinglePlayer(): boolean | undefined {
+    return this.singlePlayer;
+  }
+
+  set isSinglePlayer(value: boolean | undefined) {
+    this.singlePlayer = value;
+  }
 }

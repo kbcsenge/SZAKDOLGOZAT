@@ -3,11 +3,11 @@
   <div>
     <div style="display: flex; align-items: center; margin-bottom: 10px;">
       <label style="width: 500px;">Egyszemélyes játék</label>
-      <mat-slide-toggle #toggleOne style="flex-grow: 1; margin-left: 20px;" (change)="toggleTwo.checked = !toggleOne.checked" checked></mat-slide-toggle>
+      <mat-slide-toggle #toggleOne style="flex-grow: 1; margin-left: 20px;" (change)="toggleTwo.checked = !toggleOne.checked" [checked]="gameservice.isSinglePlayer"></mat-slide-toggle>
     </div>
     <div style="display: flex; align-items: center;margin-bottom: 10px;">
       <label style="width: 500px;">Kétszemélyes játék</label>
-      <mat-slide-toggle #toggleTwo style="flex-grow: 1; margin-left: 20px;" (change)="toggleOne.checked = !toggleTwo.checked"></mat-slide-toggle>
+      <mat-slide-toggle #toggleTwo style="flex-grow: 1; margin-left: 20px;" (change)="toggleOne.checked = !toggleTwo.checked" [checked]="!gameservice.isSinglePlayer"></mat-slide-toggle>
     </div>
   </div>
   <br>

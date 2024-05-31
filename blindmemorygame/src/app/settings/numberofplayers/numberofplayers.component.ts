@@ -1,4 +1,4 @@
-import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
+import {Component, Inject, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import {map, tap} from "rxjs/operators";
 import {merge, Observable} from "rxjs";
@@ -7,6 +7,9 @@ import {SpeechNotification} from "../../model/speech-notification";
 import {SpeechRecognizerService} from "../../services/speech-recognizer.service";
 import {SpeechSynthesizerService} from "../../services/speech-synthesizer.service";
 import {LanguageService} from "../../services/language.service";
+import {Router} from "@angular/router";
+import {GameService} from "../../services/game.service";
+import {MatSlideToggle} from "@angular/material/slide-toggle";
 
 @Component({
   selector: 'app-numberofplayers',
@@ -14,14 +17,18 @@ import {LanguageService} from "../../services/language.service";
   styleUrl: './numberofplayers.component.scss'
 })
 export class NumberofplayersComponent implements OnInit, OnDestroy {
+  @ViewChild('toggleOne') toggleOne?: MatSlideToggle;
+  @ViewChild('toggleTwo') toggleTwo?: MatSlideToggle;
   currentLanguage='';
   transcript$?: Observable<string>;
   listening$?: Observable<boolean>;
-  constructor(public dialogRef: MatDialogRef<NumberofplayersComponent>,
+  constructor(private router: Router,
+              public dialogRef: MatDialogRef<NumberofplayersComponent>,
               @Inject(MAT_DIALOG_DATA) public data: any,
               private speechrecognition: SpeechRecognizerService,
               private speechSynthesizer: SpeechSynthesizerService,
-              private languageService: LanguageService) {
+              private languageService: LanguageService,
+              public gameservice: GameService) {
     this.languageService.getLanguage().subscribe(language => {
       this.currentLanguage=language;
     });
@@ -40,6 +47,7 @@ export class NumberofplayersComponent implements OnInit, OnDestroy {
   }
 
   submit() {
+    this.gameservice.isSinglePlayer = this.toggleOne?.checked;
     this.dialogRef.close();
   }
   private initRecognition(): void {
