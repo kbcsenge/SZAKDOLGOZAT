@@ -7,12 +7,12 @@ import {RetryComponent} from "./game/retry/retry.component";
 import {RankingsComponent} from "./rangkings/rankings.component";
 import {HomepageComponent} from "./homepage/homepage.component";
 import {SetlanguageComponent} from "./setlanguage/setlanguage.component";
-import {TwoplayergameComponent} from "./twoplayergame/twoplayergame.component";
+import {MultiplayerComponent} from "./twoplayergame/multiplayer.component";
 
 
 export const routes: Routes = [
   { path: 'game', component: GameComponent},
-  { path: 'twoplayergame', component: TwoplayergameComponent},
+  { path: 'multiplayer', component: MultiplayerComponent},
   { path: 'settings', component: SettingsComponent},
   { path: 'rankings', component: RankingsComponent},
   { path : 'success' , component: SuccessComponent},

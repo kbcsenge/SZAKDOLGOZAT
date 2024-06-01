@@ -26,26 +26,32 @@ export class GameComponent implements OnInit, OnDestroy, AfterViewInit{
   currentLanguage='';
   flipping?: string;
   rows: string[][] = [];
+  row: number= 3;
+  col: number= 4;
+  size: string=""
+  showsize: string=""
   flipped: boolean[][]=[];
   selectedCards: {row: number, col: number}[] = [];
   points: number = 0;
+  time: number = 90;
   gameOver: boolean= false;
-  timer: number = 90;
   pastTime: number=0;
   matches: number= 0;
   intervalId: NodeJS.Timeout | null=null;
   cards: string[]=[]
+  maxpairs: number = 6;
   transcript$?: Observable<string>;
   listening$?: Observable<boolean>;
   numbersInWords : {[key: string]: number} = {
     első: 1,
     második: 2,
     harmadik: 3,
-    negyedik: 4
+    negyedik: 4,
+    ötödik: 5,
   };
 
    constructor(private cardservice: CardService,
-               private gameService: GameService,
+               private gameservice: GameService,
                private router: Router, public dialog: MatDialog,
                private speechrecognition: SpeechRecognizerService,
                private speechSynthesizer: SpeechSynthesizerService,
@@ -53,6 +59,10 @@ export class GameComponent implements OnInit, OnDestroy, AfterViewInit{
      this.languageService.getLanguage().subscribe(language => {
        this.currentLanguage=language;
      });
+     this.time = this.gameservice.getTime();
+     this.row=this.gameservice.getRows();
+     this.col=this.gameservice.getCols();
+     this.maxPairs();
    }
 
   ngOnInit() {
@@ -67,6 +77,23 @@ export class GameComponent implements OnInit, OnDestroy, AfterViewInit{
     this.speechSynthesizer.stop();
   }
 
+  maxPairs(){
+     if(this.row==3 && this.col==4){
+       this.maxpairs=6;
+       this.size="3-szor 4-es";
+       this.showsize="3x4-es"
+     }
+    if(this.row==4 && this.col==4){
+      this.maxpairs=8;
+      this.size="4-szer 4-es";
+      this.showsize="4x4-es"
+    }
+    if(this.row==4 && this.col==5){
+      this.maxpairs=10;
+      this.size="4-szer 5-ös"
+      this.showsize="4x5-ös";
+    }
+  }
 
   shuffle(array: string[]) {
     for (let i = array.length - 1; i > 0; i--) {
@@ -78,14 +105,14 @@ export class GameComponent implements OnInit, OnDestroy, AfterViewInit{
 
   randomizeCards() {
     this.shuffle(this.cards);
-    let cards = (this.cards).slice(0, 6);
+    let cards = (this.cards).slice(0, this.maxpairs);
     cards = cards.concat(cards);
     this.shuffle(cards);
     this.rows = [];
     this.flipped = [];
-    for (let i = 0; i < 3; i++) {
-      this.rows.push(cards.slice(i * 4, (i + 1) * 4));
-      this.flipped.push(new Array(4).fill(false));
+    for (let i = 0; i < this.row; i++) {
+      this.rows.push(cards.slice(i * this.col, (i + 1) * this.col));
+      this.flipped.push(new Array(this.col).fill(false));
     }
   }
 
@@ -115,9 +142,9 @@ export class GameComponent implements OnInit, OnDestroy, AfterViewInit{
         );
         this.matches++;
         this.points+=50;
-        this.gameService.changePoints(this.points);
+        this.gameservice.changePoints(this.points);
         this.selectedCards = [];
-        if(this.matches==6){
+        if(this.matches==this.maxpairs){
           this.success();
         }
       }
@@ -126,10 +153,10 @@ export class GameComponent implements OnInit, OnDestroy, AfterViewInit{
   startTimer(){
     if (!this.gameOver) {
       this.intervalId = setInterval(() => {
-        this.timer--;
+        this.time--;
         this.pastTime++;
-        this.gameService.changeTimer(this.pastTime);
-        if (this.timer === 0) {
+        this.gameservice.changeTimer(this.pastTime);
+        if (this.time === 0) {
           this.gameOver = true;
           this.stopTimer();
           clearInterval(this.intervalId!);
@@ -212,7 +239,7 @@ export class GameComponent implements OnInit, OnDestroy, AfterViewInit{
       }
       if(message=='mennyi idő van hátra'){
         this.speechSynthesizer.speak(
-          this.timer.toString()+'másodperc van hátra', this.currentLanguage
+          this.time.toString()+'másodperc van hátra', this.currentLanguage
         );
       }
       if(testPoint){
@@ -284,7 +311,7 @@ export class GameComponent implements OnInit, OnDestroy, AfterViewInit{
 
   ngAfterViewInit(): void {
     this.speechSynthesizer.speak(
-      'Játék megnyitva. Ez egy 3-szor 4-es játéktábla. Rendelkezésre álló idő: 90 másodperc. Sok sikert!', this.currentLanguage,
+      'Játék megnyitva. Ez egy '+this.size+' játéktábla. Rendelkezésre álló idő: '+this.time.toString()+' másodperc. Sok sikert!', this.currentLanguage,
       () => {
         this.startTimer();
       }

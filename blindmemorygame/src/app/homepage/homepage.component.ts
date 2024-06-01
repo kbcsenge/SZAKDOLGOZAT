@@ -53,7 +53,7 @@ export class HomepageComponent implements OnInit, OnDestroy{
     if (this.gameservice.isSinglePlayer) {
       this.router.navigate(['/game']);
     } else {
-      this.router.navigate(['/twoplayergame']);
+      this.router.navigate(['/multiplayer']);
     }
   }
 

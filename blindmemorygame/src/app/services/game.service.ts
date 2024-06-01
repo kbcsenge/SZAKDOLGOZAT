@@ -7,6 +7,10 @@ import { BehaviorSubject } from 'rxjs';
 export class GameService {
   private timerSource = new BehaviorSubject<number>(90);
   currentTimer = this.timerSource.asObservable();
+  time: number = 90;
+
+  row: number =3;
+  col: number = 4;
 
   private pointsSource = new BehaviorSubject<number>(0);
   currentPoints = this.pointsSource.asObservable();
@@ -17,6 +21,25 @@ export class GameService {
 
   changePoints(points: number) {
     this.pointsSource.next(points);
+  }
+
+  getTime(){
+    return this.time;
+  }
+  setTime(time: number){
+    this.time=time;
+  }
+
+  getRows(){
+    return this.row;
+  }
+  getCols(){
+    return this.col;
+  }
+
+  setTableSize(row: number, col: number){
+    this.row=row;
+    this.col=col;
   }
 
   singlePlayer?: boolean | undefined = true;

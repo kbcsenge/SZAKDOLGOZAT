@@ -1,4 +1,4 @@
-import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
+import {Component, Inject, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import {map, tap} from "rxjs/operators";
 import {merge, Observable} from "rxjs";
@@ -7,6 +7,8 @@ import {SpeechNotification} from "../../model/speech-notification";
 import {SpeechRecognizerService} from "../../services/speech-recognizer.service";
 import {SpeechSynthesizerService} from "../../services/speech-synthesizer.service";
 import {LanguageService} from "../../services/language.service";
+import {GameService} from "../../services/game.service";
+import {MatSlideToggle} from "@angular/material/slide-toggle";
 
 @Component({
   selector: 'app-time',
@@ -14,6 +16,10 @@ import {LanguageService} from "../../services/language.service";
   styleUrl: './time.component.scss'
 })
 export class TimeComponent implements OnInit, OnDestroy {
+  @ViewChild('toggle60') toggle60?: MatSlideToggle;
+  @ViewChild('toggle120') toggle120?: MatSlideToggle;
+  @ViewChild('toggle180') toggle180?: MatSlideToggle;
+  @ViewChild('toggle300') toggle300?: MatSlideToggle;
   currentLanguage='';
   transcript$?: Observable<string>;
   listening$?: Observable<boolean>;
@@ -21,7 +27,8 @@ export class TimeComponent implements OnInit, OnDestroy {
               @Inject(MAT_DIALOG_DATA) public data: any,
               private speechrecognition: SpeechRecognizerService,
               private speechSynthesizer: SpeechSynthesizerService,
-              private languageService: LanguageService) {
+              private languageService: LanguageService,
+              public gameservice: GameService) {
     this.languageService.getLanguage().subscribe(language => {
       this.currentLanguage=language;
     });
@@ -40,6 +47,18 @@ export class TimeComponent implements OnInit, OnDestroy {
   }
 
   submit() {
+    if(this.toggle60?.checked){
+      this.gameservice.setTime(60);
+    }
+    if(this.toggle120?.checked){
+      this.gameservice.setTime(120);
+    }
+    if(this.toggle180?.checked){
+      this.gameservice.setTime(180);
+    }
+    if(this.toggle300?.checked){
+      this.gameservice.setTime(300);
+    }
     this.dialogRef.close();
   }
   private initRecognition(): void {

@@ -16,13 +16,17 @@ import {SpeechNotification} from "../model/speech-notification";
 
 @Component({
   selector: 'app-twoplayergame',
-  templateUrl: './twoplayergame.component.html',
-  styleUrl: './twoplayergame.component.scss'
+  templateUrl: './multiplayer.component.html',
+  styleUrl: './multiplayer.component.scss'
 })
-export class TwoplayergameComponent implements OnInit, AfterViewInit, OnDestroy{
+export class MultiplayerComponent implements OnInit, AfterViewInit, OnDestroy{
   currentLanguage='';
   flipping?: string;
   rows: string[][] = [];
+  row: number= 3;
+  col: number= 4;
+  size: string=""
+  showsize: string=""
   flipped: boolean[][]=[];
   selectedCards: {row: number, col: number}[] = [];
   gameOver: boolean= false;
@@ -30,18 +34,20 @@ export class TwoplayergameComponent implements OnInit, AfterViewInit, OnDestroy{
   Amatches: number= 0;
   Bmatches: number= 0;
   currentPlayer: 'A' | 'B' = 'A';
-  cards: string[]=[]
+  cards: string[]=[];
+  maxpairs: number = 6;
   transcript$?: Observable<string>;
   listening$?: Observable<boolean>;
   numbersInWords : {[key: string]: number} = {
     első: 1,
     második: 2,
     harmadik: 3,
-    negyedik: 4
+    negyedik: 4,
+    ötödik: 5
   };
 
   constructor(private cardservice: CardService,
-              private gameService: GameService,
+              private gameservice: GameService,
               private router: Router, public dialog: MatDialog,
               private speechrecognition: SpeechRecognizerService,
               private speechSynthesizer: SpeechSynthesizerService,
@@ -49,6 +55,9 @@ export class TwoplayergameComponent implements OnInit, AfterViewInit, OnDestroy{
     this.languageService.getLanguage().subscribe(language => {
       this.currentLanguage=language;
     });
+    this.row=this.gameservice.getRows();
+    this.col=this.gameservice.getCols();
+    this.maxPairs();
   }
 
   ngOnInit() {
@@ -62,7 +71,23 @@ export class TwoplayergameComponent implements OnInit, AfterViewInit, OnDestroy{
     this.speechSynthesizer.stop();
   }
 
-
+  maxPairs(){
+    if(this.row==3 && this.col==4){
+      this.maxpairs=6;
+      this.size="3-szor 4-es";
+      this.showsize="3x4-es"
+    }
+    if(this.row==4 && this.col==4){
+      this.maxpairs=8;
+      this.size="4-szer 4-es";
+      this.showsize="4x4-es"
+    }
+    if(this.row==4 && this.col==5){
+      this.maxpairs=10;
+      this.size="4-szer 5-ös"
+      this.showsize="4x5-ös";
+    }
+  }
   shuffle(array: string[]) {
     for (let i = array.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
@@ -73,14 +98,14 @@ export class TwoplayergameComponent implements OnInit, AfterViewInit, OnDestroy{
 
   randomizeCards() {
     this.shuffle(this.cards);
-    let cards = (this.cards).slice(0, 6);
+    let cards = (this.cards).slice(0, this.maxpairs);
     cards = cards.concat(cards);
     this.shuffle(cards);
     this.rows = [];
     this.flipped = [];
-    for (let i = 0; i < 3; i++) {
-      this.rows.push(cards.slice(i * 4, (i + 1) * 4));
-      this.flipped.push(new Array(4).fill(false));
+    for (let i = 0; i < this.row; i++) {
+      this.rows.push(cards.slice(i * this.col, (i + 1) * this.col));
+      this.flipped.push(new Array(this.col).fill(false));
     }
   }
 
@@ -115,7 +140,7 @@ export class TwoplayergameComponent implements OnInit, AfterViewInit, OnDestroy{
           this.Bmatches++;
         }
         this.selectedCards = [];
-        if(this.Amatches + this.Bmatches == 6){
+        if(this.Amatches + this.Bmatches == this.maxpairs){
           this.success();
         }
       }
@@ -238,7 +263,7 @@ export class TwoplayergameComponent implements OnInit, AfterViewInit, OnDestroy{
 
   ngAfterViewInit(): void {
     this.speechSynthesizer.speak(
-      'Játék megnyitva. Ez egy 3-szor 4-es játéktábla.', this.currentLanguage,
+      'Játék megnyitva. Ez egy '+this.size+' játéktábla.', this.currentLanguage,
     );
   }
 }

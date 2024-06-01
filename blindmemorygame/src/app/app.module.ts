@@ -26,7 +26,7 @@ import {MatSidenavModule} from "@angular/material/sidenav";
 import {MatDialogModule} from "@angular/material/dialog";
 import { SetlanguageComponent } from './setlanguage/setlanguage.component';
 import { HelperComponent } from './helper/helper.component';
-import { TwoplayergameComponent } from './twoplayergame/twoplayergame.component';
+import { MultiplayerComponent } from './twoplayergame/multiplayer.component';
 
 
 @NgModule({
@@ -38,7 +38,7 @@ import { TwoplayergameComponent } from './twoplayergame/twoplayergame.component'
     VolumeandspeedComponent,
     SetlanguageComponent,
     HelperComponent,
-    TwoplayergameComponent
+    MultiplayerComponent
   ],
   imports: [
     BrowserModule,

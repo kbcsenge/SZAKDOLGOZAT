@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { TwoplayergameComponent } from './twoplayergame.component';
+import { MultiplayerComponent } from './multiplayer.component';
 
-describe('TwoplayergameComponent', () => {
-  let component: TwoplayergameComponent;
-  let fixture: ComponentFixture<TwoplayergameComponent>;
+describe('MultiplayerComponent', () => {
+  let component: MultiplayerComponent;
+  let fixture: ComponentFixture<MultiplayerComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [TwoplayergameComponent]
+      declarations: [MultiplayerComponent]
     })
     .compileComponents();
-    
-    fixture = TestBed.createComponent(TwoplayergameComponent);
+
+    fixture = TestBed.createComponent(MultiplayerComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
