@@ -3,7 +3,7 @@
   <p>Sikeres játék! Megtaláltad az összes párt!</p>
   <div class="inputfield">
     <label>Add meg, hogyan szeretnél szerepelni a ranglistán</label>
-    <input  #nameInput type="text" type="text" required>
+    <input  #nameInput type="text" type="text" required [value]="name">
   </div>
   <button (click)="submit(nameInput.value)">Szereplek a ranglistán</button>
   <button (click)="retrygame()">Újrakezdés</button>

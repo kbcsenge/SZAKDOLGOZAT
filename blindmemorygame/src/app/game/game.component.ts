@@ -205,6 +205,9 @@ export class GameComponent implements OnInit, OnDestroy, AfterViewInit{
   }
 
   successDialog(): void{
+    this.speechSynthesizer.speak(
+      'sikerült az összes párt megtalálni! Add meg a neved a ranglistához!', this.currentLanguage
+    );
     const dialogRef = this.dialog.open(SuccessComponent);
 
     dialogRef.afterClosed().subscribe(result => {
