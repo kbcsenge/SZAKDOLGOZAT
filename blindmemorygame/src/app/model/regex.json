@@ -1,0 +1,34 @@
+{
+  "hu-HU": {
+    "home": ".*főoldal.*",
+    "game": ".*játék.*",
+    "point": ".*pont.*",
+    "submit": ".*mentés.*",
+    "retry": ".*újra.*",
+    "settings": ".*beállítások.*",
+    "ranking": ".*ranglista.*",
+    "help": ".*segítség.*",
+    "selectCard": "^([a-záéíóöőúüű]+) ([a-záéíóöőúüű]+)$",
+    "gameboard": ".*játékmező.*",
+    "players": ".*játékosok.*",
+    "time": ".*idő.*",
+    "volume": ".*hangerő.*",
+    "speed": ".*sebesség.*"
+  },
+  "en-US": {
+    "home": ".*main page.*",
+    "game": ".*game.*",
+    "point": ".*point.*",
+    "submit": ".*save.*",
+    "retry": ".*retry.*",
+    "settings": ".*settings.*",
+    "ranking": ".*ranking.*",
+    "help": ".*help.*",
+    "selectCard": "^([a-záéíóöőúüű]+) ([a-záéíóöőúüű]+)$",
+    "gameboard": ".*game board.*",
+    "players": ".*players.*",
+    "time": ".*time.*",
+    "volume": ".*volume.*",
+    "speed": ".*speed.*"
+  }
+}

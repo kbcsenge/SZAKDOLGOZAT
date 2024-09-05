@@ -9,7 +9,10 @@ import {SpeechEvent} from "../../model/speech-event";
 import {SpeechNotification} from "../../model/speech-notification";
 import {LanguageService} from "../../services/language.service";
 import {SpeechRecognizerService} from "../../services/speech-recognizer.service";
-
+import {VoiceoverService} from "../../services/voiceover.service";
+import {SpeechSynthesizerService} from "../../services/speech-synthesizer.service";
+import * as regex from '../../model/regex.json';
+import * as text from "../../model/text.json";
 @Component({
   selector: 'app-success',
   standalone: true,
@@ -24,13 +27,18 @@ export class SuccessComponent implements OnInit{
   points?: number;
   timer?: number;
   name?: string ='';
+  regexData: any;
+  textData: any;
+  loadedText: any;
   constructor(private router: Router,
               private firestore: AngularFirestore,
               private gameService: GameService,
               public dialogRef: MatDialogRef<SuccessComponent>,
               @Inject(MAT_DIALOG_DATA) public data: any,
               private languageService: LanguageService,
-              private speechrecognition: SpeechRecognizerService,) {
+              private speechrecognition: SpeechRecognizerService,
+              public voiceoverService: VoiceoverService,
+              public speechSynthesizer: SpeechSynthesizerService) {
     this.languageService.getLanguage().subscribe(language => {
       this.currentLanguage=language;
     });
@@ -65,6 +73,9 @@ export class SuccessComponent implements OnInit{
     this.speechrecognition.initialize(this.currentLanguage);
     this.initRecognition();
     this.speechrecognition.start();
+    this.regexData = regex;
+    this.textData= text;
+    this.loadedText = this.textData[this.currentLanguage];
   }
 
   private initRecognition(): void {
@@ -81,12 +92,13 @@ export class SuccessComponent implements OnInit{
     ).pipe(map((notification) => notification.event === SpeechEvent.Start));
   }
   private processNotification(notification: SpeechNotification<string>): void {
-    if (notification.event === SpeechEvent.FinalContent) {
       const message = notification.content?.trim() || '';
-      let regexGame = new RegExp('.*játék.*')
-      let regexHome = new RegExp('.*főoldal.*')
-      let regexSubmit = new RegExp('.*rendben.*')
-      let regexRetryname = new RegExp('.*újra.*')
+      const languagePatterns = this.regexData[this.currentLanguage];
+
+      let regexGame = new RegExp(languagePatterns.game, 'i');
+      let regexHome = new RegExp(languagePatterns.home, 'i');
+      let regexSubmit = new RegExp(languagePatterns.save, 'i');
+      let regexRetryname = new RegExp(languagePatterns.retry, 'i');
       let testGame = regexGame.test(message);
       let testHome = regexHome.test(message);
       let testSubmit = regexSubmit.test(message);
@@ -107,5 +119,4 @@ export class SuccessComponent implements OnInit{
         this.name=message;
       }
     }
-  }
 }

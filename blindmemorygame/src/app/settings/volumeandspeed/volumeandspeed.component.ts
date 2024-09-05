@@ -7,8 +7,9 @@ import {SpeechNotification} from "../../model/speech-notification";
 import {SpeechRecognizerService} from "../../services/speech-recognizer.service";
 import {SpeechSynthesizerService} from "../../services/speech-synthesizer.service";
 import {LanguageService} from "../../services/language.service";
-import {MatSliderChange} from "@angular/material/slider";
-import {MatSlideToggle} from "@angular/material/slide-toggle";
+import {VoiceoverService} from "../../services/voiceover.service";
+import * as regex from '../../model/regex.json';
+import * as text from "../../model/text.json";
 
 @Component({
   selector: 'app-volumeandspeed',
@@ -21,11 +22,15 @@ export class VolumeandspeedComponent implements OnInit, OnDestroy{
   currentLanguage='';
   transcript$?: Observable<string>;
   listening$?: Observable<boolean>;
+  regexData: any;
+  textData: any;
+  loadedText: any;
   constructor(public dialogRef: MatDialogRef<VolumeandspeedComponent>,
               @Inject(MAT_DIALOG_DATA) public data: any,
               private speechrecognition: SpeechRecognizerService,
               public speechSynthesizer: SpeechSynthesizerService,
-              private languageService: LanguageService) {
+              private languageService: LanguageService,
+              public voiceoverService: VoiceoverService) {
     this.languageService.getLanguage().subscribe(language => {
       this.currentLanguage=language;
     });
@@ -33,11 +38,14 @@ export class VolumeandspeedComponent implements OnInit, OnDestroy{
 
   ngOnInit(): void {
     this.speechSynthesizer.speak(
-      'Hangerő és lejátszási sebesség beállítása megnyitva', this.currentLanguage
+      'Volume and playback speed setting open\n', this.currentLanguage
     );
     this.speechrecognition.initialize(this.currentLanguage);
     this.initRecognition();
-    this.speechrecognition.start()
+    this.speechrecognition.start();
+    this.regexData = regex;
+    this.textData= text;
+    this.loadedText = this.textData[this.currentLanguage];
   }
   ngOnDestroy() {
     this.speechSynthesizer.stop();
@@ -64,13 +72,12 @@ export class VolumeandspeedComponent implements OnInit, OnDestroy{
     ).pipe(map((notification) => notification.event === SpeechEvent.Start));
   }
   private processNotification(notification: SpeechNotification<string>): void {
-    if (notification.event === SpeechEvent.FinalContent) {
-      const message = notification.content?.trim() || '';
-      let regexSubmit= new RegExp('.*mentés.*')
-      let testSubmit = regexSubmit.test(message);
-      if(testSubmit){
-        this.submit();
-      }
+    const languagePatterns = this.regexData[this.currentLanguage];
+    const message = notification.content?.trim() || '';
+    let regexSubmit= new RegExp(languagePatterns.save, 'i');
+    let testSubmit = regexSubmit.test(message);
+    if(testSubmit){
+      this.submit();
     }
   }
 

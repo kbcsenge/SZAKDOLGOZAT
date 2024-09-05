@@ -10,7 +10,9 @@ import {LanguageService} from "../../services/language.service";
 import {Router} from "@angular/router";
 import {GameService} from "../../services/game.service";
 import {MatSlideToggle} from "@angular/material/slide-toggle";
-
+import {VoiceoverService} from "../../services/voiceover.service";
+import * as regex from '../../model/regex.json';
+import * as text from '../../model/text.json';
 @Component({
   selector: 'app-numberofplayers',
   templateUrl: './numberofplayers.component.html',
@@ -22,24 +24,31 @@ export class NumberofplayersComponent implements OnInit, OnDestroy {
   currentLanguage='';
   transcript$?: Observable<string>;
   listening$?: Observable<boolean>;
+  regexData: any;
+  textData: any;
+  loadedText: any;
   constructor(private router: Router,
               public dialogRef: MatDialogRef<NumberofplayersComponent>,
               @Inject(MAT_DIALOG_DATA) public data: any,
               private speechrecognition: SpeechRecognizerService,
-              private speechSynthesizer: SpeechSynthesizerService,
+              public speechSynthesizer: SpeechSynthesizerService,
               private languageService: LanguageService,
-              public gameservice: GameService) {
+              public gameservice: GameService,
+              public voiceoverService: VoiceoverService ) {
     this.languageService.getLanguage().subscribe(language => {
       this.currentLanguage=language;
     });
   }
   ngOnInit(): void {
     this.speechSynthesizer.speak(
-      'Játékosok száma beállítás megnyitva', this.currentLanguage
+      'Number of players setting opened', this.currentLanguage
     );
     this.speechrecognition.initialize(this.currentLanguage);
     this.initRecognition();
-    this.speechrecognition.start()
+    this.speechrecognition.start();
+    this.regexData = regex;
+    this.textData= text;
+    this.loadedText = this.textData[this.currentLanguage];
   }
 
   ngOnDestroy(): void {
@@ -64,13 +73,12 @@ export class NumberofplayersComponent implements OnInit, OnDestroy {
     ).pipe(map((notification) => notification.event === SpeechEvent.Start));
   }
   private processNotification(notification: SpeechNotification<string>): void {
-    if (notification.event === SpeechEvent.FinalContent) {
-      const message = notification.content?.trim() || '';
-      let regexSubmit= new RegExp('.*mentés.*')
-      let testSubmit = regexSubmit.test(message);
-      if(testSubmit){
-        this.submit();
-      }
+    const languagePatterns = this.regexData[this.currentLanguage];
+    const message = notification.content?.trim() || '';
+    let regexSubmit= new RegExp(languagePatterns.save, 'i');
+    let testSubmit = regexSubmit.test(message);
+    if(testSubmit){
+      this.submit();
     }
   }
 }

@@ -7,7 +7,8 @@ import {merge, Observable} from "rxjs";
 import {map, tap} from "rxjs/operators";
 import {SpeechEvent} from "../model/speech-event";
 import {SpeechNotification} from "../model/speech-notification";
-
+import * as regex from '../model/regex.json';
+import * as text from '../model/text.json';
 @Component({
   selector: 'app-helper',
   templateUrl: './helper.component.html',
@@ -17,6 +18,9 @@ export class HelperComponent implements OnInit, OnDestroy{
   currentLanguage='';
   transcript$?: Observable<string>;
   listening$?: Observable<boolean>;
+  regexData: any;
+  textData: any;
+  loadedText: any;
   constructor(public dialogRef: MatDialogRef<HelperComponent>,
               @Inject(MAT_DIALOG_DATA) public data: any,
               private speechrecognition: SpeechRecognizerService,
@@ -54,7 +58,10 @@ export class HelperComponent implements OnInit, OnDestroy{
     );
     this.speechrecognition.initialize(this.currentLanguage);
     this.initRecognition();
-    this.speechrecognition.start()
+    this.speechrecognition.start();
+    this.regexData = regex;
+    this.textData= text;
+    this.loadedText = this.textData[this.currentLanguage];
   }
 
   ngOnDestroy(): void {
@@ -78,13 +85,12 @@ export class HelperComponent implements OnInit, OnDestroy{
     ).pipe(map((notification) => notification.event === SpeechEvent.Start));
   }
   private processNotification(notification: SpeechNotification<string>): void {
-    if (notification.event === SpeechEvent.FinalContent) {
-      const message = notification.content?.trim() || '';
-      let regexHome= new RegExp('.*főoldal.*')
-      let testHome = regexHome.test(message);
-      if(testHome){
-        this.submit();
-      }
+    const languagePatterns = this.regexData[this.currentLanguage];
+    const message = notification.content?.trim() || '';
+    let regexHome= new RegExp(languagePatterns.home, 'i');
+    let testHome = regexHome.test(message);
+    if(testHome){
+      this.submit();
     }
   }
 }

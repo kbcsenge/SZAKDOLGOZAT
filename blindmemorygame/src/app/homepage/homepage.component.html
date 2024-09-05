@@ -1,14 +1,14 @@
 <img style="height: 100px; width: auto;float: left"src="./assets/icon.png" alt="icon" (click)="gotohome()">
-<img style="height: 100px; width: auto;float: right"src="./assets/settingsicon.jpg" alt="icon" (click)="gotosettings()">
-<img style="height: 100px; width: auto;float: right"src="./assets/help.png" alt="icon" (click)="gotohelp()">
+<img style="height: 100px; width: auto;float: right"src="./assets/settingsicon.jpg" alt="icon" (mouseleave)="this.speechSynthesizer.stop()" (mouseenter)="this.voiceoverService.readingText($event)" (click)="gotosettings()">
+<img style="height: 100px; width: auto;float: right"src="./assets/help.png" alt="icon" (mouseleave)="this.speechSynthesizer.stop()" (mouseenter)="this.voiceoverService.readingText($event)" (click)="gotohelp()">
 <div class="centeritems">
   <div>
-    <h1>Üdvözöllek a játékban!</h1>
+    <h1 (mouseenter)="this.voiceoverService.readingText($event)" (mouseleave)="this.speechSynthesizer.stop()">{{ loadedText.welcome}}</h1>
   </div>
   <div>
-    <button (click)="gotogame()">Kezdés</button>
+    <button (mouseenter)="this.voiceoverService.readingText($event)" (mouseleave)="this.speechSynthesizer.stop()" (click)="gotogame()">{{ loadedText.start}}</button>
   </div>
   <br><br>
-  <a (click)="gotoresults()">Ranglista</a>
+  <a (mouseenter)="this.voiceoverService.readingText($event)" (mouseleave)="this.speechSynthesizer.stop()" (click)="gotoresults()">{{ loadedText.rankings}}</a>
 </div>
 

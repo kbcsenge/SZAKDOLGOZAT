@@ -7,11 +7,12 @@ import {SpeechEvent} from "../model/speech-event";
 import {SpeechNotification} from "../model/speech-notification";
 import {SpeechSynthesizerService} from "../services/speech-synthesizer.service";
 import {LanguageService} from "../services/language.service";
-import {VolumeandspeedComponent} from "../settings/volumeandspeed/volumeandspeed.component";
 import {HelperComponent} from "../helper/helper.component";
 import {MatDialog} from "@angular/material/dialog";
 import {GameService} from "../services/game.service";
-
+import {VoiceoverService} from "../services/voiceover.service";
+import * as regex from '../model/regex.json';
+import * as text from '../model/text.json';
 @Component({
   selector: 'app-homepage',
   standalone: true,
@@ -24,12 +25,16 @@ export class HomepageComponent implements OnInit, OnDestroy{
   currentLanguage='';
   transcript$?: Observable<string>;
   listening$?: Observable<boolean>;
+  regexData: any;
+  textData: any;
+  loadedText: any;
   constructor(private router: Router,
               private speechrecognition: SpeechRecognizerService,
-              private speechSynthesizer: SpeechSynthesizerService,
+              public speechSynthesizer: SpeechSynthesizerService,
               private languageService: LanguageService,
               public dialog: MatDialog,
-              private gameservice: GameService) {
+              private gameservice: GameService,
+              public voiceoverService: VoiceoverService) {
     this.languageService.getLanguage().subscribe(language => {
       this.currentLanguage=language;
     });
@@ -38,11 +43,14 @@ export class HomepageComponent implements OnInit, OnDestroy{
 
   ngOnInit(): void {
     this.speechSynthesizer.speak(
-      'Szia! Ez egy beszédfelismerő játék vakok és látássérültek számára!', this.currentLanguage
+      'Hi! This is a speech recognition game for blind and partially sighted people!', this.currentLanguage
     );
     this.speechrecognition.initialize(this.currentLanguage);
     this.initRecognition();
-    this.speechrecognition.start()
+    this.speechrecognition.start();
+    this.regexData = regex;
+    this.textData= text;
+    this.loadedText = this.textData[this.currentLanguage];
   }
 
   ngOnDestroy(): void {
@@ -81,28 +89,27 @@ export class HomepageComponent implements OnInit, OnDestroy{
     ).pipe(map((notification) => notification.event === SpeechEvent.Start));
   }
   private processNotification(notification: SpeechNotification<string>): void {
-    if (notification.event === SpeechEvent.FinalContent) {
-      const message = notification.content?.trim() || '';
-      let regexSettings = new RegExp('.*beállítás.*')
-      let regexGame = new RegExp('.*játék.*')
-      let regexRanglist = new RegExp('.*ranglist.*')
-      let regexHelp = new RegExp('.*segítség.*')
-      let testSettings = regexSettings.test(message);
-      let testGame = regexGame.test(message);
-      let testRanglist = regexRanglist.test(message);
-      let testHelp = regexHelp.test(message);
-      if(testSettings){
-        this.gotosettings();
-      }
-      if(testGame){
-        this.gotogame();
-      }
-      if(testRanglist){
-        this.gotoresults();
-      }
-      if(testHelp){
-        this.gotohelp();
-      }
+    const languagePatterns = this.regexData[this.currentLanguage];
+    const message = notification.content?.trim() || '';
+    let regexSettings = new RegExp(languagePatterns.settings, 'i');
+    let regexGame = new RegExp(languagePatterns.game, 'i');
+    let regexRanglist = new RegExp(languagePatterns.ranking, 'i');
+    let regexHelp = new RegExp(languagePatterns.help, 'i');
+    let testSettings = regexSettings.test(message);
+    let testGame = regexGame.test(message);
+    let testRanglist = regexRanglist.test(message);
+    let testHelp = regexHelp.test(message);
+    if(testSettings){
+      this.gotosettings();
+    }
+    if(testGame){
+      this.gotogame();
+    }
+    if(testRanglist){
+      this.gotoresults();
+    }
+    if(testHelp){
+      this.gotohelp();
     }
   }
 
@@ -111,7 +118,7 @@ export class HomepageComponent implements OnInit, OnDestroy{
 
     dialogRef.afterClosed().subscribe(result => {
       this.speechSynthesizer.speak(
-        'Segítség ablak bezárva', this.currentLanguage
+        'Help dialog closed!', this.currentLanguage
       );
       this.reInit();
     });

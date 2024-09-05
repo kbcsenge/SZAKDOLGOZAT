@@ -1,19 +1,19 @@
 <div class="alertwindow">
-  <p>Hangerő és lejátszási sebesség</p>
+  <p (mouseenter)="this.voiceoverService.readingText($event)" (mouseleave)="this.speechSynthesizer.stop()">{{ loadedText.vandps}}</p>
   <div class="bettersytle">
     <div style="display: flex; align-items: center; margin-bottom: 10px;">
-      <label style="width: 200px;">Hangerő</label>
+      <label (mouseenter)="this.voiceoverService.readingText($event)" (mouseleave)="this.speechSynthesizer.stop()" style="width: 200px;">{{ loadedText.volume}}</label>
       <mat-slider showTickMarks discrete [displayWith]="formatLabel" min="0" max="1" step="0.1" style="flex-grow: 1; margin-left: 20px;">
         <input #volumeInput matSliderThumb [value]="this.speechSynthesizer.getVolume()" />
       </mat-slider>
     </div>
     <div style="display: flex; align-items: center; margin-bottom: 10px;">
-      <label style="width: 200px;">lejátszási sebesség</label>
+      <label (mouseenter)="this.voiceoverService.readingText($event)" (mouseleave)="this.speechSynthesizer.stop()" style="width: 200px;">{{ loadedText.playbackspeed}}</label>
       <mat-slider showTickMarks discrete [displayWith]="formatLabel" min="0.25" max="5" step="0.25" style="flex-grow: 1; margin-left: 20px;">
         <input #rateInput matSliderThumb [value]="this.speechSynthesizer.getRate()"/>
       </mat-slider>
     </div>
   </div>
   <br>
-  <button (click)="submit()">Ok</button>
+  <button (mouseenter)="this.voiceoverService.readingText($event)" (mouseleave)="this.speechSynthesizer.stop()" (click)="submit()">{{ loadedText.save}}</button>
 </div>

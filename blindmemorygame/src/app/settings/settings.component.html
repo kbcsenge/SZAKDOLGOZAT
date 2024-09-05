@@ -1,9 +1,9 @@
 <img style="height: 100px; width: auto; float: left"src="./assets/icon.png" alt="icon" (click)="gotohome()">
 
 <div class="menu">
-  <h2>Beállítások</h2>
-  <h4 (click)="vandsDialog()">Hangerő/lejátszási sebesség</h4>
-  <h4 (click)="boardsizeDialog()">Játékmező mérete</h4>
-  <h4 (click)="timeDialog()">Játékidő</h4>
-  <h4 (click)="nofpDialog()">Egyszemélyes/kétszemélyes játék</h4>
+  <h2 (mouseenter)="this.voiceoverService.readingText($event)" (mouseleave)="this.speechSynthesizer.stop()">{{ loadedText.settings}}</h2>
+  <h4 (mouseenter)="this.voiceoverService.readingText($event)" (mouseleave)="this.speechSynthesizer.stop()" (click)="vandsDialog()">{{ loadedText.vandps}}</h4>
+  <h4 (mouseenter)="this.voiceoverService.readingText($event)" (mouseleave)="this.speechSynthesizer.stop()" (click)="boardsizeDialog()">{{ loadedText.gamesize}}</h4>
+  <h4 (mouseenter)="this.voiceoverService.readingText($event)" (mouseleave)="this.speechSynthesizer.stop()" (click)="timeDialog()">{{ loadedText.gametime}}</h4>
+  <h4 (mouseenter)="this.voiceoverService.readingText($event)" (mouseleave)="this.speechSynthesizer.stop()" (click)="nofpDialog()">{{ loadedText.singleordouble}}</h4>
 </div>

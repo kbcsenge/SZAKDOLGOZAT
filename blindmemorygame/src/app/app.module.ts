@@ -27,6 +27,7 @@ import {MatDialogModule} from "@angular/material/dialog";
 import { SetlanguageComponent } from './setlanguage/setlanguage.component';
 import { HelperComponent } from './helper/helper.component';
 import { MultiplayerComponent } from './twoplayergame/multiplayer.component';
+import {HttpClientModule} from "@angular/common/http";
 
 
 @NgModule({
@@ -42,6 +43,7 @@ import { MultiplayerComponent } from './twoplayergame/multiplayer.component';
   ],
   imports: [
     BrowserModule,
+    HttpClientModule,
     AppRoutingModule,
     MatSlideToggleModule,
     MatSliderModule,

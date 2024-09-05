@@ -1,6 +1,6 @@
 <div style="display: flex">
   <img style="height: 100px; width: auto"src="./assets/icon.png" alt="icon" (click)="gotohome()">
-  <h1 class="title">{{showsize}} játéktér</h1>
+  <h1 (mouseenter)="this.voiceoverService.readingText($event)" (mouseleave)="this.speechSynthesizer.stop()" class="title">{{showsize}} playing field</h1>
 </div>
 <div class="game">
   <table>
@@ -13,10 +13,10 @@
     </tr>
   </table>
 </div>
-<div class="data">
-  <h1>A játékos talált párok: {{Amatches}}</h1>
+<div class="regex">
+  <h1 (mouseenter)="this.voiceoverService.readingText($event)" (mouseleave)="this.speechSynthesizer.stop()">A player pairs: {{Amatches}}</h1>
   <br>
   <br>
-  <h1>B játékos talált párok: {{Bmatches}}</h1>
+  <h1 (mouseenter)="this.voiceoverService.readingText($event)" (mouseleave)="this.speechSynthesizer.stop()">B player pairs: {{Bmatches}}</h1>
 </div>
 

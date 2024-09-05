@@ -1,29 +1,28 @@
 <img style="height: 100px; width: auto; float: left"src="./assets/icon.png" alt="icon" (click)="gotohome()">
 
-
 <div class="list">
-  <h2>Ranglista</h2>
+  <h2 (mouseenter)="this.voiceoverService.readingText($event)" (mouseleave)="this.speechSynthesizer.stop()">{{ loadedText.rankings}}</h2>
   <table>
-    <th>Helyezés</th>
-    <th>Név</th>
-    <th>Pontszám</th>
-    <th>Idő</th>
-    <th>Dátum</th>
+    <th (mouseenter)="this.voiceoverService.readingText($event)" (mouseleave)="this.speechSynthesizer.stop()">{{ loadedText.ranking}}</th>
+    <th (mouseenter)="this.voiceoverService.readingText($event)" (mouseleave)="this.speechSynthesizer.stop()">{{ loadedText.name}}</th>
+    <th (mouseenter)="this.voiceoverService.readingText($event)" (mouseleave)="this.speechSynthesizer.stop()">{{ loadedText.receivedpoints}}</th>
+    <th (mouseenter)="this.voiceoverService.readingText($event)" (mouseleave)="this.speechSynthesizer.stop()">{{ loadedText.time}}</th>
+    <th (mouseenter)="this.voiceoverService.readingText($event)" (mouseleave)="this.speechSynthesizer.stop()">{{ loadedText.date}}</th>
     <tbody>
     <tr *ngFor="let ranking of rankings | async; index as i">
-      <td>
+      <td (mouseenter)="this.voiceoverService.readingText($event)" (mouseleave)="this.speechSynthesizer.stop()">
         {{i + 1}}.
       </td>
-      <td>
+      <td (mouseenter)="this.voiceoverService.readingText($event)" (mouseleave)="this.speechSynthesizer.stop()">
         {{ranking.name}}
       </td>
-      <td>
+      <td (mouseenter)="this.voiceoverService.readingText($event)" (mouseleave)="this.speechSynthesizer.stop()">
         {{ranking.points}}
       </td>
-      <td>
+      <td (mouseenter)="this.voiceoverService.readingText($event)" (mouseleave)="this.speechSynthesizer.stop()">
         {{ranking.time}}
       </td>
-      <td>
+      <td (mouseenter)="this.voiceoverService.readingText($event)" (mouseleave)="this.speechSynthesizer.stop()">
         {{ranking.date.toDate() | date:'yyyy.MM.dd. HH:mm:ss':'UTC'}}
       </td>
     </tr>

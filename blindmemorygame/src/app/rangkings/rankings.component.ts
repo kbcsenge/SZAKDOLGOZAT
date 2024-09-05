@@ -10,6 +10,9 @@ import {SpeechNotification} from "../model/speech-notification";
 import {SpeechRecognizerService} from "../services/speech-recognizer.service";
 import {SpeechSynthesizerService} from "../services/speech-synthesizer.service";
 import {LanguageService} from "../services/language.service";
+import {VoiceoverService} from "../services/voiceover.service";
+import * as regex from '../model/regex.json';
+import * as text from '../model/text.json';
 
 @Component({
   selector: 'app-rangkings',
@@ -23,11 +26,15 @@ export class RankingsComponent implements OnInit, OnDestroy{
   transcript$?: Observable<string>;
   listening$?: Observable<boolean>;
   rankings: Observable<Ranking[]>;
+  regexData: any;
+  textData: any;
+  loadedText: any;
   constructor(private router: Router,
               private firestore: AngularFirestore,
               private speechrecognition: SpeechRecognizerService,
-              private speechSynthesizer: SpeechSynthesizerService,
-              private languageService: LanguageService)
+              public speechSynthesizer: SpeechSynthesizerService,
+              private languageService: LanguageService,
+              public voiceoverService: VoiceoverService )
   {
     this.rankings = firestore.collection<Ranking>('rankings').valueChanges();
     this.languageService.getLanguage().subscribe(language => {
@@ -36,13 +43,16 @@ export class RankingsComponent implements OnInit, OnDestroy{
   }
 
   ngOnInit(): void {
-    this.rankings.subscribe(data => console.log(data));
+    this.rankings.subscribe(regex => console.log(regex));
     this.speechSynthesizer.speak(
-      'Ranglista megnyitva', this.currentLanguage
+      'Rankings open', this.currentLanguage
     );
     this.speechrecognition.initialize(this.currentLanguage);
     this.initRecognition();
-    this.speechrecognition.start()
+    this.speechrecognition.start();
+    this.regexData = regex;
+    this.textData= text;
+    this.loadedText = this.textData[this.currentLanguage];
   }
 
   ngOnDestroy(): void {
@@ -66,13 +76,12 @@ export class RankingsComponent implements OnInit, OnDestroy{
     ).pipe(map((notification) => notification.event === SpeechEvent.Start));
   }
   private processNotification(notification: SpeechNotification<string>): void {
-    if (notification.event === SpeechEvent.FinalContent) {
-      const message = notification.content?.trim() || '';
-      let regexHome = new RegExp('.*főoldalra.*')
-      let testHome = regexHome.test(message);
-      if(testHome){
-        this.gotohome();
-      }
+    const languagePatterns = this.regexData[this.currentLanguage];
+    const message = notification.content?.trim() || '';
+    let regexHome = new RegExp(languagePatterns.home, 'i');
+    let testHome = regexHome.test(message);
+    if(testHome){
+      this.gotohome();
     }
   }
 }

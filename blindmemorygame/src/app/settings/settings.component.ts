@@ -12,7 +12,9 @@ import {SpeechNotification} from "../model/speech-notification";
 import {SpeechRecognizerService} from "../services/speech-recognizer.service";
 import {SpeechSynthesizerService} from "../services/speech-synthesizer.service";
 import {LanguageService} from "../services/language.service";
-
+import {VoiceoverService} from "../services/voiceover.service";
+import * as regex from '../model/regex.json';
+import * as text from '../model/text.json';
 @Component({
   selector: 'app-settings',
   standalone: true,
@@ -24,22 +26,29 @@ export class SettingsComponent implements OnInit, OnDestroy{
   currentLanguage='';
   transcript$?: Observable<string>;
   listening$?: Observable<boolean>;
+  regexData: any;
+  textData: any;
+  loadedText: any;
   constructor(private router: Router,
               public dialog: MatDialog,
               private speechrecognition: SpeechRecognizerService,
-              private speechSynthesizer: SpeechSynthesizerService,
-              private languageService: LanguageService) {
+              public speechSynthesizer: SpeechSynthesizerService,
+              private languageService: LanguageService,
+              public voiceoverService: VoiceoverService) {
     this.languageService.getLanguage().subscribe(language => {
       this.currentLanguage=language;
     });
   }
   ngOnInit() {
     this.speechSynthesizer.speak(
-      'Beállítások megnyitva', this.currentLanguage
+      'Settings open', this.currentLanguage
     );
     this.speechrecognition.initialize(this.currentLanguage);
     this.initRecognition();
-    this.speechrecognition.start()
+    this.speechrecognition.start();
+    this.regexData = regex;
+    this.textData= text;
+    this.loadedText = this.textData[this.currentLanguage];
   }
   ngOnDestroy() {
     this.speechSynthesizer.stop();
@@ -54,7 +63,7 @@ export class SettingsComponent implements OnInit, OnDestroy{
 
     dialogRef.afterClosed().subscribe(result => {
       this.speechSynthesizer.speak(
-        'Hangerő és lejátszási sebesség beállítása mentve', this.currentLanguage
+        'Volume and playback speed setting saved', this.currentLanguage
       );
       this.reInit();
     });
@@ -63,7 +72,7 @@ export class SettingsComponent implements OnInit, OnDestroy{
     const dialogRef = this.dialog.open(NumberofplayersComponent);
     dialogRef.afterClosed().subscribe(result => {
       this.speechSynthesizer.speak(
-        'Játékosok számának beállítása mentve', this.currentLanguage
+        'Setting the number of players saved', this.currentLanguage
       );
       this.reInit();
     });
@@ -73,7 +82,7 @@ export class SettingsComponent implements OnInit, OnDestroy{
     const dialogRef = this.dialog.open(BoardsizeComponent);
     dialogRef.afterClosed().subscribe(result => {
       this.speechSynthesizer.speak(
-        'Játéktér beállítása mentve', this.currentLanguage
+        'Game boardsize setting saved', this.currentLanguage
       );
       this.reInit();
     });
@@ -83,7 +92,7 @@ export class SettingsComponent implements OnInit, OnDestroy{
     const dialogRef = this.dialog.open(TimeComponent);
     dialogRef.afterClosed().subscribe(result => {
       this.speechSynthesizer.speak(
-        'Játékidő beállítása mentve', this.currentLanguage
+        'Game time setting saved', this.currentLanguage
       );
       this.reInit();
     });
@@ -103,35 +112,34 @@ export class SettingsComponent implements OnInit, OnDestroy{
     ).pipe(map((notification) => notification.event === SpeechEvent.Start));
   }
   private processNotification(notification: SpeechNotification<string>): void {
-    if (notification.event === SpeechEvent.FinalContent) {
-      const message = notification.content?.trim() || '';
-      let regexHome = new RegExp('.*főoldal.*')
-      let testHome = regexHome.test(message);
-      let regexBoard = new RegExp('.*játékmező.*')
-      let testBoard = regexBoard.test(message);
-      let regexPlayers= new RegExp('.*játékosok.*')
-      let testPlayers = regexPlayers.test(message);
-      let regexTime= new RegExp('.*idő.*')
-      let testTime = regexTime.test(message);
-      let regexVolume= new RegExp('.*hangerő.*')
-      let testVolume = regexVolume.test(message);
-      let regexSpeed= new RegExp('.*sebesség.*')
-      let testSpeed = regexSpeed.test(message);
-      if(testHome){
-        this.gotohome();
-      }
-      if(testPlayers){
-        this.nofpDialog();
-      }
-      if(testBoard){
-        this.boardsizeDialog();
-      }
-      if(testTime){
-        this.timeDialog();
-      }
-      if(testVolume || testSpeed){
-        this.vandsDialog();
-      }
+    const languagePatterns = this.regexData[this.currentLanguage];
+    const message = notification.content?.trim() || '';
+    let regexHome = new RegExp(languagePatterns.home, 'i');
+    let testHome = regexHome.test(message);
+    let regexBoard = new RegExp(languagePatterns.gameboard, 'i');
+    let testBoard = regexBoard.test(message);
+    let regexPlayers= new RegExp(languagePatterns.players, 'i');
+    let testPlayers = regexPlayers.test(message);
+    let regexTime= new RegExp(languagePatterns.time, 'i');
+    let testTime = regexTime.test(message);
+    let regexVolume= new RegExp(languagePatterns.volume, 'i');
+    let testVolume = regexVolume.test(message);
+    let regexSpeed= new RegExp(languagePatterns.speed, 'i');
+    let testSpeed = regexSpeed.test(message);
+    if(testHome){
+      this.gotohome();
+    }
+    if(testPlayers){
+      this.nofpDialog();
+    }
+    if(testBoard){
+      this.boardsizeDialog();
+    }
+    if(testTime){
+      this.timeDialog();
+    }
+    if(testVolume || testSpeed){
+      this.vandsDialog();
     }
   }
   reInit(){

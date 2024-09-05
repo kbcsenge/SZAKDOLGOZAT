@@ -8,12 +8,12 @@ import {SpeechRecognizerService} from "../services/speech-recognizer.service";
 import {SpeechSynthesizerService} from "../services/speech-synthesizer.service";
 import {LanguageService} from "../services/language.service";
 import {cardpictures} from "../game/cardurls/cardurls";
-import {RetryComponent} from "../game/retry/retry.component";
 import {SuccessComponent} from "../game/success/success.component";
 import {map, tap} from "rxjs/operators";
 import {SpeechEvent} from "../model/speech-event";
 import {SpeechNotification} from "../model/speech-notification";
-
+import {VoiceoverService} from "../services/voiceover.service";
+import * as regex from '../model/regex.json';
 @Component({
   selector: 'app-twoplayergame',
   templateUrl: './multiplayer.component.html',
@@ -39,19 +39,21 @@ export class MultiplayerComponent implements OnInit, AfterViewInit, OnDestroy{
   transcript$?: Observable<string>;
   listening$?: Observable<boolean>;
   numbersInWords : {[key: string]: number} = {
-    első: 1,
-    második: 2,
-    harmadik: 3,
-    negyedik: 4,
-    ötödik: 5
+    first: 1,
+    second: 2,
+    third: 3,
+    fourth: 4,
+    fifth: 5,
   };
+  regexData: any = regex;
 
   constructor(private cardservice: CardService,
               private gameservice: GameService,
               private router: Router, public dialog: MatDialog,
               private speechrecognition: SpeechRecognizerService,
-              private speechSynthesizer: SpeechSynthesizerService,
-              private languageService: LanguageService) {
+              public speechSynthesizer: SpeechSynthesizerService,
+              private languageService: LanguageService,
+              public voiceoverService: VoiceoverService) {
     this.languageService.getLanguage().subscribe(language => {
       this.currentLanguage=language;
     });
@@ -74,18 +76,18 @@ export class MultiplayerComponent implements OnInit, AfterViewInit, OnDestroy{
   maxPairs(){
     if(this.row==3 && this.col==4){
       this.maxpairs=6;
-      this.size="3-szor 4-es";
-      this.showsize="3x4-es"
+      this.size="3 by 4";
+      this.showsize="3x4"
     }
     if(this.row==4 && this.col==4){
       this.maxpairs=8;
-      this.size="4-szer 4-es";
-      this.showsize="4x4-es"
+      this.size="4 by 4";
+      this.showsize="4x4"
     }
     if(this.row==4 && this.col==5){
       this.maxpairs=10;
-      this.size="4-szer 5-ös"
-      this.showsize="4x5-ös";
+      this.size="4 by 5"
+      this.showsize="4x5";
     }
   }
   shuffle(array: string[]) {
@@ -122,7 +124,7 @@ export class MultiplayerComponent implements OnInit, AfterViewInit, OnDestroy{
       const card2 = this.rows[this.selectedCards[1].row][this.selectedCards[1].col];
       if (card1 !== card2) {
         this.speechSynthesizer.speak(
-          'nem talált', this.currentLanguage
+          'not matching', this.currentLanguage
         );
         setTimeout(() => {
           this.flipped[this.selectedCards[0].row][this.selectedCards[0].col] = false;
@@ -131,7 +133,7 @@ export class MultiplayerComponent implements OnInit, AfterViewInit, OnDestroy{
         }, 800);
       } else {
         this.speechSynthesizer.speak(
-          'párt találtál', this.currentLanguage
+          'you found a pair', this.currentLanguage
         );
 
         if(this.currentPlayer === 'A') {
@@ -156,8 +158,8 @@ export class MultiplayerComponent implements OnInit, AfterViewInit, OnDestroy{
     this.router.navigate(['/home']);
   }
   setUpCards(){
-    this.cardservice.getImage('cards/flip.png').subscribe(data=>{
-      this.flipping=data
+    this.cardservice.getImage('cards/flip.png').subscribe(regex=>{
+      this.flipping=regex
     })
     const imageObservables = cardpictures.map(card => this.cardservice.getImage(card));
     forkJoin(imageObservables).subscribe(images => {
@@ -190,11 +192,11 @@ export class MultiplayerComponent implements OnInit, AfterViewInit, OnDestroy{
     ).pipe(map((notification) => notification.event === SpeechEvent.Start));
   }
   private processNotification(notification: SpeechNotification<string>): void {
-    if (notification.event === SpeechEvent.FinalContent) {
+      const languagePatterns = this.regexData[this.currentLanguage];
       const message = notification.content?.trim() || '';
-      let regexHome = new RegExp('.*főoldalra.*')
+      let regexHome = new RegExp(languagePatterns.home, 'i');
       let testHome = regexHome.test(message);
-      let regexSelectCard = new RegExp('^([a-záéíóöőúüű]+) ([a-záéíóöőúüű]+)$');
+      let regexSelectCard = new RegExp(languagePatterns.selectCard, 'i');
       let testGame = regexSelectCard.exec(message)
       if(testHome){
         this.gotohome();
@@ -204,59 +206,58 @@ export class MultiplayerComponent implements OnInit, AfterViewInit, OnDestroy{
         let col = this.numbersInWords[testGame[2]] - 1;
         this.selectCard(row, col);
       }
-    }
   }
 
   sayCard(cardname: string){
     console.log(this.currentLanguage)
     if(cardname.includes('cat.png')){
       this.speechSynthesizer.speak(
-        'cica', this.currentLanguage
+        'cat', this.currentLanguage
       );
     }
     if(cardname.includes('ball.png')){
       this.speechSynthesizer.speak(
-        'labda', this.currentLanguage
+        'ball', this.currentLanguage
       );
     }
     if(cardname.includes('candy.png')){
       this.speechSynthesizer.speak(
-        'cukorka', this.currentLanguage
+        'candy', this.currentLanguage
       );
     }
     if(cardname.includes('car.png')){
       this.speechSynthesizer.speak(
-        'autó', this.currentLanguage
+        'car', this.currentLanguage
       );
     }
     if(cardname.includes('cloud.png')){
       this.speechSynthesizer.speak(
-        'felhő', this.currentLanguage
+        'cloud', this.currentLanguage
       );
     }
     if(cardname.includes('dog.png')){
       this.speechSynthesizer.speak(
-        'kutya', this.currentLanguage
+        'dog', this.currentLanguage
       );
     }
     if(cardname.includes('flow.png')){
       this.speechSynthesizer.speak(
-        'narancsárga virág', this.currentLanguage
+        'flower', this.currentLanguage
       );
     }
     if(cardname.includes('rose.png')){
       this.speechSynthesizer.speak(
-        'rózsa', this.currentLanguage
+        'rose', this.currentLanguage
       );
     }
     if(cardname.includes('sun.png')){
       this.speechSynthesizer.speak(
-        'nap', this.currentLanguage
+        'sun', this.currentLanguage
       );
     }
     if(cardname.includes('umb.png')){
       this.speechSynthesizer.speak(
-        'esernyő', this.currentLanguage
+        'umbrella', this.currentLanguage
       );
     }
   }

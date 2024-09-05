@@ -1,6 +1,6 @@
 
 <div class="alertwindow">
-  <p>Nem sikerült az összes párt megtalálni!</p>
-  <button (click)="retrygame()">Újrakezdés</button>
-  <button (click)="gotohome()">Vissza a főoldalra</button>
+  <p (mouseenter)="this.voiceoverService.readingText($event)" (mouseleave)="this.speechSynthesizer.stop()" >{{ loadedText.notfoundallpairs}}</p>
+  <button (mouseenter)="this.voiceoverService.readingText($event)" (mouseleave)="this.speechSynthesizer.stop()" (click)="retrygame()">{{ loadedText.retry }}</button>
+  <button (mouseenter)="this.voiceoverService.readingText($event)" (mouseleave)="this.speechSynthesizer.stop()" (click)="gotohome()">{{ loadedText.backtomainpage }}</button>
 </div>
