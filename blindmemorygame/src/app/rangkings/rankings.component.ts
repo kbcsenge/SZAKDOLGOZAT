@@ -13,6 +13,7 @@ import {LanguageService} from "../services/language.service";
 import {VoiceoverService} from "../services/voiceover.service";
 import * as regex from '../model/regex.json';
 import * as text from '../model/text.json';
+import * as spokentext from "../model/spokentext.json";
 
 @Component({
   selector: 'app-rangkings',
@@ -29,6 +30,8 @@ export class RankingsComponent implements OnInit, OnDestroy{
   regexData: any;
   textData: any;
   loadedText: any;
+  spokenTextData: any;
+  spokenText: any;
   constructor(private router: Router,
               private firestore: AngularFirestore,
               private speechrecognition: SpeechRecognizerService,
@@ -43,16 +46,18 @@ export class RankingsComponent implements OnInit, OnDestroy{
   }
 
   ngOnInit(): void {
+    this.regexData = regex;
+    this.textData= text;
+    this.spokenTextData = spokentext;
+    this.loadedText = this.textData[this.currentLanguage];
+    this.spokenText = this.spokenTextData[this.currentLanguage];
     this.rankings.subscribe(regex => console.log(regex));
     this.speechSynthesizer.speak(
-      'Rankings open', this.currentLanguage
+      this.spokenText.rankingsopen, this.currentLanguage
     );
     this.speechrecognition.initialize(this.currentLanguage);
     this.initRecognition();
     this.speechrecognition.start();
-    this.regexData = regex;
-    this.textData= text;
-    this.loadedText = this.textData[this.currentLanguage];
   }
 
   ngOnDestroy(): void {

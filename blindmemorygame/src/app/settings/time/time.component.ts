@@ -12,6 +12,7 @@ import {MatSlideToggle} from "@angular/material/slide-toggle";
 import {VoiceoverService} from "../../services/voiceover.service";
 import * as regex from '../../model/regex.json';
 import * as text from "../../model/text.json";
+import * as spokentext from "../../model/spokentext.json";
 
 @Component({
   selector: 'app-time',
@@ -29,6 +30,8 @@ export class TimeComponent implements OnInit, OnDestroy {
   regexData: any;
   textData: any;
   loadedText: any;
+  spokenTextData: any;
+  spokenText: any;
   constructor(public dialogRef: MatDialogRef<TimeComponent>,
               @Inject(MAT_DIALOG_DATA) public data: any,
               private speechrecognition: SpeechRecognizerService,
@@ -41,16 +44,17 @@ export class TimeComponent implements OnInit, OnDestroy {
     });
   }
   ngOnInit(): void {
+    this.regexData = regex;
+    this.textData= text;
+    this.spokenTextData = spokentext;
+    this.loadedText = this.textData[this.currentLanguage];
+    this.spokenText = this.spokenTextData[this.currentLanguage];
     this.speechSynthesizer.speak(
-      'Game time setting opened', this.currentLanguage
+      this.spokenText.gametimeopened, this.currentLanguage
     );
     this.speechrecognition.initialize(this.currentLanguage);
     this.initRecognition();
     this.speechrecognition.start();
-    this.regexData = regex;
-    this.regexData = regex;
-    this.textData= text;
-    this.loadedText = this.textData[this.currentLanguage];
   }
 
   ngOnDestroy(): void {

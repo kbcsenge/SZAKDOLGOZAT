@@ -17,6 +17,7 @@ import {LanguageService} from "../services/language.service";
 import {VoiceoverService} from "../services/voiceover.service";
 import * as regex from '../model/regex.json';
 import * as text from '../model/text.json';
+import * as spokentext from '../model/spokentext.json';
 
 @Component({
   selector: 'app-game',
@@ -56,6 +57,8 @@ export class GameComponent implements OnInit, OnDestroy, AfterViewInit{
   regexData: any;
   textData: any;
   loadedText: any;
+  spokenTextData: any;
+  spokenText: any;
 
    constructor(private cardservice: CardService,
                private gameservice: GameService,
@@ -70,19 +73,20 @@ export class GameComponent implements OnInit, OnDestroy, AfterViewInit{
      this.time = this.gameservice.getTime();
      this.row=this.gameservice.getRows();
      this.col=this.gameservice.getCols();
-     this.maxPairs();
    }
 
   ngOnInit() {
-      this.setUpCards();
-      this.speechrecognition.initialize(this.currentLanguage);
-      this.initRecognition();
-      this.speechrecognition.start();
-      this.regexData = regex;
-      this.textData= text;
-      this.loadedText = this.textData[this.currentLanguage];
+    this.regexData = regex;
+    this.textData= text;
+    this.spokenTextData = spokentext;
+    this.loadedText = this.textData[this.currentLanguage];
+    this.spokenText = this.spokenTextData[this.currentLanguage];
+    this.setUpCards();
+    this.speechrecognition.initialize(this.currentLanguage);
+    this.initRecognition();
+    this.speechrecognition.start();
+    this.maxPairs();
   }
-
   ngOnDestroy(){
     this.stopTimer();
     this.speechSynthesizer.stop();
@@ -91,17 +95,17 @@ export class GameComponent implements OnInit, OnDestroy, AfterViewInit{
   maxPairs(){
      if(this.row==3 && this.col==4){
        this.maxpairs=6;
-       this.size="3 by 4";
+       this.size=this.spokenText.threebyfour;
        this.showsize="3x4"
      }
     if(this.row==4 && this.col==4){
       this.maxpairs=8;
-      this.size="4 by 4";
+      this.size=this.spokenText.fourbyfour;
       this.showsize="4x4"
     }
     if(this.row==4 && this.col==5){
       this.maxpairs=10;
-      this.size="4 by 5"
+      this.size=this.spokenText.fourbyfive;
       this.showsize="4x5";
     }
   }
@@ -140,7 +144,7 @@ export class GameComponent implements OnInit, OnDestroy, AfterViewInit{
       const card2 = this.rows[this.selectedCards[1].row][this.selectedCards[1].col];
       if (card1 !== card2) {
         this.speechSynthesizer.speak(
-          'not mtching', this.currentLanguage
+          this.spokenText.notmatching, this.currentLanguage
         );
         setTimeout(() => {
           this.flipped[this.selectedCards[0].row][this.selectedCards[0].col] = false;
@@ -149,7 +153,7 @@ export class GameComponent implements OnInit, OnDestroy, AfterViewInit{
         }, 800);
       } else {
         this.speechSynthesizer.speak(
-          'you found a pair', this.currentLanguage
+          this.spokenText.foundpair, this.currentLanguage
         );
         this.matches++;
         this.points+=50;
@@ -206,7 +210,7 @@ export class GameComponent implements OnInit, OnDestroy, AfterViewInit{
   }
   retryDialog(): void {
     this.speechSynthesizer.speak(
-      'You didn\'t find all the pairs!', this.currentLanguage
+      this.spokenText.notallpairsfound, this.currentLanguage
     );
     const dialogRef = this.dialog.open(RetryComponent);
 
@@ -217,7 +221,7 @@ export class GameComponent implements OnInit, OnDestroy, AfterViewInit{
 
   successDialog(): void{
     this.speechSynthesizer.speak(
-      'Yo found all the pairs! Add your name to the leaderboard!\n', this.currentLanguage
+      this.spokenText.allpairsfound, this.currentLanguage
     );
     const dialogRef = this.dialog.open(SuccessComponent);
 
@@ -255,13 +259,13 @@ export class GameComponent implements OnInit, OnDestroy, AfterViewInit{
 
     if (message === 'how much time is left') {
       this.speechSynthesizer.speak(
-        this.time.toString() + ' seconds to go', this.currentLanguage
+        this.time.toString() + this.spokenText.secondsleft, this.currentLanguage
       );
     }
 
     if (testPoint) {
       this.speechSynthesizer.speak(
-        "You have " + this.points.toString() + " points", this.currentLanguage
+        this.spokenText.youhave  + " " + this.points.toString() + " " + this.spokenText.points, this.currentLanguage
       );
     }
 
@@ -276,59 +280,59 @@ export class GameComponent implements OnInit, OnDestroy, AfterViewInit{
      console.log(this.currentLanguage)
      if(cardname.includes('cat.png')){
        this.speechSynthesizer.speak(
-         'cat', this.currentLanguage
+         this.spokenText.cat, this.currentLanguage
        );
      }
     if(cardname.includes('ball.png')){
       this.speechSynthesizer.speak(
-        'ball', this.currentLanguage
+        this.spokenText.ball, this.currentLanguage
       );
     }
     if(cardname.includes('candy.png')){
       this.speechSynthesizer.speak(
-        'candy', this.currentLanguage
+        this.spokenText.candy, this.currentLanguage
       );
     }
     if(cardname.includes('car.png')){
       this.speechSynthesizer.speak(
-        'car', this.currentLanguage
+        this.spokenText.car, this.currentLanguage
       );
     }
     if(cardname.includes('cloud.png')){
       this.speechSynthesizer.speak(
-        'clound', this.currentLanguage
+        this.spokenText.cloud, this.currentLanguage
       );
     }
     if(cardname.includes('dog.png')){
       this.speechSynthesizer.speak(
-        'dog', this.currentLanguage
+        this.spokenText.dog, this.currentLanguage
       );
     }
     if(cardname.includes('flow.png')){
       this.speechSynthesizer.speak(
-        'flower', this.currentLanguage
+        this.spokenText.flower, this.currentLanguage
       );
     }
     if(cardname.includes('rose.png')){
       this.speechSynthesizer.speak(
-        'rose', this.currentLanguage
+        this.spokenText.rose, this.currentLanguage
       );
     }
     if(cardname.includes('sun.png')){
       this.speechSynthesizer.speak(
-        'sun', this.currentLanguage
+        this.spokenText.sun, this.currentLanguage
       );
     }
     if(cardname.includes('umb.png')){
       this.speechSynthesizer.speak(
-        'umbrella', this.currentLanguage
+        this.spokenText.umb, this.currentLanguage
       );
     }
   }
 
   ngAfterViewInit(): void {
     this.speechSynthesizer.speak(
-      'Game started. It is a '+this.size+' game board with a standing time of '+this.time.toString()+' seconds. Good luck!', this.currentLanguage,
+      this.spokenText.gamestarted+" "+ this.spokenText.itsa+" " +this.size+" " +this.spokenText.gameboard+" "+this.spokenText.havetime+" "+this.time.toString()+" "+this.spokenText.seconds+" " +this.spokenText.goodluck, this.currentLanguage,
       () => {
         this.startTimer();
       }

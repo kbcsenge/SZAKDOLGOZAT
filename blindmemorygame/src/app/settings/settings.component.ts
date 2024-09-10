@@ -15,6 +15,7 @@ import {LanguageService} from "../services/language.service";
 import {VoiceoverService} from "../services/voiceover.service";
 import * as regex from '../model/regex.json';
 import * as text from '../model/text.json';
+import * as spokentext from "../model/spokentext.json";
 @Component({
   selector: 'app-settings',
   standalone: true,
@@ -29,6 +30,8 @@ export class SettingsComponent implements OnInit, OnDestroy{
   regexData: any;
   textData: any;
   loadedText: any;
+  spokenTextData: any;
+  spokenText: any;
   constructor(private router: Router,
               public dialog: MatDialog,
               private speechrecognition: SpeechRecognizerService,
@@ -40,15 +43,17 @@ export class SettingsComponent implements OnInit, OnDestroy{
     });
   }
   ngOnInit() {
+    this.regexData = regex;
+    this.textData= text;
+    this.spokenTextData = spokentext;
+    this.loadedText = this.textData[this.currentLanguage];
+    this.spokenText = this.spokenTextData[this.currentLanguage];
     this.speechSynthesizer.speak(
-      'Settings open', this.currentLanguage
+      this.spokenText.settingsopened, this.currentLanguage
     );
     this.speechrecognition.initialize(this.currentLanguage);
     this.initRecognition();
     this.speechrecognition.start();
-    this.regexData = regex;
-    this.textData= text;
-    this.loadedText = this.textData[this.currentLanguage];
   }
   ngOnDestroy() {
     this.speechSynthesizer.stop();
@@ -63,7 +68,7 @@ export class SettingsComponent implements OnInit, OnDestroy{
 
     dialogRef.afterClosed().subscribe(result => {
       this.speechSynthesizer.speak(
-        'Volume and playback speed setting saved', this.currentLanguage
+        this.spokenText.vandsaved, this.currentLanguage
       );
       this.reInit();
     });
@@ -72,7 +77,7 @@ export class SettingsComponent implements OnInit, OnDestroy{
     const dialogRef = this.dialog.open(NumberofplayersComponent);
     dialogRef.afterClosed().subscribe(result => {
       this.speechSynthesizer.speak(
-        'Setting the number of players saved', this.currentLanguage
+        this.spokenText.numberofplayerssaved, this.currentLanguage
       );
       this.reInit();
     });
@@ -82,7 +87,7 @@ export class SettingsComponent implements OnInit, OnDestroy{
     const dialogRef = this.dialog.open(BoardsizeComponent);
     dialogRef.afterClosed().subscribe(result => {
       this.speechSynthesizer.speak(
-        'Game boardsize setting saved', this.currentLanguage
+        this.spokenText.gametimesaved, this.currentLanguage
       );
       this.reInit();
     });
@@ -92,7 +97,7 @@ export class SettingsComponent implements OnInit, OnDestroy{
     const dialogRef = this.dialog.open(TimeComponent);
     dialogRef.afterClosed().subscribe(result => {
       this.speechSynthesizer.speak(
-        'Game time setting saved', this.currentLanguage
+        this.spokenText.gameboardsizementve, this.currentLanguage
       );
       this.reInit();
     });

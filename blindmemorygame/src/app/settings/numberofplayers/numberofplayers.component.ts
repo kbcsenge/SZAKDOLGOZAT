@@ -13,6 +13,7 @@ import {MatSlideToggle} from "@angular/material/slide-toggle";
 import {VoiceoverService} from "../../services/voiceover.service";
 import * as regex from '../../model/regex.json';
 import * as text from '../../model/text.json';
+import * as spokentext from "../../model/spokentext.json";
 @Component({
   selector: 'app-numberofplayers',
   templateUrl: './numberofplayers.component.html',
@@ -27,6 +28,8 @@ export class NumberofplayersComponent implements OnInit, OnDestroy {
   regexData: any;
   textData: any;
   loadedText: any;
+  spokenTextData: any;
+  spokenText: any;
   constructor(private router: Router,
               public dialogRef: MatDialogRef<NumberofplayersComponent>,
               @Inject(MAT_DIALOG_DATA) public data: any,
@@ -40,15 +43,17 @@ export class NumberofplayersComponent implements OnInit, OnDestroy {
     });
   }
   ngOnInit(): void {
+    this.regexData = regex;
+    this.textData= text;
+    this.spokenTextData = spokentext;
+    this.loadedText = this.textData[this.currentLanguage];
+    this.spokenText = this.spokenTextData[this.currentLanguage];
     this.speechSynthesizer.speak(
-      'Number of players setting opened', this.currentLanguage
+      this.spokenText.numberofplayersopened, this.currentLanguage
     );
     this.speechrecognition.initialize(this.currentLanguage);
     this.initRecognition();
     this.speechrecognition.start();
-    this.regexData = regex;
-    this.textData= text;
-    this.loadedText = this.textData[this.currentLanguage];
   }
 
   ngOnDestroy(): void {

@@ -12,6 +12,7 @@ import {GameService} from "../../services/game.service";
 import {VoiceoverService} from "../../services/voiceover.service";
 import * as regex from '../../model/regex.json';
 import * as text from '../../model/text.json';
+import * as spokentext from "../../model/spokentext.json";
 
 @Component({
   selector: 'app-boardsize',
@@ -28,6 +29,8 @@ export class BoardsizeComponent implements OnInit, OnDestroy{
   regexData: any;
   textData: any;
   loadedText: any;
+  spokenTextData: any;
+  spokenText: any;
   constructor(public dialogRef: MatDialogRef<BoardsizeComponent>,
               @Inject(MAT_DIALOG_DATA) public data: any,
               private speechrecognition: SpeechRecognizerService,
@@ -40,15 +43,17 @@ export class BoardsizeComponent implements OnInit, OnDestroy{
     });
   }
   ngOnInit(): void {
+    this.regexData = regex;
+    this.textData= text;
+    this.spokenTextData = spokentext;
+    this.loadedText = this.textData[this.currentLanguage];
+    this.spokenText = this.spokenTextData[this.currentLanguage];
     this.speechSynthesizer.speak(
-      'Game boardsize setting opened', this.currentLanguage
+      this.spokenText.gameboardsizeopened, this.currentLanguage
     );
     this.speechrecognition.initialize(this.currentLanguage);
     this.initRecognition();
     this.speechrecognition.start()
-    this.regexData = regex;
-    this.textData= text;
-    this.loadedText = this.textData[this.currentLanguage];
   }
 
   ngOnDestroy() {

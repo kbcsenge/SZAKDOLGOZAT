@@ -13,6 +13,7 @@ import {GameService} from "../services/game.service";
 import {VoiceoverService} from "../services/voiceover.service";
 import * as regex from '../model/regex.json';
 import * as text from '../model/text.json';
+import * as spokentext from "../model/spokentext.json";
 @Component({
   selector: 'app-homepage',
   standalone: true,
@@ -28,6 +29,8 @@ export class HomepageComponent implements OnInit, OnDestroy{
   regexData: any;
   textData: any;
   loadedText: any;
+  spokenTextData: any;
+  spokenText: any;
   constructor(private router: Router,
               private speechrecognition: SpeechRecognizerService,
               public speechSynthesizer: SpeechSynthesizerService,
@@ -42,15 +45,17 @@ export class HomepageComponent implements OnInit, OnDestroy{
 
 
   ngOnInit(): void {
+    this.regexData = regex;
+    this.textData= text;
+    this.spokenTextData = spokentext;
+    this.loadedText = this.textData[this.currentLanguage];
+    this.spokenText = this.spokenTextData[this.currentLanguage];
     this.speechSynthesizer.speak(
-      'Hi! This is a speech recognition game for blind and partially sighted people!', this.currentLanguage
+      this.spokenText.welcome, this.currentLanguage
     );
     this.speechrecognition.initialize(this.currentLanguage);
     this.initRecognition();
     this.speechrecognition.start();
-    this.regexData = regex;
-    this.textData= text;
-    this.loadedText = this.textData[this.currentLanguage];
   }
 
   ngOnDestroy(): void {
@@ -118,7 +123,7 @@ export class HomepageComponent implements OnInit, OnDestroy{
 
     dialogRef.afterClosed().subscribe(result => {
       this.speechSynthesizer.speak(
-        'Help dialog closed!', this.currentLanguage
+        this.spokenText.helpclosed, this.currentLanguage
       );
       this.reInit();
     });

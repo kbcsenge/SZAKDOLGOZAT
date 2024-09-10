@@ -14,6 +14,8 @@ import {SpeechEvent} from "../model/speech-event";
 import {SpeechNotification} from "../model/speech-notification";
 import {VoiceoverService} from "../services/voiceover.service";
 import * as regex from '../model/regex.json';
+import * as text from "../model/text.json";
+import * as spokentext from "../model/spokentext.json";
 @Component({
   selector: 'app-twoplayergame',
   templateUrl: './multiplayer.component.html',
@@ -46,7 +48,10 @@ export class MultiplayerComponent implements OnInit, AfterViewInit, OnDestroy{
     fifth: 5,
   };
   regexData: any = regex;
-
+  textData: any;
+  loadedText: any;
+  spokenTextData: any;
+  spokenText: any;
   constructor(private cardservice: CardService,
               private gameservice: GameService,
               private router: Router, public dialog: MatDialog,
@@ -63,10 +68,15 @@ export class MultiplayerComponent implements OnInit, AfterViewInit, OnDestroy{
   }
 
   ngOnInit() {
+    this.regexData = regex;
+    this.textData= text;
+    this.spokenTextData = spokentext;
+    this.loadedText = this.textData[this.currentLanguage];
+    this.spokenText = this.spokenTextData[this.currentLanguage];
     this.setUpCards();
     this.speechrecognition.initialize(this.currentLanguage);
     this.initRecognition();
-    this.speechrecognition.start()
+    this.speechrecognition.start();
   }
 
   ngOnDestroy(){
@@ -76,17 +86,17 @@ export class MultiplayerComponent implements OnInit, AfterViewInit, OnDestroy{
   maxPairs(){
     if(this.row==3 && this.col==4){
       this.maxpairs=6;
-      this.size="3 by 4";
+      this.size=this.spokenText.threebyfour;
       this.showsize="3x4"
     }
     if(this.row==4 && this.col==4){
       this.maxpairs=8;
-      this.size="4 by 4";
+      this.size=this.spokenText.fourbyfour;
       this.showsize="4x4"
     }
     if(this.row==4 && this.col==5){
       this.maxpairs=10;
-      this.size="4 by 5"
+      this.size=this.spokenText.fourbyfive;
       this.showsize="4x5";
     }
   }
@@ -124,7 +134,7 @@ export class MultiplayerComponent implements OnInit, AfterViewInit, OnDestroy{
       const card2 = this.rows[this.selectedCards[1].row][this.selectedCards[1].col];
       if (card1 !== card2) {
         this.speechSynthesizer.speak(
-          'not matching', this.currentLanguage
+          this.spokenText.notmatching, this.currentLanguage
         );
         setTimeout(() => {
           this.flipped[this.selectedCards[0].row][this.selectedCards[0].col] = false;
@@ -133,7 +143,7 @@ export class MultiplayerComponent implements OnInit, AfterViewInit, OnDestroy{
         }, 800);
       } else {
         this.speechSynthesizer.speak(
-          'you found a pair', this.currentLanguage
+          this.spokenText.foundpair, this.currentLanguage
         );
 
         if(this.currentPlayer === 'A') {
@@ -191,21 +201,23 @@ export class MultiplayerComponent implements OnInit, AfterViewInit, OnDestroy{
       this.speechrecognition.onEnd()
     ).pipe(map((notification) => notification.event === SpeechEvent.Start));
   }
-  private processNotification(notification: SpeechNotification<string>): void {
-      const languagePatterns = this.regexData[this.currentLanguage];
-      const message = notification.content?.trim() || '';
-      let regexHome = new RegExp(languagePatterns.home, 'i');
-      let testHome = regexHome.test(message);
-      let regexSelectCard = new RegExp(languagePatterns.selectCard, 'i');
-      let testGame = regexSelectCard.exec(message)
-      if(testHome){
-        this.gotohome();
-      }
-      if (testGame) {
-        let row = this.numbersInWords[testGame[1]] - 1;
-        let col = this.numbersInWords[testGame[2]] - 1;
-        this.selectCard(row, col);
-      }
+  private processNotification(notification: SpeechNotification<string>):void {
+    const message = notification.content?.trim() || '';
+    const languagePatterns = this.regexData[this.currentLanguage];
+    let regexHome = new RegExp(languagePatterns.home, 'i');
+    let regexSelectCard = new RegExp(languagePatterns.selectCard, 'i');
+    let testHome = regexHome.test(message);
+    let testGame = regexSelectCard.exec(message);
+
+    if (testHome) {
+      this.gotohome();
+    }
+
+    if (testGame) {
+      let row = this.numbersInWords[testGame[1]] - 1;
+      let col = this.numbersInWords[testGame[2]] - 1;
+      this.selectCard(row, col);
+    }
   }
 
   sayCard(cardname: string){
@@ -264,7 +276,7 @@ export class MultiplayerComponent implements OnInit, AfterViewInit, OnDestroy{
 
   ngAfterViewInit(): void {
     this.speechSynthesizer.speak(
-      'Játék megnyitva. Ez egy '+this.size+' játéktábla.', this.currentLanguage,
+      this.spokenText.gamestarted+" "+ this.spokenText.itsa+" " +this.size+" " +this.spokenText.gameboard, this.currentLanguage,
     );
   }
 }
