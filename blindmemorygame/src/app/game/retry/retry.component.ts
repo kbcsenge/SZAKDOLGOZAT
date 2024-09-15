@@ -76,18 +76,20 @@ export class RetryComponent {
     ).pipe(map((notification) => notification.event === SpeechEvent.Start));
   }
   private processNotification(notification: SpeechNotification<string>): void {
-    const languagePatterns = this.regexData[this.currentLanguage];
-    const message = notification.content?.trim() || '';
+    if (notification.event === SpeechEvent.FinalContent) {
+      const languagePatterns = this.regexData[this.currentLanguage];
+      const message = notification.content?.trim() || '';
 
-    let regexGame = new RegExp(languagePatterns.game, 'i');
-    let regexHome =new RegExp(languagePatterns.home, 'i');
-    let testGame = regexGame.test(message);
-    let testHome = regexHome.test(message);
-    if(testGame){
-      this.retrygame();
-    }
-    if(testHome){
-      this.gotohome();
+      let regexGame = new RegExp(languagePatterns.game, 'i');
+      let regexHome = new RegExp(languagePatterns.home, 'i');
+      let testGame = regexGame.test(message);
+      let testHome = regexHome.test(message);
+      if (testGame) {
+        this.retrygame();
+      }
+      if (testHome) {
+        this.gotohome();
+      }
     }
   }
 }
