@@ -16,6 +16,7 @@ import {VoiceoverService} from "../services/voiceover.service";
 import * as regex from '../model/regex.json';
 import * as text from "../model/text.json";
 import * as spokentext from "../model/spokentext.json";
+import {MultiplayersuccessComponent} from "./success/multiplayersuccess.component";
 @Component({
   selector: 'app-twoplayergame',
   templateUrl: './multiplayer.component.html',
@@ -40,18 +41,13 @@ export class MultiplayerComponent implements OnInit, AfterViewInit, OnDestroy{
   maxpairs: number = 6;
   transcript$?: Observable<string>;
   listening$?: Observable<boolean>;
-  numbersInWords : {[key: string]: number} = {
-    first: 1,
-    second: 2,
-    third: 3,
-    fourth: 4,
-    fifth: 5,
-  };
+  numbersInWords : any;
   regexData: any = regex;
   textData: any;
   loadedText: any;
   spokenTextData: any;
   spokenText: any;
+  successText: any;
   constructor(private cardservice: CardService,
               private gameservice: GameService,
               private router: Router, public dialog: MatDialog,
@@ -64,7 +60,6 @@ export class MultiplayerComponent implements OnInit, AfterViewInit, OnDestroy{
     });
     this.row=this.gameservice.getRows();
     this.col=this.gameservice.getCols();
-    this.maxPairs();
   }
 
   ngOnInit() {
@@ -77,6 +72,7 @@ export class MultiplayerComponent implements OnInit, AfterViewInit, OnDestroy{
     this.speechrecognition.initialize(this.currentLanguage);
     this.initRecognition();
     this.speechrecognition.start();
+    this.maxPairs();
   }
 
   ngOnDestroy(){
@@ -133,8 +129,14 @@ export class MultiplayerComponent implements OnInit, AfterViewInit, OnDestroy{
       const card1 = this.rows[this.selectedCards[0].row][this.selectedCards[0].col];
       const card2 = this.rows[this.selectedCards[1].row][this.selectedCards[1].col];
       if (card1 !== card2) {
+        if(this.currentPlayer === 'A'){
+          this.currentPlayer = 'B';
+        } else if(this.currentPlayer === 'B'){
+          this.currentPlayer = 'A';
+        }
         this.speechSynthesizer.speak(
-          this.spokenText.notmatching, this.currentLanguage
+          this.spokenText.notmatching + " " + this.currentPlayer + this.spokenText.playerturns,
+          this.currentLanguage
         );
         setTimeout(() => {
           this.flipped[this.selectedCards[0].row][this.selectedCards[0].col] = false;
@@ -181,8 +183,17 @@ export class MultiplayerComponent implements OnInit, AfterViewInit, OnDestroy{
   }
 
   successDialog(): void{
-    const dialogRef = this.dialog.open(SuccessComponent);
-
+    if(this.Amatches===this.Bmatches){
+      this.successText= this.spokenText.drawn;
+    }else{
+      this.successText=this.currentPlayer + this.spokenText.playerwon
+    }
+    this.speechSynthesizer.speak(
+      this.successText, this.currentLanguage
+    );
+    const dialogRef = this.dialog.open(MultiplayersuccessComponent, {
+      data: { successText: this.successText }
+    });
     dialogRef.afterClosed().subscribe(result => {
       console.log('The dialog was closed');
     });
@@ -202,74 +213,82 @@ export class MultiplayerComponent implements OnInit, AfterViewInit, OnDestroy{
     ).pipe(map((notification) => notification.event === SpeechEvent.Start));
   }
   private processNotification(notification: SpeechNotification<string>):void {
-    const message = notification.content?.trim() || '';
-    const languagePatterns = this.regexData[this.currentLanguage];
-    let regexHome = new RegExp(languagePatterns.home, 'i');
-    let regexSelectCard = new RegExp(languagePatterns.selectCard, 'i');
-    let testHome = regexHome.test(message);
-    let testGame = regexSelectCard.exec(message);
+    if (notification.event === SpeechEvent.FinalContent) {
+      const message = notification.content?.trim() || '';
+      const languagePatterns = this.regexData[this.currentLanguage];
+      this.numbersInWords = {
+        [languagePatterns.first]: 1,
+        [languagePatterns.second]: 2,
+        [languagePatterns.third]: 3,
+        [languagePatterns.fourth]: 4,
+        [languagePatterns.fifth]: 5
+      };
+      let regexHome = new RegExp(languagePatterns.home, 'i');
+      let regexSelectCard = new RegExp(languagePatterns.selectCard, 'i');
+      let testHome = regexHome.test(message);
+      let testGame = regexSelectCard.exec(message);
 
-    if (testHome) {
-      this.gotohome();
-    }
+      if (testHome) {
+        this.gotohome();
+      }
 
-    if (testGame) {
-      let row = this.numbersInWords[testGame[1]] - 1;
-      let col = this.numbersInWords[testGame[2]] - 1;
-      this.selectCard(row, col);
+      if (testGame) {
+        let row = this.numbersInWords[testGame[1]] - 1;
+        let col = this.numbersInWords[testGame[2]] - 1;
+        this.selectCard(row, col);
+      }
     }
   }
 
   sayCard(cardname: string){
-    console.log(this.currentLanguage)
     if(cardname.includes('cat.png')){
       this.speechSynthesizer.speak(
-        'cat', this.currentLanguage
+        this.spokenText.cat, this.currentLanguage
       );
     }
     if(cardname.includes('ball.png')){
       this.speechSynthesizer.speak(
-        'ball', this.currentLanguage
+        this.spokenText.ball, this.currentLanguage
       );
     }
     if(cardname.includes('candy.png')){
       this.speechSynthesizer.speak(
-        'candy', this.currentLanguage
+        this.spokenText.candy, this.currentLanguage
       );
     }
     if(cardname.includes('car.png')){
       this.speechSynthesizer.speak(
-        'car', this.currentLanguage
+        this.spokenText.car, this.currentLanguage
       );
     }
     if(cardname.includes('cloud.png')){
       this.speechSynthesizer.speak(
-        'cloud', this.currentLanguage
+        this.spokenText.cloud, this.currentLanguage
       );
     }
     if(cardname.includes('dog.png')){
       this.speechSynthesizer.speak(
-        'dog', this.currentLanguage
+        this.spokenText.dog, this.currentLanguage
       );
     }
     if(cardname.includes('flow.png')){
       this.speechSynthesizer.speak(
-        'flower', this.currentLanguage
+        this.spokenText.flower, this.currentLanguage
       );
     }
     if(cardname.includes('rose.png')){
       this.speechSynthesizer.speak(
-        'rose', this.currentLanguage
+        this.spokenText.rose, this.currentLanguage
       );
     }
     if(cardname.includes('sun.png')){
       this.speechSynthesizer.speak(
-        'sun', this.currentLanguage
+        this.spokenText.sun, this.currentLanguage
       );
     }
     if(cardname.includes('umb.png')){
       this.speechSynthesizer.speak(
-        'umbrella', this.currentLanguage
+        this.spokenText.umb, this.currentLanguage
       );
     }
   }

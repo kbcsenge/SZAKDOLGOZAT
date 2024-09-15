@@ -81,12 +81,14 @@ export class RankingsComponent implements OnInit, OnDestroy{
     ).pipe(map((notification) => notification.event === SpeechEvent.Start));
   }
   private processNotification(notification: SpeechNotification<string>): void {
-    const languagePatterns = this.regexData[this.currentLanguage];
-    const message = notification.content?.trim() || '';
-    let regexHome = new RegExp(languagePatterns.home, 'i');
-    let testHome = regexHome.test(message);
-    if(testHome){
-      this.gotohome();
+    if (notification.event === SpeechEvent.FinalContent) {
+      const languagePatterns = this.regexData[this.currentLanguage];
+      const message = notification.content?.trim() || '';
+      let regexHome = new RegExp(languagePatterns.home, 'i');
+      let testHome = regexHome.test(message);
+      if (testHome) {
+        this.gotohome();
+      }
     }
   }
 }

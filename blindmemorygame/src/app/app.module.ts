@@ -28,6 +28,7 @@ import { SetlanguageComponent } from './setlanguage/setlanguage.component';
 import { HelperComponent } from './helper/helper.component';
 import { MultiplayerComponent } from './twoplayergame/multiplayer.component';
 import {HttpClientModule} from "@angular/common/http";
+import { MultiplayersuccessComponent } from './twoplayergame/success/multiplayersuccess.component';
 
 
 @NgModule({
@@ -39,7 +40,8 @@ import {HttpClientModule} from "@angular/common/http";
     VolumeandspeedComponent,
     SetlanguageComponent,
     HelperComponent,
-    MultiplayerComponent
+    MultiplayerComponent,
+    MultiplayersuccessComponent
   ],
   imports: [
     BrowserModule,

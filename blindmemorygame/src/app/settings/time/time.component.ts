@@ -74,6 +74,7 @@ export class TimeComponent implements OnInit, OnDestroy {
     if(this.toggle300?.checked){
       this.gameservice.setTime(300);
     }
+
     this.dialogRef.close();
   }
   private initRecognition(): void {
@@ -90,12 +91,84 @@ export class TimeComponent implements OnInit, OnDestroy {
     ).pipe(map((notification) => notification.event === SpeechEvent.Start));
   }
   private processNotification(notification: SpeechNotification<string>): void {
-    const languagePatterns = this.regexData[this.currentLanguage];
-    const message = notification.content?.trim() || '';
-    let regexSubmit= new RegExp(languagePatterns.save, 'i');
-    let testSubmit = regexSubmit.test(message);
-    if(testSubmit){
-      this.submit();
+    if (notification.event === SpeechEvent.FinalContent) {
+      const languagePatterns = this.regexData[this.currentLanguage];
+      const message = notification.content?.trim() || '';
+      let regex60 = new RegExp(languagePatterns.sixty);
+      let regex120 = new RegExp(languagePatterns.hundredandtwenty);
+      let regex180 = new RegExp(languagePatterns.hundredandeighty);
+      let regex300 = new RegExp(languagePatterns.threehundred);
+      let regex60WithNumber = new RegExp(languagePatterns.sixtywithnumber);
+      let regex120WithNumber = new RegExp(languagePatterns.hundredandtwentywithnumber);
+      let regex180WithNumber = new RegExp(languagePatterns.hundredandeightywithnumber);
+      let regex300WithNumber = new RegExp(languagePatterns.threehundredwithnumber);
+      let regexSubmit = new RegExp(languagePatterns.submit);
+      let test60 = regex60.test(message);
+      let test120 = regex120.test(message);
+      let test180 = regex180.test(message);
+      let test300 = regex300.test(message);
+      let test60WithNumber = regex60WithNumber.test(message);
+      let test120WithNumber = regex120WithNumber.test(message);
+      let test180WithNumber = regex180WithNumber.test(message);
+      let test300WithNumber = regex300WithNumber.test(message);
+      let testSubmit = regexSubmit.test(message);
+      if (test60 || test60WithNumber) {
+        if (this.toggle60) {
+          this.toggle60.checked = true;
+        }
+        if (this.toggle120) {
+          this.toggle120.checked = false;
+        }
+        if (this.toggle180) {
+          this.toggle180.checked = false;
+        }
+        if (this.toggle300) {
+          this.toggle300.checked = false;
+        }
+      } else if (test120 || test120WithNumber) {
+        if (this.toggle60) {
+          this.toggle60.checked = false;
+        }
+        if (this.toggle120) {
+          this.toggle120.checked = true;
+        }
+        if (this.toggle180) {
+          this.toggle180.checked = false;
+        }
+        if (this.toggle300) {
+          this.toggle300.checked = false;
+        }
+      }else if (test180 || test180WithNumber) {
+        if (this.toggle60) {
+          this.toggle60.checked = false;
+        }
+        if (this.toggle120) {
+          this.toggle120.checked = false;
+        }
+        if (this.toggle180) {
+          this.toggle180.checked = true;
+        }
+        if (this.toggle300) {
+          this.toggle300.checked = false;
+        }
+      }else if (test300 || test300WithNumber) {
+        if (this.toggle60) {
+          this.toggle60.checked = false;
+        }
+        if (this.toggle120) {
+          this.toggle120.checked = false;
+        }
+        if (this.toggle180) {
+          this.toggle180.checked = false;
+        }
+        if (this.toggle300) {
+          this.toggle300.checked = true;
+        }
+      }
+
+      if (testSubmit) {
+        this.submit();
+      }
     }
   }
 }

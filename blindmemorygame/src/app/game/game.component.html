@@ -1,5 +1,5 @@
 <div style="display: flex">
-  <img style="height: 100px; width: auto"src="./assets/icon.png" alt="icon" (click)="gotohome()">
+  <img style="height: 100px; width: auto"src="./assets/icon.png" alt="icon" (mouseenter)="this.speechSynthesizer.speak(this.spokenText.mainpage, this.currentLanguage)" (mouseleave)="this.speechSynthesizer.stop()" (click)="gotohome()">
   <h1 (mouseenter)="this.voiceoverService.readingText($event)" (mouseleave)="this.speechSynthesizer.stop()" class="title">{{showsize}}{{ loadedText.playingfield }}</h1>
 </div>
 <div class="game">

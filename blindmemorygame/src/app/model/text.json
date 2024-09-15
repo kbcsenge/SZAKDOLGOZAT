@@ -17,9 +17,9 @@
     "receivedpoints": "Pontok",
     "time": "Idő",
     "date": "Dátum",
-    "gamesize": "Játékmező mérete",
+    "gamesize": "Játéktábla mérete",
     "numberofplayers": "Játékosok száma",
-    "singleplayer": "Egy játékos mód",
+    "singleplayer": "Egyszemélyes játékmód",
     "multiplayer": "Kétszemélyes játékmód",
     "gametime": "Játékidő",
     "seconds": "másodperc",
@@ -28,9 +28,10 @@
     "playbackspeed": "Lejátszási sebesség",
     "settings": "Beállítások",
     "singleordouble": "Egyjátékos/kétjátékos mód",
-    "playingfield": "-es játékmező",
+    "playingfield": "-es játéktábla",
     "Apairs": "A játékos talált párok:",
-    "Bpairs": "B játékos talált párok:"
+    "Bpairs": "B játékos talált párok:",
+    "playerwon": " játékos nyert!"
   },
   "en-US": {
     "notfoundallpairs": "You didn't find all the pairs!",
@@ -63,6 +64,7 @@
     "settings": "Settings",
     "singleordouble": "Single player/double player game",
     "Apairs": "A player pairs:",
-    "Bpairs": "B player pairs:"
+    "Bpairs": "B player pairs:",
+    "playerwon": " player won!"
   }
 }

@@ -94,27 +94,29 @@ export class HomepageComponent implements OnInit, OnDestroy{
     ).pipe(map((notification) => notification.event === SpeechEvent.Start));
   }
   private processNotification(notification: SpeechNotification<string>): void {
-    const languagePatterns = this.regexData[this.currentLanguage];
-    const message = notification.content?.trim() || '';
-    let regexSettings = new RegExp(languagePatterns.settings, 'i');
-    let regexGame = new RegExp(languagePatterns.game, 'i');
-    let regexRanglist = new RegExp(languagePatterns.ranking, 'i');
-    let regexHelp = new RegExp(languagePatterns.help, 'i');
-    let testSettings = regexSettings.test(message);
-    let testGame = regexGame.test(message);
-    let testRanglist = regexRanglist.test(message);
-    let testHelp = regexHelp.test(message);
-    if(testSettings){
-      this.gotosettings();
-    }
-    if(testGame){
-      this.gotogame();
-    }
-    if(testRanglist){
-      this.gotoresults();
-    }
-    if(testHelp){
-      this.gotohelp();
+    if (notification.event === SpeechEvent.FinalContent) {
+      const languagePatterns = this.regexData[this.currentLanguage];
+      const message = notification.content?.trim() || '';
+      let regexSettings = new RegExp(languagePatterns.settings, 'i');
+      let regexGame = new RegExp(languagePatterns.game, 'i');
+      let regexRanglist = new RegExp(languagePatterns.ranking, 'i');
+      let regexHelp = new RegExp(languagePatterns.help, 'i');
+      let testSettings = regexSettings.test(message);
+      let testGame = regexGame.test(message);
+      let testRanglist = regexRanglist.test(message);
+      let testHelp = regexHelp.test(message);
+      if (testSettings) {
+        this.gotosettings();
+      }
+      if (testGame) {
+        this.gotogame();
+      }
+      if (testRanglist) {
+        this.gotoresults();
+      }
+      if (testHelp) {
+        this.gotohelp();
+      }
     }
   }
 

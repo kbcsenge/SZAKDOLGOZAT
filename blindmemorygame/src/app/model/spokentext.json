@@ -1,6 +1,7 @@
 {
   "hu-HU": {
-    "notmatching": "nem talált",
+    "notmatching": "nem talált.",
+    "playerturns": " játékos jön.",
     "foundpair": "párt találtál",
     "notallpairsfound": "Nem találtad meg az összes párt!",
     "allpairsfound": "Megtaláltad az összes párt. Add meg a neved a ranglistához!",
@@ -24,9 +25,9 @@
     "seconds": "másodperc.",
     "goodluck": "Sok sikert!",
     "helpclosed": "Segítség ablak bezárva.",
-    "welcome": "Szia! Ez egy beszédfelismerő játék vako és látássérültek számára.",
+    "welcome": "Szia! Ez egy beszédfelismerő játék vakok és látássérültek számára.",
     "rankingsopen": "Ranglista megnyitva.",
-    "gameboardsizeopened": "Játékmező beállítás megnyitva.",
+    "gameboardsizeopened": "Játéktábla beállítás megnyitva.",
     "numberofplayersopened": "Játékosok számának beállítás megnyitva.",
     "gametimeopened": "Játékidő beállítás megnyitva.",
     "vandopened": "Hangerő és lejátszási sebesség beállítás megnyitva.",
@@ -34,10 +35,15 @@
     "vandsaved": "Hangerő és lejátszási sebesség beállítása mentve.",
     "numberofplayerssaved": "Játékosok számának beállítása mentve.",
     "gametimesaved": "Játékidő beállítása mentve.",
-    "gameboardsizementve": "Játékmező beállítása mentve.",
+    "gameboardsizesaved": "Játéktábla beállítása mentve.",
     "threebyfour": "3-szor 4-es",
     "fourbyfour": "4-szer 4-es",
-    "fourbyfive": "4-szer 5-ös"
+    "fourbyfive": "4-szer 5-ös",
+    "playerwon": " játékos nyert!",
+    "drawn": "Döntetlen lett a játék!",
+    "mainpage": "főoldal gomb",
+    "settings": "beállítások gomb",
+    "help": "segítség gomb"
   },
   "en-US": {
     "notmatching": "not matching pairs",
@@ -74,9 +80,15 @@
     "vandsaved": "Volume and playback speed setting saved.",
     "numberofplayerssaved": "Setting the number of players saved.",
     "gametimesaved": "Game time setting saved",
-    "gameboardsizementve": "Game boardsize setting saved.",
+    "gameboardsizesaved": "Game boardsize setting saved.",
     "threebyfour": "3 by 4",
     "fourbyfour": "4 by 4",
-    "fourbyfive": "4 by 5"
+    "fourbyfive": "4 by 5",
+    "playerturns": " player's turn",
+    "playerwon": " player won!",
+    "drawn": "DThe game is drawn!",
+    "mainpage": "mainpage button",
+    "settings": "settings button",
+    "help": "help button"
   }
 }

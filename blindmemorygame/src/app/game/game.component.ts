@@ -26,7 +26,7 @@ import * as spokentext from '../model/spokentext.json';
   templateUrl: './game.component.html',
   styleUrl: './game.component.scss'
 })
-export class GameComponent implements OnInit, OnDestroy, AfterViewInit{
+export class GameComponent implements OnInit, OnDestroy{
   currentLanguage='';
   flipping?: string;
   rows: string[][] = [];
@@ -46,13 +46,7 @@ export class GameComponent implements OnInit, OnDestroy, AfterViewInit{
   maxpairs: number = 6;
   transcript$?: Observable<string>;
   listening$?: Observable<boolean>;
-  numbersInWords : {[key: string]: number} = {
-    first: 1,
-    second: 2,
-    third: 3,
-    fourth: 4,
-    fifth: 5,
-  };
+  numbersInWords : any;
 
   regexData: any;
   textData: any;
@@ -85,11 +79,34 @@ export class GameComponent implements OnInit, OnDestroy, AfterViewInit{
     this.speechrecognition.initialize(this.currentLanguage);
     this.initRecognition();
     this.speechrecognition.start();
+    this.speakAndStartTimer();
     this.maxPairs();
   }
   ngOnDestroy(){
     this.stopTimer();
     this.speechSynthesizer.stop();
+  }
+  speakText(): Promise<void> {
+    return new Promise((resolve, reject) => {
+      const utterance = new SpeechSynthesisUtterance(
+        this.spokenText.gamestarted + " " + this.spokenText.itsa + " " + this.size + " " + this.spokenText.gameboard + " " + this.spokenText.havetime + ": " + this.time.toString() + " " + this.spokenText.seconds + " " + this.spokenText.goodluck
+      );
+      utterance.lang = this.currentLanguage;
+      utterance.pitch = 0.5;
+      utterance.onend = () => resolve();
+      utterance.onerror = (event) => reject(event.error);
+
+      try {
+        window.speechSynthesis.speak(utterance);
+      } catch (error) {
+        reject(error);
+      }
+    });
+  }
+  speakAndStartTimer() {
+    this.speakText().finally(() => {
+      this.startTimer();
+    });
   }
 
   maxPairs(){
@@ -244,35 +261,44 @@ export class GameComponent implements OnInit, OnDestroy, AfterViewInit{
     ).pipe(map((notification) => notification.event === SpeechEvent.Start));
   }
   private processNotification(notification: SpeechNotification<string>):void {
-    const message = notification.content?.trim() || '';
-    const languagePatterns = this.regexData[this.currentLanguage];
-    let regexHome = new RegExp(languagePatterns.home, 'i');
-    let regexPoint = new RegExp(languagePatterns.point, 'i');
-    let regexSelectCard = new RegExp(languagePatterns.selectCard, 'i');
-    let testHome = regexHome.test(message);
-    let testPoint = regexPoint.test(message);
-    let testGame = regexSelectCard.exec(message);
+    if (notification.event === SpeechEvent.FinalContent) {
+      const message = notification.content?.trim() || '';
+      const languagePatterns = this.regexData[this.currentLanguage];
+      this.numbersInWords = {
+        [languagePatterns.first]: 1,
+        [languagePatterns.second]: 2,
+        [languagePatterns.third]: 3,
+        [languagePatterns.fourth]: 4,
+        [languagePatterns.fifth]: 5
+      };
+      let regexHome = new RegExp(languagePatterns.home, 'i');
+      let regexPoint = new RegExp(languagePatterns.point, 'i');
+      let regexSelectCard = new RegExp(languagePatterns.selectCard, 'i');
+      let testHome = regexHome.test(message);
+      let testPoint = regexPoint.test(message);
+      let testGame = regexSelectCard.exec(message);
 
-    if (testHome) {
-      this.gotohome();
-    }
+      if (testHome) {
+        this.gotohome();
+      }
 
-    if (message === 'how much time is left') {
-      this.speechSynthesizer.speak(
-        this.time.toString() + this.spokenText.secondsleft, this.currentLanguage
-      );
-    }
+      if (message === 'how much time is left') {
+        this.speechSynthesizer.speak(
+          this.time.toString() + this.spokenText.secondsleft, this.currentLanguage
+        );
+      }
 
-    if (testPoint) {
-      this.speechSynthesizer.speak(
-        this.spokenText.youhave  + " " + this.points.toString() + " " + this.spokenText.points, this.currentLanguage
-      );
-    }
+      if (testPoint) {
+        this.speechSynthesizer.speak(
+          this.spokenText.youhave + " " + this.points.toString() + " " + this.spokenText.points, this.currentLanguage
+        );
+      }
 
-    if (testGame) {
-      let row = this.numbersInWords[testGame[1]] - 1;
-      let col = this.numbersInWords[testGame[2]] - 1;
-      this.selectCard(row, col);
+      if (testGame) {
+        let row = this.numbersInWords[testGame[1]] - 1;
+        let col = this.numbersInWords[testGame[2]] - 1;
+        this.selectCard(row, col);
+      }
     }
   }
 
@@ -328,14 +354,5 @@ export class GameComponent implements OnInit, OnDestroy, AfterViewInit{
         this.spokenText.umb, this.currentLanguage
       );
     }
-  }
-
-  ngAfterViewInit(): void {
-    this.speechSynthesizer.speak(
-      this.spokenText.gamestarted+" "+ this.spokenText.itsa+" " +this.size+" " +this.spokenText.gameboard+" "+this.spokenText.havetime+" "+this.time.toString()+" "+this.spokenText.seconds+" " +this.spokenText.goodluck, this.currentLanguage,
-      () => {
-        this.startTimer();
-      }
-    );
   }
 }

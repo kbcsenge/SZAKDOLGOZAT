@@ -1,31 +1,32 @@
-<img style="height: 100px; width: auto; float: left"src="./assets/icon.png" alt="icon" (click)="gotohome()">
-
-<div class="list">
-  <h2 (mouseenter)="this.voiceoverService.readingText($event)" (mouseleave)="this.speechSynthesizer.stop()">{{ loadedText.rankings}}</h2>
-  <table>
-    <th (mouseenter)="this.voiceoverService.readingText($event)" (mouseleave)="this.speechSynthesizer.stop()">{{ loadedText.ranking}}</th>
-    <th (mouseenter)="this.voiceoverService.readingText($event)" (mouseleave)="this.speechSynthesizer.stop()">{{ loadedText.name}}</th>
-    <th (mouseenter)="this.voiceoverService.readingText($event)" (mouseleave)="this.speechSynthesizer.stop()">{{ loadedText.receivedpoints}}</th>
-    <th (mouseenter)="this.voiceoverService.readingText($event)" (mouseleave)="this.speechSynthesizer.stop()">{{ loadedText.time}}</th>
-    <th (mouseenter)="this.voiceoverService.readingText($event)" (mouseleave)="this.speechSynthesizer.stop()">{{ loadedText.date}}</th>
-    <tbody>
-    <tr *ngFor="let ranking of rankings | async; index as i">
-      <td (mouseenter)="this.voiceoverService.readingText($event)" (mouseleave)="this.speechSynthesizer.stop()">
-        {{i + 1}}.
-      </td>
-      <td (mouseenter)="this.voiceoverService.readingText($event)" (mouseleave)="this.speechSynthesizer.stop()">
-        {{ranking.name}}
-      </td>
-      <td (mouseenter)="this.voiceoverService.readingText($event)" (mouseleave)="this.speechSynthesizer.stop()">
-        {{ranking.points}}
-      </td>
-      <td (mouseenter)="this.voiceoverService.readingText($event)" (mouseleave)="this.speechSynthesizer.stop()">
-        {{ranking.time}}
-      </td>
-      <td (mouseenter)="this.voiceoverService.readingText($event)" (mouseleave)="this.speechSynthesizer.stop()">
-        {{ranking.date.toDate() | date:'yyyy.MM.dd. HH:mm:ss':'UTC'}}
-      </td>
-    </tr>
-    </tbody>
-  </table>
+<img style="height: 100px; width: auto; float: left"src="./assets/icon.png" alt="icon" (mouseenter)="this.speechSynthesizer.speak(this.spokenText.mainpage, this.currentLanguage)" (mouseleave)="this.speechSynthesizer.stop()" (click)="gotohome()">
+<div class="list" style="max-height: 600px;">
+  <h2 (mouseenter)="this.voiceoverService.readingText($event)" (mouseleave)="this.speechSynthesizer.stop()">
+    {{ loadedText.rankings }}
+  </h2>
+  <div class="table-container">
+    <table>
+      <thead>
+      <tr>
+        <th>{{ loadedText.ranking }}</th>
+        <th>{{ loadedText.name }}</th>
+        <th>{{ loadedText.receivedpoints }}</th>
+        <th>{{ loadedText.time }}</th>
+        <th style="padding-right: 170px">{{ loadedText.date }}</th>
+      </tr>
+      </thead>
+    </table>
+    <div class="table-body-container">
+      <table>
+        <tbody>
+        <tr *ngFor="let ranking of rankings | async; index as i">
+          <td>{{ i + 1 }}.</td>
+          <td>{{ ranking.name }}</td>
+          <td>{{ ranking.points }}</td>
+          <td>{{ ranking.time }}</td>
+          <td style="padding-right: 170px">{{ ranking.date.toDate() | date: 'yyyy.MM.dd. HH:mm:ss':'UTC' }}</td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
 </div>

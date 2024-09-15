@@ -97,9 +97,9 @@ export class SuccessComponent implements OnInit{
     ).pipe(map((notification) => notification.event === SpeechEvent.Start));
   }
   private processNotification(notification: SpeechNotification<string>): void {
+    if (notification.event === SpeechEvent.FinalContent) {
       const message = notification.content?.trim() || '';
       const languagePatterns = this.regexData[this.currentLanguage];
-
       let regexGame = new RegExp(languagePatterns.game, 'i');
       let regexHome = new RegExp(languagePatterns.home, 'i');
       let regexSubmit = new RegExp(languagePatterns.save, 'i');
@@ -108,20 +108,21 @@ export class SuccessComponent implements OnInit{
       let testHome = regexHome.test(message);
       let testSubmit = regexSubmit.test(message);
       let testRetryname = regexRetryname.test(message);
-      if(testGame){
+      if (testGame) {
         this.retrygame();
       }
-      if(testHome){
+      if (testHome) {
         this.gotohome();
       }
-      if(testSubmit){
+      if (testSubmit) {
         this.submit(this.name)
       }
-      if(testRetryname){
-        this.name='';
+      if (testRetryname) {
+        this.name = '';
       }
-      if(!testHome && !testGame && !testSubmit && !testRetryname){
-        this.name=message;
+      if (!testHome && !testGame && !testSubmit && !testRetryname) {
+        this.name = message;
       }
     }
+  }
 }

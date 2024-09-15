@@ -1,20 +1,73 @@
-.list{
+.list {
   border: rgba(13, 35, 65, 0.3) 7px solid;
   border-radius: 20px;
   background: rgba(90, 90, 145, 0.4);
   position: fixed;
   top: 50%;
   left: 50%;
-
   transform: translate(-50%, -50%);
   text-align: center;
   color: white;
   font-size: 50px;
-  padding: 10px 60px 10px 60px;
+  padding: 30px 60px 30px 60px;
 }
 
-th{
-  padding-left: 20px;
-  padding-right: 20px;
+th {
+  padding-left: 40px;
+  padding-right: 40px;
+  width: 20%;
   border-bottom: rgba(13, 35, 65, 0.3) 7px solid;
 }
+
+.table-container {
+  position: relative;
+  width: 100%;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+thead {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+td {
+  padding-left: 50px;
+  padding-right: 40px;
+  width: 20%;
+  font-size: 50px;
+}
+
+.table-body-container {
+  max-height: 300px;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.table-body-container::-webkit-scrollbar {
+  width: 12px;
+}
+
+.table-body-container::-webkit-scrollbar-thumb {
+  background-color: rgba(13, 35, 65, 0.5);
+  border-radius: 10px;
+}
+
+.table-body-container::-webkit-scrollbar-track {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.table-body-container table {
+  width: calc(100% - 15px);
+}
+
+.table-body-container tbody tr {
+  display: table;
+  width: 100%;
+  table-layout: fixed;
+}
+

@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import {MatSliderChange} from "@angular/material/slider";
 
 @Injectable({
   providedIn: 'root',

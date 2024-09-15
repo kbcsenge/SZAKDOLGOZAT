@@ -8,16 +8,17 @@ import {RankingsComponent} from "./rangkings/rankings.component";
 import {HomepageComponent} from "./homepage/homepage.component";
 import {SetlanguageComponent} from "./setlanguage/setlanguage.component";
 import {MultiplayerComponent} from "./twoplayergame/multiplayer.component";
+import {AuthGuard} from "./Authguard";
 
 
 export const routes: Routes = [
-  { path: 'game', component: GameComponent},
-  { path: 'multiplayer', component: MultiplayerComponent},
-  { path: 'settings', component: SettingsComponent},
-  { path: 'rankings', component: RankingsComponent},
-  { path : 'success' , component: SuccessComponent},
-  { path : 'fail' , component: RetryComponent},
-  { path : 'home' , component: HomepageComponent},
+  { path: 'game', component: GameComponent, canActivate: [AuthGuard]},
+  { path: 'multiplayer', component: MultiplayerComponent, canActivate: [AuthGuard]},
+  { path: 'settings', component: SettingsComponent, canActivate: [AuthGuard]},
+  { path: 'rankings', component: RankingsComponent, canActivate: [AuthGuard]},
+  { path : 'success' , component: SuccessComponent, canActivate: [AuthGuard]},
+  { path : 'fail' , component: RetryComponent, canActivate: [AuthGuard]},
+  { path : 'home' , component: HomepageComponent,  canActivate: [AuthGuard]},
   { path : '' , component: SetlanguageComponent}
 
 ];

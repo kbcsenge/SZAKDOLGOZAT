@@ -78,12 +78,35 @@ export class NumberofplayersComponent implements OnInit, OnDestroy {
     ).pipe(map((notification) => notification.event === SpeechEvent.Start));
   }
   private processNotification(notification: SpeechNotification<string>): void {
-    const languagePatterns = this.regexData[this.currentLanguage];
-    const message = notification.content?.trim() || '';
-    let regexSubmit= new RegExp(languagePatterns.save, 'i');
-    let testSubmit = regexSubmit.test(message);
-    if(testSubmit){
-      this.submit();
+    if (notification.event === SpeechEvent.FinalContent) {
+      const languagePatterns = this.regexData[this.currentLanguage];
+      const message = notification.content?.trim() || '';
+      let regexSinglePlayer = new RegExp(languagePatterns.sigleplayer);
+      let regexMultiPlayer = new RegExp(languagePatterns.multiplayer);
+      let regexSubmit = new RegExp(languagePatterns.submit);
+      let testSinglePlayer = regexSinglePlayer.test(message);
+      let testMultiPlayer = regexMultiPlayer.test(message);
+      let testSubmit = regexSubmit.test(message);
+
+      if (testSinglePlayer) {
+        if (this.toggleOne) {
+          this.toggleOne.checked = true;
+        }
+        if (this.toggleTwo) {
+          this.toggleTwo.checked = false;
+        }
+      } else if (testMultiPlayer) {
+        if (this.toggleOne) {
+          this.toggleOne.checked = false;
+        }
+        if (this.toggleTwo) {
+          this.toggleTwo.checked = true;
+        }
+      }
+
+      if (testSubmit) {
+        this.submit();
+      }
     }
   }
 }

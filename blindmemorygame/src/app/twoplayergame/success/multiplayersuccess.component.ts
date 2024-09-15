@@ -1,68 +1,64 @@
-import {Component, ElementRef, Inject, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import {Component, Inject} from '@angular/core';
+import {VoiceoverService} from "../../services/voiceover.service";
 import {map, tap} from "rxjs/operators";
 import {merge, Observable} from "rxjs";
 import {SpeechEvent} from "../../model/speech-event";
 import {SpeechNotification} from "../../model/speech-notification";
-import {SpeechRecognizerService} from "../../services/speech-recognizer.service";
-import {SpeechSynthesizerService} from "../../services/speech-synthesizer.service";
-import {LanguageService} from "../../services/language.service";
-import {VoiceoverService} from "../../services/voiceover.service";
 import * as regex from '../../model/regex.json';
-import * as text from "../../model/text.json";
-import * as spokentext from "../../model/spokentext.json";
-
+import * as text from '../../model/text.json';
+import * as spokentext from '../../model/spokentext.json';
+import {Router} from "@angular/router";
+import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
+import {SpeechRecognizerService} from "../../services/speech-recognizer.service";
+import {LanguageService} from "../../services/language.service";
+import {SpeechSynthesizerService} from "../../services/speech-synthesizer.service";
 @Component({
-  selector: 'app-volumeandspeed',
-  templateUrl: './volumeandspeed.component.html',
-  styleUrl: './volumeandspeed.component.scss'
+  selector: 'app-multiplayersuccess',
+  templateUrl: './multiplayersuccess.component.html',
+  styleUrl: './multiplayersuccess.component.scss'
 })
-export class VolumeandspeedComponent implements OnInit, OnDestroy{
-  @ViewChild('volumeInput') volumeInput?: ElementRef;
-  @ViewChild('rateInput') rateInput?: ElementRef;
+export class MultiplayersuccessComponent {
   currentLanguage='';
   transcript$?: Observable<string>;
   listening$?: Observable<boolean>;
   regexData: any;
   textData: any;
   loadedText: any;
-  spokenTextData: any;
-  spokenText: any;
-  constructor(public dialogRef: MatDialogRef<VolumeandspeedComponent>,
+  spokenTextData: any
+  spokenText: any
+  constructor(private router: Router,
+              public dialogRef: MatDialogRef<MultiplayersuccessComponent>,
               @Inject(MAT_DIALOG_DATA) public data: any,
               private speechrecognition: SpeechRecognizerService,
-              public speechSynthesizer: SpeechSynthesizerService,
               private languageService: LanguageService,
-              public voiceoverService: VoiceoverService) {
+              public voiceoverService: VoiceoverService,
+              public speechSynthesizer: SpeechSynthesizerService) {
     this.languageService.getLanguage().subscribe(language => {
       this.currentLanguage=language;
     });
   }
-
   ngOnInit(): void {
     this.regexData = regex;
     this.textData= text;
-    this.spokenTextData = spokentext;
+    this.spokenTextData= spokentext;
     this.loadedText = this.textData[this.currentLanguage];
     this.spokenText = this.spokenTextData[this.currentLanguage];
-    this.speechSynthesizer.speak(
-      this.spokenText.vandopened, this.currentLanguage
-    );
     this.speechrecognition.initialize(this.currentLanguage);
     this.initRecognition();
     this.speechrecognition.start();
   }
-  ngOnDestroy() {
-    this.speechSynthesizer.stop();
+  retrygame() {
+    this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
+      this.router.navigate(['/multiplayer']);
+      this.dialogRef.close();
+    });
   }
 
-  submit() {
-    this.speechSynthesizer.setVolume(Number(this.volumeInput?.nativeElement.value));
-    this.speechSynthesizer.setRate(Number(this.rateInput?.nativeElement.value));
-    console.log(this.speechSynthesizer.getRate())
-    console.log(this.speechSynthesizer.getVolume())
+  gotohome(){
+    this.router.navigate(['/home']);
     this.dialogRef.close();
   }
+
   private initRecognition(): void {
     this.transcript$ = this.speechrecognition.onResult().pipe(
       tap((notification) => {
@@ -80,18 +76,17 @@ export class VolumeandspeedComponent implements OnInit, OnDestroy{
     if (notification.event === SpeechEvent.FinalContent) {
       const languagePatterns = this.regexData[this.currentLanguage];
       const message = notification.content?.trim() || '';
-      let regexSubmit = new RegExp(languagePatterns.save, 'i');
-      let testSubmit = regexSubmit.test(message);
-      if (testSubmit) {
-        this.submit();
+
+      let regexGame = new RegExp(languagePatterns.game, 'i');
+      let regexHome = new RegExp(languagePatterns.home, 'i');
+      let testGame = regexGame.test(message);
+      let testHome = regexHome.test(message);
+      if (testGame) {
+        this.retrygame();
+      }
+      if (testHome) {
+        this.gotohome();
       }
     }
-  }
-
-  formatLabel(value: number): string {
-    if (value >= 1000) {
-      return Math.round(value / 1000) + 'k';
-    }
-    return `${value}`;
   }
 }

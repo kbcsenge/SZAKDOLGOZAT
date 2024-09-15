@@ -87,12 +87,53 @@ export class BoardsizeComponent implements OnInit, OnDestroy{
     ).pipe(map((notification) => notification.event === SpeechEvent.Start));
   }
   private processNotification(notification: SpeechNotification<string>): void {
-    const languagePatterns = this.regexData[this.currentLanguage];
-    const message = notification.content?.trim() || '';
-    let regexSubmit= new RegExp(languagePatterns.save, 'i');
-    let testSubmit = regexSubmit.test(message);
-    if(testSubmit){
-      this.submit();
+    if (notification.event === SpeechEvent.FinalContent) {
+      const languagePatterns = this.regexData[this.currentLanguage];
+      const message = notification.content?.trim() || '';
+      let regex3x4 = new RegExp(languagePatterns.threebyfour);
+      let regex4x4 = new RegExp(languagePatterns.fourbyfour);
+      let regex4x5 = new RegExp(languagePatterns.fourbyfive);
+      let regexSubmit = new RegExp(languagePatterns.submit);
+      let test3x4 = regex3x4.test(message);
+      let test4x4 = regex4x4.test(message);
+      let test4x5 = regex4x5.test(message);
+      let testSubmit = regexSubmit.test(message);
+
+      if (test3x4) {
+        if (this.toggle3x4) {
+          this.toggle3x4.checked = true;
+        }
+        if (this.toggle4x4) {
+          this.toggle4x4.checked = false;
+        }
+        if (this.toggle4x5) {
+          this.toggle4x5.checked = false;
+        }
+      } else if (test4x4) {
+        if (this.toggle4x4) {
+          this.toggle4x4.checked = true;
+        }
+        if (this.toggle3x4) {
+          this.toggle3x4.checked = false;
+        }
+        if (this.toggle4x5) {
+          this.toggle4x5.checked = false;
+        }
+      } else if (test4x5) {
+        if (this.toggle4x5) {
+          this.toggle4x5.checked = true;
+        }
+        if (this.toggle3x4) {
+          this.toggle3x4.checked = false;
+        }
+        if (this.toggle4x4) {
+          this.toggle4x4.checked = false;
+        }
+      }
+
+      if (testSubmit) {
+        this.submit();
+      }
     }
   }
 }

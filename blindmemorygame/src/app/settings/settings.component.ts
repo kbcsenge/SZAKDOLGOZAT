@@ -87,7 +87,7 @@ export class SettingsComponent implements OnInit, OnDestroy{
     const dialogRef = this.dialog.open(BoardsizeComponent);
     dialogRef.afterClosed().subscribe(result => {
       this.speechSynthesizer.speak(
-        this.spokenText.gametimesaved, this.currentLanguage
+        this.spokenText.gameboardsizesaved, this.currentLanguage
       );
       this.reInit();
     });
@@ -97,7 +97,7 @@ export class SettingsComponent implements OnInit, OnDestroy{
     const dialogRef = this.dialog.open(TimeComponent);
     dialogRef.afterClosed().subscribe(result => {
       this.speechSynthesizer.speak(
-        this.spokenText.gameboardsizementve, this.currentLanguage
+        this.spokenText.gametimesaved, this.currentLanguage
       );
       this.reInit();
     });
@@ -117,36 +117,39 @@ export class SettingsComponent implements OnInit, OnDestroy{
     ).pipe(map((notification) => notification.event === SpeechEvent.Start));
   }
   private processNotification(notification: SpeechNotification<string>): void {
-    const languagePatterns = this.regexData[this.currentLanguage];
-    const message = notification.content?.trim() || '';
-    let regexHome = new RegExp(languagePatterns.home, 'i');
-    let testHome = regexHome.test(message);
-    let regexBoard = new RegExp(languagePatterns.gameboard, 'i');
-    let testBoard = regexBoard.test(message);
-    let regexPlayers= new RegExp(languagePatterns.players, 'i');
-    let testPlayers = regexPlayers.test(message);
-    let regexTime= new RegExp(languagePatterns.time, 'i');
-    let testTime = regexTime.test(message);
-    let regexVolume= new RegExp(languagePatterns.volume, 'i');
-    let testVolume = regexVolume.test(message);
-    let regexSpeed= new RegExp(languagePatterns.speed, 'i');
-    let testSpeed = regexSpeed.test(message);
-    if(testHome){
-      this.gotohome();
-    }
-    if(testPlayers){
-      this.nofpDialog();
-    }
-    if(testBoard){
-      this.boardsizeDialog();
-    }
-    if(testTime){
-      this.timeDialog();
-    }
-    if(testVolume || testSpeed){
-      this.vandsDialog();
+    if (notification.event === SpeechEvent.FinalContent) {
+      const languagePatterns = this.regexData[this.currentLanguage];
+      const message = notification.content?.trim() || '';
+      let regexHome = new RegExp(languagePatterns.home, 'i');
+      let testHome = regexHome.test(message);
+      let regexBoard = new RegExp(languagePatterns.gameboard, 'i');
+      let testBoard = regexBoard.test(message);
+      let regexPlayers = new RegExp(languagePatterns.players, 'i');
+      let testPlayers = regexPlayers.test(message);
+      let regexTime = new RegExp(languagePatterns.time, 'i');
+      let testTime = regexTime.test(message);
+      let regexVolume = new RegExp(languagePatterns.volume, 'i');
+      let testVolume = regexVolume.test(message);
+      let regexSpeed = new RegExp(languagePatterns.speed, 'i');
+      let testSpeed = regexSpeed.test(message);
+      if (testHome) {
+        this.gotohome();
+      }
+      if (testPlayers) {
+        this.nofpDialog();
+      }
+      if (testBoard) {
+        this.boardsizeDialog();
+      }
+      if (testTime) {
+        this.timeDialog();
+      }
+      if (testVolume || testSpeed) {
+        this.vandsDialog();
+      }
     }
   }
+
   reInit(){
     this.speechrecognition.initialize(this.currentLanguage);
     this.initRecognition();
