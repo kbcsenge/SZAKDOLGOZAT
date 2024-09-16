@@ -80,8 +80,61 @@ export class VolumeandspeedComponent implements OnInit, OnDestroy{
     if (notification.event === SpeechEvent.FinalContent) {
       const languagePatterns = this.regexData[this.currentLanguage];
       const message = notification.content?.trim() || '';
-      let regexSubmit = new RegExp(languagePatterns.save, 'i');
+      let regexFast = new RegExp(languagePatterns.fast);
+      let regexSlow = new RegExp(languagePatterns.slow);
+      let regexLoud = new RegExp(languagePatterns.loud);
+      let regexquiet= new RegExp(languagePatterns.quiet);
+      let regexSubmit = new RegExp(languagePatterns.submit);
+      let testFast = regexFast.test(message);
+      let testSlow = regexSlow.test(message);
+      let testLoud = regexLoud.test(message);
+      let testQuiet= regexquiet.test(message);
       let testSubmit = regexSubmit.test(message);
+
+      if (testFast && this.speechSynthesizer.getRate() < 5) {
+        if (this.rateInput) {
+          let newRate = parseFloat(this.rateInput.nativeElement.value) + 0.25;
+          this.rateInput.nativeElement.value = newRate.toFixed(2);
+          this.speechSynthesizer.setRate(newRate);
+          this.speechSynthesizer.speak(
+            this.speechSynthesizer.getRate().toString(), this.currentLanguage
+          );
+        }
+      }
+
+      if (testSlow && this.speechSynthesizer.getRate() > 0.25) {
+        if (this.rateInput) {
+          let newRate = parseFloat(this.rateInput.nativeElement.value) - 0.25;
+          this.rateInput.nativeElement.value = newRate.toFixed(2);
+          this.speechSynthesizer.setRate(newRate);
+          this.speechSynthesizer.speak(
+            this.speechSynthesizer.getRate().toString(), this.currentLanguage
+          );
+        }
+      }
+
+      if (testLoud && this.speechSynthesizer.getVolume() < 1) {
+        if (this.volumeInput) {
+          let newVolume = parseFloat(this.volumeInput.nativeElement.value) + 0.1;
+          this.volumeInput.nativeElement.value = newVolume.toFixed(2);
+          this.speechSynthesizer.setVolume(newVolume);
+          this.speechSynthesizer.speak(
+            this.speechSynthesizer.getVolume().toString(), this.currentLanguage
+          );
+        }
+      }
+
+      if (testQuiet && this.speechSynthesizer.getVolume() > 0) {
+        if (this.volumeInput) {
+          let newVolume = parseFloat(this.volumeInput.nativeElement.value) - 0.1;
+          this.volumeInput.nativeElement.value = newVolume.toFixed(2);
+          this.speechSynthesizer.setVolume(newVolume);
+          this.speechSynthesizer.speak(
+            this.speechSynthesizer.getVolume().toString(), this.currentLanguage
+          );
+        }
+      }
+
       if (testSubmit) {
         this.submit();
       }
