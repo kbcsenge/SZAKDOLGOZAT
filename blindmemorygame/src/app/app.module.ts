@@ -29,6 +29,7 @@ import { HelperComponent } from './helper/helper.component';
 import { MultiplayerComponent } from './twoplayergame/multiplayer.component';
 import {HttpClientModule} from "@angular/common/http";
 import { MultiplayersuccessComponent } from './twoplayergame/success/multiplayersuccess.component';
+import {A11yModule} from "@angular/cdk/a11y";
 
 
 @NgModule({
@@ -44,6 +45,7 @@ import { MultiplayersuccessComponent } from './twoplayergame/success/multiplayer
     MultiplayersuccessComponent
   ],
   imports: [
+    A11yModule,
     BrowserModule,
     HttpClientModule,
     AppRoutingModule,

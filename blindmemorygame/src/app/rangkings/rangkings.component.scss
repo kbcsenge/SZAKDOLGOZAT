@@ -1,22 +1,22 @@
 .list {
-  border: rgba(13, 35, 65, 0.3) 7px solid;
+  border: rgb(255, 255, 255) 15px solid;
   border-radius: 20px;
-  background: rgba(90, 90, 145, 0.4);
+  background: rgba(21, 62, 110);
   position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   text-align: center;
   color: white;
-  font-size: 50px;
-  padding: 30px 60px 30px 60px;
+  font-size: 60px;
+  padding: 0px 60px 30px 60px;
 }
 
 th {
   padding-left: 40px;
   padding-right: 40px;
   width: 20%;
-  border-bottom: rgba(13, 35, 65, 0.3) 7px solid;
+  border-bottom: rgb(255, 255, 255) 10px solid;
 }
 
 .table-container {
@@ -53,12 +53,13 @@ td {
 }
 
 .table-body-container::-webkit-scrollbar-thumb {
-  background-color: rgba(13, 35, 65, 0.5);
-  border-radius: 10px;
+  background-color: white;
+  border-radius: 20px;
 }
 
 .table-body-container::-webkit-scrollbar-track {
   background-color: rgba(255, 255, 255, 0.1);
+  border: rgba(255, 255, 255, 0.75) 3px solid;
 }
 
 .table-body-container table {

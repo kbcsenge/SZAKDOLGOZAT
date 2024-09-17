@@ -1,10 +1,41 @@
 /* You can add global styles to this file, and also import other style files */
+
 html{
-  background: url('./assets/gamebg.jpg');
+  background: url('./assets/darkbluebackground.jpg');
   background-repeat: no-repeat;
   background-size: cover;
   font-family: sans-serif;
 }
 
 html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+body { margin: 0; font-family: sans-serif;}
+
+button{
+  background: rgba(21, 62, 110, 0.78);
+  border: rgb(255, 255, 255) 10px solid;
+  border-radius: 20px;
+  font-size: 60px;
+  color: white;
+  padding: 20px 40px 20px 40px;
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+.alertwindow{
+  border: rgb(255, 255, 255) 15px solid;
+  border-radius: 20px;
+  background: rgba(21, 62, 110);
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  width: 40%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  color: white;
+  font-size: 50px;
+  padding: 10px 60px 10px 60px;
+}
+
+.p{
+  border-bottom: rgb(255, 255, 255) 10px solid;
+}

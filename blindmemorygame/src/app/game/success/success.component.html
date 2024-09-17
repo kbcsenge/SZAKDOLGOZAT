@@ -5,7 +5,10 @@
     <label (mouseenter)="this.voiceoverService.readingText($event)" (mouseleave)="this.speechSynthesizer.stop()">{{ loadedText.nameontheranglist}}</label>
     <input  #nameInput type="text" type="text" required [value]="name">
   </div>
+  <br>
   <button (mouseenter)="this.voiceoverService.readingText($event)" (mouseleave)="this.speechSynthesizer.stop()" (click)="submit(nameInput.value)">{{ loadedText.save}}</button>
+  <br>
   <button (mouseenter)="this.voiceoverService.readingText($event)" (mouseleave)="this.speechSynthesizer.stop()" (click)="retrygame()">{{ loadedText.retry}}</button>
+  <br>
   <button (mouseenter)="this.voiceoverService.readingText($event)" (mouseleave)="this.speechSynthesizer.stop()" (click)="gotohome()">{{ loadedText.backtomainpage}}</button>
 </div>

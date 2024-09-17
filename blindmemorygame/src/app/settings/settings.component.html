@@ -1,4 +1,4 @@
-<img style="height: 100px; width: auto; float: left"src="./assets/icon.png" alt="icon" (mouseenter)="this.speechSynthesizer.speak(this.spokenText.mainpage, this.currentLanguage)" (mouseleave)="this.speechSynthesizer.stop()" (click)="gotohome()">
+<img style="height: 150px; width: auto; float: left"src="./assets/icon.png" alt="icon" (mouseenter)="this.speechSynthesizer.speak(this.spokenText.mainpage, this.currentLanguage)" (mouseleave)="this.speechSynthesizer.stop()" (click)="gotohome()">
 
 <div class="menu">
   <h2 (mouseenter)="this.voiceoverService.readingText($event)" (mouseleave)="this.speechSynthesizer.stop()">{{ loadedText.settings}}</h2>

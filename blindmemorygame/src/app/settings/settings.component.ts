@@ -16,10 +16,14 @@ import {VoiceoverService} from "../services/voiceover.service";
 import * as regex from '../model/regex.json';
 import * as text from '../model/text.json';
 import * as spokentext from "../model/spokentext.json";
+import {MatListOption, MatSelectionList} from "@angular/material/list";
 @Component({
   selector: 'app-settings',
   standalone: true,
-  imports: [],
+  imports: [
+    MatSelectionList,
+    MatListOption
+  ],
   templateUrl: './settings.component.html',
   styleUrl: './settings.component.scss'
 })
