@@ -80,8 +80,8 @@ export class RetryComponent {
       const languagePatterns = this.regexData[this.currentLanguage];
       const message = notification.content?.trim() || '';
 
-      let regexGame = new RegExp(languagePatterns.game, 'i');
-      let regexHome = new RegExp(languagePatterns.home, 'i');
+      let regexGame = new RegExp(languagePatterns.game);
+      let regexHome = new RegExp(languagePatterns.home);
       let testGame = regexGame.test(message);
       let testHome = regexHome.test(message);
       if (testGame) {

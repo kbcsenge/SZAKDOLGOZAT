@@ -100,10 +100,10 @@ export class SuccessComponent implements OnInit{
     if (notification.event === SpeechEvent.FinalContent) {
       const message = notification.content?.trim() || '';
       const languagePatterns = this.regexData[this.currentLanguage];
-      let regexGame = new RegExp(languagePatterns.game, 'i');
-      let regexHome = new RegExp(languagePatterns.home, 'i');
-      let regexSubmit = new RegExp(languagePatterns.save, 'i');
-      let regexRetryname = new RegExp(languagePatterns.retry, 'i');
+      let regexGame = new RegExp(languagePatterns.game);
+      let regexHome = new RegExp(languagePatterns.home);
+      let regexSubmit = new RegExp(languagePatterns.save);
+      let regexRetryname = new RegExp(languagePatterns.retry);
       let testGame = regexGame.test(message);
       let testHome = regexHome.test(message);
       let testSubmit = regexSubmit.test(message);

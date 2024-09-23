@@ -35,7 +35,8 @@
     "loud": ".*hangos.*",
     "quiet": ".*halk.*",
     "fast": ".*gyors.*",
-    "slow": ".*lassa.*"
+    "slow": ".*lassa.*",
+    "howmuchtimeisleft": ".*mennyi idő van hátra.*"
   },
   "en-US": {
     "home": ".*main page.*",
@@ -73,6 +74,7 @@
     "loud": ".*loud.*",
     "quiet": ".*quiet.*",
     "fast": ".*fast.*",
-    "slow": ".*slow.*"
+    "slow": ".*slow.*",
+    "howmuchtimeisleft": ".*how much time is left.*"
   }
 }

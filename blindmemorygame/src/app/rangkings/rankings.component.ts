@@ -84,7 +84,7 @@ export class RankingsComponent implements OnInit, OnDestroy{
     if (notification.event === SpeechEvent.FinalContent) {
       const languagePatterns = this.regexData[this.currentLanguage];
       const message = notification.content?.trim() || '';
-      let regexHome = new RegExp(languagePatterns.home, 'i');
+      let regexHome = new RegExp(languagePatterns.home);
       let testHome = regexHome.test(message);
       if (testHome) {
         this.gotohome();

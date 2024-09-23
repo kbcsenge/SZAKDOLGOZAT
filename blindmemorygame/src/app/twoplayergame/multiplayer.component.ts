@@ -223,8 +223,8 @@ export class MultiplayerComponent implements OnInit, AfterViewInit, OnDestroy{
         [languagePatterns.fourth]: 4,
         [languagePatterns.fifth]: 5
       };
-      let regexHome = new RegExp(languagePatterns.home, 'i');
-      let regexSelectCard = new RegExp(languagePatterns.selectCard, 'i');
+      let regexHome = new RegExp(languagePatterns.home);
+      let regexSelectCard = new RegExp(languagePatterns.selectCard);
       let testHome = regexHome.test(message);
       let testGame = regexSelectCard.exec(message);
 

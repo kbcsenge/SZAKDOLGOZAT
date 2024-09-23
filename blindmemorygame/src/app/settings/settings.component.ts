@@ -124,17 +124,17 @@ export class SettingsComponent implements OnInit, OnDestroy{
     if (notification.event === SpeechEvent.FinalContent) {
       const languagePatterns = this.regexData[this.currentLanguage];
       const message = notification.content?.trim() || '';
-      let regexHome = new RegExp(languagePatterns.home, 'i');
+      let regexHome = new RegExp(languagePatterns.home);
       let testHome = regexHome.test(message);
-      let regexBoard = new RegExp(languagePatterns.gameboard, 'i');
+      let regexBoard = new RegExp(languagePatterns.gameboard);
       let testBoard = regexBoard.test(message);
-      let regexPlayers = new RegExp(languagePatterns.players, 'i');
+      let regexPlayers = new RegExp(languagePatterns.players);
       let testPlayers = regexPlayers.test(message);
-      let regexTime = new RegExp(languagePatterns.time, 'i');
+      let regexTime = new RegExp(languagePatterns.time);
       let testTime = regexTime.test(message);
-      let regexVolume = new RegExp(languagePatterns.volume, 'i');
+      let regexVolume = new RegExp(languagePatterns.volume);
       let testVolume = regexVolume.test(message);
-      let regexSpeed = new RegExp(languagePatterns.speed, 'i');
+      let regexSpeed = new RegExp(languagePatterns.speed);
       let testSpeed = regexSpeed.test(message);
       if (testHome) {
         this.gotohome();

@@ -9,6 +9,8 @@ import {SpeechEvent} from "../model/speech-event";
 import {SpeechNotification} from "../model/speech-notification";
 import * as regex from '../model/regex.json';
 import * as text from '../model/text.json';
+import * as helpText from '../model/help.json';
+import {VoiceoverService} from "../services/voiceover.service";
 @Component({
   selector: 'app-helper',
   templateUrl: './helper.component.html',
@@ -20,48 +22,53 @@ export class HelperComponent implements OnInit, OnDestroy{
   listening$?: Observable<boolean>;
   regexData: any;
   textData: any;
+  helpTextData: any;
   loadedText: any;
+  loadedHelpText: any;
   constructor(public dialogRef: MatDialogRef<HelperComponent>,
               @Inject(MAT_DIALOG_DATA) public data: any,
               private speechrecognition: SpeechRecognizerService,
-              private speechSynthesizer: SpeechSynthesizerService,
-              private languageService: LanguageService) {
+              public speechSynthesizer: SpeechSynthesizerService,
+              private languageService: LanguageService,
+              public voiceoverService: VoiceoverService) {
     this.languageService.getLanguage().subscribe(language => {
       this.currentLanguage=language;
     });
   }
   ngOnInit(): void {
-    this.speechSynthesizer.speak(
-      'Hogyan kell használni a játékot?'+
-      '        ' +
-      'Ez egy memóriajáték vakok-és látássérültek, illetve színtévesztőknek. A játékot hangvezérléssel lehet irányítani, mely beszédszintézissel segíti a felhasználót a tájékozódásban. Sikeres játék esetén felkerülhetsz a ranglistára.' +
-      '        ' +
-      'A weboldalt és a játékot a következő parancsokkal lehet irányítani:' +
-      '        ' +
-      'Főoldalra navigálás: legyen benne a mondatban a főoldal szó.' +
-      '        ' +
-      'Játékra navigálás: legyen benne a mondatban a játék szó.' +
-      '        ' +
-      'Beállításokra navigálás: legyen benne a mondatban a beállítás szó.' +
-      '        ' +
-      'Ranglistára navigálás: legyen benne a mondatban a ranglista szó.' +
-      '        ' +
-      'Segítség ablakra navigálás: legyen benne a mondatban a segítség szó.' +
-      '        ' +
-      'A játékban a lapokat sor oszlop páros kimondásával lehet felfordítani( például az első sor első oszlopában lévő lap felfordításához mondd azt hogy első első).' +
-      '        ' +
-      'A játék hátralévő ideje lekérdezhető a "mennyi idő van hátra" kérdéssel.' +
-      '        ' +
-      'Aktuális pontok lekérdezéséhez legyen benne a mondatban a pont szó.' +
-      '        ' +
-      'A beállítások mentésénél legyen benne a mondatban a mentés szó.', this.currentLanguage
-    );
+    this.regexData = regex;
+    this.textData= text;
+    this.helpTextData= helpText;
+    this.loadedHelpText = this.helpTextData[this.currentLanguage];
+    this.loadedText = this.textData[this.currentLanguage];
     this.speechrecognition.initialize(this.currentLanguage);
     this.initRecognition();
     this.speechrecognition.start();
-    this.regexData = regex;
-    this.textData= text;
-    this.loadedText = this.textData[this.currentLanguage];
+    this.speechSynthesizer.speak(
+      this.loadedHelpText.howtoplay +
+      '        ' +
+      this.loadedHelpText.thisis +
+      '        ' +
+      this.loadedHelpText.speechinputs +
+      '        ' +
+      this.loadedHelpText.mainpage +
+      '        ' +
+      this.loadedHelpText.game +
+      '        ' +
+      this.loadedHelpText.settings +
+      '        ' +
+      this.loadedHelpText.ranglist +
+      '        ' +
+      this.loadedHelpText.help +
+      '        ' +
+      this.loadedHelpText.selectcard +
+      '        ' +
+      this.loadedHelpText.timeleft +
+      '        ' +
+      this.loadedHelpText.point +
+      '        ' +
+      this.loadedHelpText.savesettings, this.currentLanguage
+    );
   }
 
   ngOnDestroy(): void {
@@ -87,7 +94,7 @@ export class HelperComponent implements OnInit, OnDestroy{
   private processNotification(notification: SpeechNotification<string>): void {
     const languagePatterns = this.regexData[this.currentLanguage];
     const message = notification.content?.trim() || '';
-    let regexHome= new RegExp(languagePatterns.home, 'i');
+    let regexHome= new RegExp(languagePatterns.home);
     let testHome = regexHome.test(message);
     if(testHome){
       this.submit();

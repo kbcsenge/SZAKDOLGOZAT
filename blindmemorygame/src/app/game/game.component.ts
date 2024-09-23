@@ -79,8 +79,8 @@ export class GameComponent implements OnInit, OnDestroy{
     this.speechrecognition.initialize(this.currentLanguage);
     this.initRecognition();
     this.speechrecognition.start();
-    this.speakAndStartTimer();
     this.maxPairs();
+    this.speakAndStartTimer();
   }
   ngOnDestroy(){
     this.stopTimer();
@@ -271,18 +271,21 @@ export class GameComponent implements OnInit, OnDestroy{
         [languagePatterns.fourth]: 4,
         [languagePatterns.fifth]: 5
       };
-      let regexHome = new RegExp(languagePatterns.home, 'i');
-      let regexPoint = new RegExp(languagePatterns.point, 'i');
-      let regexSelectCard = new RegExp(languagePatterns.selectCard, 'i');
+      let regexHome = new RegExp(languagePatterns.home);
+      let regexPoint = new RegExp(languagePatterns.point);
+      let regexSelectCard = new RegExp(languagePatterns.selectCard);
+      let regexTime = new RegExp(languagePatterns.howmuchtimeisleft);
+
       let testHome = regexHome.test(message);
       let testPoint = regexPoint.test(message);
       let testGame = regexSelectCard.exec(message);
+      let testTime = regexTime.exec(message);
 
       if (testHome) {
         this.gotohome();
       }
 
-      if (message === 'how much time is left') {
+      if (testTime) {
         this.speechSynthesizer.speak(
           this.time.toString() + this.spokenText.secondsleft, this.currentLanguage
         );

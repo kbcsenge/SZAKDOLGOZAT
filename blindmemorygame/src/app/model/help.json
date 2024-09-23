@@ -1,0 +1,30 @@
+{
+  "hu-HU":{
+    "howtoplay": "Hogyan kell használni a játékot?",
+    "thisis": "Ez egy memóriajáték vakok-és látássérültek, illetve színtévesztőknek. A játékot hangvezérléssel lehet irányítani, mely beszédszintézissel segíti a felhasználót a tájékozódásban. Sikeres játék esetén felkerülhetsz a ranglistára.",
+    "speechinputs": "A weboldalt és a játékot a következő parancsokkal lehet irányítani:",
+    "mainpage": "Főoldalra navigálás: legyen benne a mondatban a “főoldal“ szó.",
+    "game": "Játékra navigálás: legyen benne a mondatban a “játék“ szó.",
+    "settings": "Beállításokra navigálás: legyen benne a mondatban a “beállítás“ szó.",
+    "ranglist": "Ranglistára navigálás: legyen benne a mondatban a “ranglista” szó.",
+    "help": "Segítség ablakra navigálás: legyen benne a mondatban a “segítség“ szó.",
+    "selectcard": "A játékban a lapokat sor oszlop páros kimondásával lehet felfordítani( például az első sor első oszlopában lévő lap felfordításához mondd azt hogy első első).",
+    "timeleft": "A játék hátralévő ideje lekérdezhető a “mennyi idő van hátra“ kérdéssel.",
+    "points": "Aktuális pontok lekérdezéséhez legyen benne a mondatban a “pont“ szó.",
+    "savesettings": "A beállítások mentésénél legyen benne a mondatban a “mentés“ szó."
+  },
+  "en-US": {
+    "howtoplay": "How to play the game?",
+    "thisis": "This is a memory game for the blind and visually impaired, as well as for those with color blindness. The game can be controlled by voice commands, which use speech synthesis to help the user navigate. If you succeed in the game, you can get on the leaderboard.",
+    "speechinputs": "You can control the website and the game with the following commands:",
+    "mainpage": "Navigate to the homepage: the sentence must include the word “homepage”.",
+    "game": "Navigate to the game: the sentence must include the word “game”.",
+    "settings": "Navigate to settings: the sentence must include the word “settings”.",
+    "ranglist": "Navigate to the leaderboard: the sentence must include the word “leaderboard”.",
+    "help": "Navigate to the help window: the sentence must include the word “help”.",
+    "selectcard": "In the game, you can flip the cards by saying the row and column pair (for example, to flip the card in the first row and first column, say “first first”).",
+    "timeleft": "You can ask for the remaining time in the game by saying “how much time is left”.",
+    "points": "To check your current points, the sentence must include the word “points”.",
+    "savesettings": "When saving settings, the sentence must include the word “save”."
+  }
+}

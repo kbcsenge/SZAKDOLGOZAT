@@ -97,10 +97,10 @@ export class HomepageComponent implements OnInit, OnDestroy{
     if (notification.event === SpeechEvent.FinalContent) {
       const languagePatterns = this.regexData[this.currentLanguage];
       const message = notification.content?.trim() || '';
-      let regexSettings = new RegExp(languagePatterns.settings, 'i');
-      let regexGame = new RegExp(languagePatterns.game, 'i');
-      let regexRanglist = new RegExp(languagePatterns.ranking, 'i');
-      let regexHelp = new RegExp(languagePatterns.help, 'i');
+      let regexSettings = new RegExp(languagePatterns.settings);
+      let regexGame = new RegExp(languagePatterns.game);
+      let regexRanglist = new RegExp(languagePatterns.ranking);
+      let regexHelp = new RegExp(languagePatterns.help);
       let testSettings = regexSettings.test(message);
       let testGame = regexGame.test(message);
       let testRanglist = regexRanglist.test(message);
@@ -122,7 +122,6 @@ export class HomepageComponent implements OnInit, OnDestroy{
 
   gotohelp(): void{
     const dialogRef = this.dialog.open(HelperComponent);
-
     dialogRef.afterClosed().subscribe(result => {
       this.speechSynthesizer.speak(
         this.spokenText.helpclosed, this.currentLanguage
