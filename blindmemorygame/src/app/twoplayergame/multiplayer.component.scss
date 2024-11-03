@@ -57,11 +57,11 @@ table {
   padding-bottom: 5px;
   box-sizing: border-box;
   transition: transfrom 1000ms;
-  z-index: 60000;
   position: relative;
   overflow: visible;
 }
 
 .card img:hover{
-  transform: scale(4);
+  transform: scale(3);
+  z-index: 60000;
 }

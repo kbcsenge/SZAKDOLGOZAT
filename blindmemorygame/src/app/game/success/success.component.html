@@ -3,12 +3,13 @@
   <p (mouseenter)="this.voiceoverService.readingText($event)" (mouseleave)="this.speechSynthesizer.stop()">{{ loadedText.success}}</p>
   <div class="inputfield">
     <label (mouseenter)="this.voiceoverService.readingText($event)" (mouseleave)="this.speechSynthesizer.stop()">{{ loadedText.nameontheranglist}}</label>
-    <input  #nameInput type="text" type="text" required [value]="name">
+    <input (mouseenter)="this.speechSynthesizer.speak(nameInput.value, this.currentLanguage)" (mouseleave)="this.speechSynthesizer.stop()" #nameInput type="text" type="text" required [value]="name">
   </div>
   <br>
   <button (mouseenter)="this.voiceoverService.readingText($event)" (mouseleave)="this.speechSynthesizer.stop()" (click)="submit(nameInput.value)">{{ loadedText.save}}</button>
-  <br>
+  <br><br>
   <button (mouseenter)="this.voiceoverService.readingText($event)" (mouseleave)="this.speechSynthesizer.stop()" (click)="retrygame()">{{ loadedText.retry}}</button>
-  <br>
+  <br><br>
   <button (mouseenter)="this.voiceoverService.readingText($event)" (mouseleave)="this.speechSynthesizer.stop()" (click)="gotohome()">{{ loadedText.backtomainpage}}</button>
+  <br>
 </div>

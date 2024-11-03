@@ -3,19 +3,19 @@
   <div>
     <div style="display: flex; align-items: center; margin-bottom: 10px;">
       <label (mouseenter)="this.voiceoverService.readingText($event)" (mouseleave)="this.speechSynthesizer.stop()" style="width: 400px;">60 {{ loadedText.seconds}}</label>
-      <mat-slide-toggle #toggle60 style="flex-grow: 1; margin-left: 20px;" (change)="toggle120.checked = false; toggle180.checked = false; toggle300.checked = false;" [checked]="gameservice.getTime()==90"></mat-slide-toggle>
+      <mat-slide-toggle #toggle60 style="flex-grow: 1; margin-left: 20px;" (change)="toggle120.checked = false; toggle180.checked = false; toggle300.checked = false; checkToggles()" [checked]="gameservice.getTime()==60"></mat-slide-toggle>
     </div>
     <div style="display: flex; align-items: center;margin-bottom: 10px;">
       <label (mouseenter)="this.voiceoverService.readingText($event)" (mouseleave)="this.speechSynthesizer.stop()" style="width: 400px;">120 {{ loadedText.seconds}}</label>
-      <mat-slide-toggle #toggle120 style="flex-grow: 1; margin-left: 20px;" (change)="toggle60.checked = false; toggle180.checked = false; toggle300.checked = false;" [checked]="gameservice.getTime()==120"></mat-slide-toggle>
+      <mat-slide-toggle #toggle120 style="flex-grow: 1; margin-left: 20px;" (change)="toggle60.checked = false; toggle180.checked = false; toggle300.checked = false; checkToggles()" [checked]="gameservice.getTime()==120"></mat-slide-toggle>
     </div>
     <div style="display: flex; align-items: center;margin-bottom: 10px;">
       <label (mouseenter)="this.voiceoverService.readingText($event)" (mouseleave)="this.speechSynthesizer.stop()" style="width: 400px;">180 {{ loadedText.seconds}}</label>
-      <mat-slide-toggle #toggle180 style="flex-grow: 1; margin-left: 20px;" (change)="toggle60.checked = false; toggle120.checked = false; toggle300.checked = false;" [checked]="gameservice.getTime()==180"></mat-slide-toggle>
+      <mat-slide-toggle #toggle180 style="flex-grow: 1; margin-left: 20px;" (change)="toggle60.checked = false; toggle120.checked = false; toggle300.checked = false; checkToggles()" [checked]="gameservice.getTime()==180"></mat-slide-toggle>
     </div>
     <div style="display: flex; align-items: center;margin-bottom: 10px;">
       <label (mouseenter)="this.voiceoverService.readingText($event)" (mouseleave)="this.speechSynthesizer.stop()" style="width: 400px;">300 {{ loadedText.seconds}}</label>
-      <mat-slide-toggle #toggle300 style="flex-grow: 1; margin-left: 20px;" (change)="toggle60.checked = false; toggle120.checked = false; toggle180.checked = false;" [checked]="gameservice.getTime()==300"></mat-slide-toggle>
+      <mat-slide-toggle #toggle300 style="flex-grow: 1; margin-left: 20px;" (change)="toggle60.checked = false; toggle120.checked = false; toggle180.checked = false; checkToggles()" [checked]="gameservice.getTime()==300"></mat-slide-toggle>
     </div>
   </div>
   <br>

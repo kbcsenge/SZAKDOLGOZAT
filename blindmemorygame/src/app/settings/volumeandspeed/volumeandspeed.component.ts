@@ -45,9 +45,19 @@ export class VolumeandspeedComponent implements OnInit, OnDestroy{
     this.spokenTextData = spokentext;
     this.loadedText = this.textData[this.currentLanguage];
     this.spokenText = this.spokenTextData[this.currentLanguage];
-    this.speechSynthesizer.speak(
-      this.spokenText.vandopened, this.currentLanguage
-    );
+    this.languageService.getLanguage().subscribe(language => {
+      this.currentLanguage = language;
+      setTimeout(() => {
+        this.speechSynthesizer.speak(
+          this.spokenText.vandopened +
+          " . " +
+          this.spokenText.volume +
+          this.volumeInput?.nativeElement.value.toString() +
+          " . "+
+          this.spokenText.playbackspeed +
+          this.rateInput?.nativeElement.value.toString(), this.currentLanguage);
+      });
+    });
     this.speechrecognition.initialize(this.currentLanguage);
     this.initRecognition();
     this.speechrecognition.start();
@@ -59,8 +69,6 @@ export class VolumeandspeedComponent implements OnInit, OnDestroy{
   submit() {
     this.speechSynthesizer.setVolume(Number(this.volumeInput?.nativeElement.value));
     this.speechSynthesizer.setRate(Number(this.rateInput?.nativeElement.value));
-    console.log(this.speechSynthesizer.getRate())
-    console.log(this.speechSynthesizer.getVolume())
     this.dialogRef.close();
   }
   private initRecognition(): void {
@@ -116,10 +124,10 @@ export class VolumeandspeedComponent implements OnInit, OnDestroy{
       if (testLoud && this.speechSynthesizer.getVolume() < 1) {
         if (this.volumeInput) {
           let newVolume = parseFloat(this.volumeInput.nativeElement.value) + 0.1;
-          this.volumeInput.nativeElement.value = newVolume.toFixed(2);
+          this.volumeInput.nativeElement.value = newVolume.toFixed(1);
           this.speechSynthesizer.setVolume(newVolume);
           this.speechSynthesizer.speak(
-            this.speechSynthesizer.getVolume().toString(), this.currentLanguage
+            this.speechSynthesizer.getVolume().toFixed(1), this.currentLanguage
           );
         }
       }
@@ -127,10 +135,10 @@ export class VolumeandspeedComponent implements OnInit, OnDestroy{
       if (testQuiet && this.speechSynthesizer.getVolume() > 0) {
         if (this.volumeInput) {
           let newVolume = parseFloat(this.volumeInput.nativeElement.value) - 0.1;
-          this.volumeInput.nativeElement.value = newVolume.toFixed(2);
+          this.volumeInput.nativeElement.value = newVolume.toFixed(1);
           this.speechSynthesizer.setVolume(newVolume);
           this.speechSynthesizer.speak(
-            this.speechSynthesizer.getVolume().toString(), this.currentLanguage
+            this.speechSynthesizer.getVolume().toFixed(1), this.currentLanguage
           );
         }
       }
@@ -146,5 +154,13 @@ export class VolumeandspeedComponent implements OnInit, OnDestroy{
       return Math.round(value / 1000) + 'k';
     }
     return `${value}`;
+  }
+
+  checkVolume(){
+    this.speechSynthesizer.speak(this.spokenText.volume + this.volumeInput?.nativeElement.value.toString(), this.currentLanguage)
+  }
+
+  checkRate(){
+    this.speechSynthesizer.speak(this.spokenText.playbackspeed + this.rateInput?.nativeElement.value.toString(), this.currentLanguage)
   }
 }

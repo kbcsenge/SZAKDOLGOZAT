@@ -76,7 +76,6 @@ export class MultiplayersuccessComponent {
     if (notification.event === SpeechEvent.FinalContent) {
       const languagePatterns = this.regexData[this.currentLanguage];
       const message = notification.content?.trim() || '';
-
       let regexGame = new RegExp(languagePatterns.game);
       let regexHome = new RegExp(languagePatterns.home);
       let testGame = regexGame.test(message);

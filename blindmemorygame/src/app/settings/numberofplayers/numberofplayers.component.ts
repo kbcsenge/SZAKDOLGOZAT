@@ -48,9 +48,15 @@ export class NumberofplayersComponent implements OnInit, OnDestroy {
     this.spokenTextData = spokentext;
     this.loadedText = this.textData[this.currentLanguage];
     this.spokenText = this.spokenTextData[this.currentLanguage];
-    this.speechSynthesizer.speak(
-      this.spokenText.numberofplayersopened, this.currentLanguage
-    );
+    this.languageService.getLanguage().subscribe(language => {
+      this.currentLanguage = language;
+      setTimeout(() => {
+        this.speechSynthesizer.speak(
+          this.spokenText.numberofplayersopened, this.currentLanguage
+        )
+        this.checkToggles()
+      })
+    })
     this.speechrecognition.initialize(this.currentLanguage);
     this.initRecognition();
     this.speechrecognition.start();
@@ -91,6 +97,7 @@ export class NumberofplayersComponent implements OnInit, OnDestroy {
       if (testSinglePlayer) {
         if (this.toggleOne) {
           this.toggleOne.checked = true;
+          this.speechSynthesizer.speak(this.spokenText.singleplayer + this.spokenText.choosen, this.currentLanguage);
         }
         if (this.toggleTwo) {
           this.toggleTwo.checked = false;
@@ -101,12 +108,21 @@ export class NumberofplayersComponent implements OnInit, OnDestroy {
         }
         if (this.toggleTwo) {
           this.toggleTwo.checked = true;
+          this.speechSynthesizer.speak(this.spokenText.multiplayer + this.spokenText.choosen, this.currentLanguage);
         }
       }
 
       if (testSubmit) {
         this.submit();
       }
+    }
+  }
+  checkToggles() {
+    if (this.toggleOne?.checked) {
+      this.speechSynthesizer.speak(this.spokenText.singleplayer + this.spokenText.choosen, this.currentLanguage);
+    }
+    if (this.toggleTwo?.checked) {
+      this.speechSynthesizer.speak(this.spokenText.multiplayer + this.spokenText.choosen, this.currentLanguage);
     }
   }
 }

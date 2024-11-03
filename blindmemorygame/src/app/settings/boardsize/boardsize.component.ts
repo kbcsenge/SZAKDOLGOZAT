@@ -48,9 +48,15 @@ export class BoardsizeComponent implements OnInit, OnDestroy{
     this.spokenTextData = spokentext;
     this.loadedText = this.textData[this.currentLanguage];
     this.spokenText = this.spokenTextData[this.currentLanguage];
-    this.speechSynthesizer.speak(
-      this.spokenText.gameboardsizeopened, this.currentLanguage
-    );
+    this.languageService.getLanguage().subscribe(language => {
+      this.currentLanguage = language;
+      setTimeout(() => {
+        this.speechSynthesizer.speak(
+          this.spokenText.gameboardsizeopened, this.currentLanguage
+        )
+        this.checkToggles()
+      })
+    });
     this.speechrecognition.initialize(this.currentLanguage);
     this.initRecognition();
     this.speechrecognition.start()
@@ -102,6 +108,7 @@ export class BoardsizeComponent implements OnInit, OnDestroy{
       if (test3x4) {
         if (this.toggle3x4) {
           this.toggle3x4.checked = true;
+          this.speechSynthesizer.speak(this.spokenText.threebyfour + this.spokenText.gameboard + this.spokenText.choosen, this.currentLanguage);
         }
         if (this.toggle4x4) {
           this.toggle4x4.checked = false;
@@ -112,6 +119,7 @@ export class BoardsizeComponent implements OnInit, OnDestroy{
       } else if (test4x4) {
         if (this.toggle4x4) {
           this.toggle4x4.checked = true;
+          this.speechSynthesizer.speak(this.spokenText.fourbyfour + this.spokenText.gameboard + this.spokenText.choosen, this.currentLanguage);
         }
         if (this.toggle3x4) {
           this.toggle3x4.checked = false;
@@ -122,6 +130,7 @@ export class BoardsizeComponent implements OnInit, OnDestroy{
       } else if (test4x5) {
         if (this.toggle4x5) {
           this.toggle4x5.checked = true;
+          this.speechSynthesizer.speak(this.spokenText.fourbyfive + this.spokenText.gameboard + this.spokenText.choosen, this.currentLanguage);
         }
         if (this.toggle3x4) {
           this.toggle3x4.checked = false;
@@ -130,10 +139,21 @@ export class BoardsizeComponent implements OnInit, OnDestroy{
           this.toggle4x4.checked = false;
         }
       }
-
       if (testSubmit) {
         this.submit();
       }
+    }
+  }
+
+  checkToggles() {
+    if (this.toggle3x4?.checked) {
+      this.speechSynthesizer.speak(this.spokenText.threebyfour + this.spokenText.gameboard + this.spokenText.choosen, this.currentLanguage);
+    }
+    if (this.toggle4x4?.checked) {
+      this.speechSynthesizer.speak(this.spokenText.fourbyfour + this.spokenText.gameboard + this.spokenText.choosen, this.currentLanguage);
+    }
+    if (this.toggle4x5?.checked) {
+      this.speechSynthesizer.speak(this.spokenText.fourbyfive +this.spokenText.gameboard + this.spokenText.choosen, this.currentLanguage);
     }
   }
 }

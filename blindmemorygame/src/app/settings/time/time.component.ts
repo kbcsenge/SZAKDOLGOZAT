@@ -49,9 +49,15 @@ export class TimeComponent implements OnInit, OnDestroy {
     this.spokenTextData = spokentext;
     this.loadedText = this.textData[this.currentLanguage];
     this.spokenText = this.spokenTextData[this.currentLanguage];
-    this.speechSynthesizer.speak(
-      this.spokenText.gametimeopened, this.currentLanguage
-    );
+    this.languageService.getLanguage().subscribe(language => {
+      this.currentLanguage = language;
+      setTimeout(() => {
+        this.speechSynthesizer.speak(
+          this.spokenText.gametimeopened, this.currentLanguage
+        )
+        this.checkToggles()
+      })
+    });
     this.speechrecognition.initialize(this.currentLanguage);
     this.initRecognition();
     this.speechrecognition.start();
@@ -115,6 +121,7 @@ export class TimeComponent implements OnInit, OnDestroy {
       if (test60 || test60WithNumber) {
         if (this.toggle60) {
           this.toggle60.checked = true;
+          this.speechSynthesizer.speak("60" + this.spokenText.seconds + this.spokenText.choosen, this.currentLanguage);
         }
         if (this.toggle120) {
           this.toggle120.checked = false;
@@ -131,6 +138,7 @@ export class TimeComponent implements OnInit, OnDestroy {
         }
         if (this.toggle120) {
           this.toggle120.checked = true;
+          this.speechSynthesizer.speak("120" + this.spokenText.seconds + this.spokenText.choosen, this.currentLanguage);
         }
         if (this.toggle180) {
           this.toggle180.checked = false;
@@ -147,6 +155,7 @@ export class TimeComponent implements OnInit, OnDestroy {
         }
         if (this.toggle180) {
           this.toggle180.checked = true;
+          this.speechSynthesizer.speak("180" + this.spokenText.seconds + this.spokenText.choosen, this.currentLanguage);
         }
         if (this.toggle300) {
           this.toggle300.checked = false;
@@ -163,12 +172,27 @@ export class TimeComponent implements OnInit, OnDestroy {
         }
         if (this.toggle300) {
           this.toggle300.checked = true;
+          this.speechSynthesizer.speak("300" + this.spokenText.seconds + this.spokenText.choosen, this.currentLanguage);
         }
       }
 
       if (testSubmit) {
         this.submit();
       }
+    }
+  }
+  checkToggles() {
+    if (this.toggle60?.checked) {
+      this.speechSynthesizer.speak("60" + this.spokenText.seconds + this.spokenText.choosen, this.currentLanguage);
+    }
+    if (this.toggle120?.checked) {
+      this.speechSynthesizer.speak("120" + this.spokenText.seconds + this.spokenText.choosen, this.currentLanguage);
+    }
+    if (this.toggle180?.checked) {
+      this.speechSynthesizer.speak("180" + this.spokenText.seconds + this.spokenText.choosen, this.currentLanguage);
+    }
+    if (this.toggle300?.checked) {
+      this.speechSynthesizer.speak("300" + this.spokenText.seconds + this.spokenText.choosen, this.currentLanguage);
     }
   }
 }

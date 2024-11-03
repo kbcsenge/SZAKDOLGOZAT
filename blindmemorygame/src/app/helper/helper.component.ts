@@ -44,31 +44,38 @@ export class HelperComponent implements OnInit, OnDestroy{
     this.speechrecognition.initialize(this.currentLanguage);
     this.initRecognition();
     this.speechrecognition.start();
-    this.speechSynthesizer.speak(
-      this.loadedHelpText.howtoplay +
-      '        ' +
-      this.loadedHelpText.thisis +
-      '        ' +
-      this.loadedHelpText.speechinputs +
-      '        ' +
-      this.loadedHelpText.mainpage +
-      '        ' +
-      this.loadedHelpText.game +
-      '        ' +
-      this.loadedHelpText.settings +
-      '        ' +
-      this.loadedHelpText.ranglist +
-      '        ' +
-      this.loadedHelpText.help +
-      '        ' +
-      this.loadedHelpText.selectcard +
-      '        ' +
-      this.loadedHelpText.timeleft +
-      '        ' +
-      this.loadedHelpText.point +
-      '        ' +
-      this.loadedHelpText.savesettings, this.currentLanguage
-    );
+    this.languageService.getLanguage().subscribe(language => {
+      this.currentLanguage = language;
+      setTimeout(() => {
+        this.speechSynthesizer.speak(
+          this.loadedHelpText.howtoplay +
+          '        ' +
+          this.loadedHelpText.thisis +
+          '        ' +
+          this.loadedHelpText.speechinputs +
+          '        ' +
+          this.loadedHelpText.mainpage +
+          '        ' +
+          this.loadedHelpText.game +
+          '        ' +
+          this.loadedHelpText.settings +
+          '        ' +
+          this.loadedHelpText.ranglist +
+          '        ' +
+          this.loadedHelpText.help +
+          '        ' +
+          this.loadedHelpText.selectcard +
+          '        ' +
+          this.loadedHelpText.timeleft +
+          '        ' +
+          this.loadedHelpText.points +
+          '        ' +
+          this.loadedHelpText.savesettings +
+          '        ' +
+          this.loadedHelpText.return, this.currentLanguage
+        )
+      })
+    })
   }
 
   ngOnDestroy(): void {

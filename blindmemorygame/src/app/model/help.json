@@ -11,7 +11,8 @@
     "selectcard": "A játékban a lapokat sor oszlop páros kimondásával lehet felfordítani( például az első sor első oszlopában lévő lap felfordításához mondd azt hogy első első).",
     "timeleft": "A játék hátralévő ideje lekérdezhető a “mennyi idő van hátra“ kérdéssel.",
     "points": "Aktuális pontok lekérdezéséhez legyen benne a mondatban a “pont“ szó.",
-    "savesettings": "A beállítások mentésénél legyen benne a mondatban a “mentés“ szó."
+    "savesettings": "A beállítások mentésénél legyen benne a mondatban a “mentés“ szó.",
+    "return": "Ezt az ablakot be tudod zárni, ha azt mondod “vissza a főoldalra“"
   },
   "en-US": {
     "howtoplay": "How to play the game?",
@@ -25,6 +26,7 @@
     "selectcard": "In the game, you can flip the cards by saying the row and column pair (for example, to flip the card in the first row and first column, say “first first”).",
     "timeleft": "You can ask for the remaining time in the game by saying “how much time is left”.",
     "points": "To check your current points, the sentence must include the word “points”.",
-    "savesettings": "When saving settings, the sentence must include the word “save”."
+    "savesettings": "When saving settings, the sentence must include the word “save”.",
+    "return": "You can return to the main page if you say “go back to the main page“"
   }
 }

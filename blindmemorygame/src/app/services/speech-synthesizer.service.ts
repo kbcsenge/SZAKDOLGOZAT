@@ -31,7 +31,6 @@ export class SpeechSynthesizerService {
     this.speechSynthesizer.lang = language;
     this.speechSynthesizer.text = message;
     this.speechSynthesizer.onend = (event) => {
-      console.log('Speech has finished being spoken.');
       if (callback) {
         callback();
       }

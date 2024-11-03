@@ -7,11 +7,11 @@
     <table>
       <thead>
       <tr>
-        <th>{{ loadedText.ranking }}</th>
-        <th>{{ loadedText.name }}</th>
-        <th>{{ loadedText.receivedpoints }}</th>
-        <th>{{ loadedText.time }}</th>
-        <th style="padding-right: 170px">{{ loadedText.date }}</th>
+        <th (mouseenter)="this.voiceoverService.readingText($event)" (mouseleave)="this.speechSynthesizer.stop()">{{ loadedText.ranking }}</th>
+        <th (mouseenter)="this.voiceoverService.readingText($event)" (mouseleave)="this.speechSynthesizer.stop()">{{ loadedText.name }}</th>
+        <th (mouseenter)="this.voiceoverService.readingText($event)" (mouseleave)="this.speechSynthesizer.stop()">{{ loadedText.receivedpoints }}</th>
+        <th (mouseenter)="this.voiceoverService.readingText($event)" (mouseleave)="this.speechSynthesizer.stop()">{{ loadedText.time }}</th>
+        <th (mouseenter)="this.voiceoverService.readingText($event)" (mouseleave)="this.speechSynthesizer.stop()" style="padding-right: 170px">{{ loadedText.date }}</th>
       </tr>
       </thead>
     </table>
@@ -19,11 +19,11 @@
       <table>
         <tbody>
         <tr *ngFor="let ranking of rankings | async; index as i">
-          <td>{{ i + 1 }}.</td>
-          <td>{{ ranking.name }}</td>
-          <td>{{ ranking.points }}</td>
-          <td>{{ ranking.time }}</td>
-          <td style="padding-right: 170px">{{ ranking.date.toDate() | date: 'yyyy.MM.dd. HH:mm:ss':'UTC' }}</td>
+          <td (mouseenter)="this.voiceoverService.readingText($event)" (mouseleave)="this.speechSynthesizer.stop()">{{ i + 1 }}.</td>
+          <td (mouseenter)="this.voiceoverService.readingText($event)" (mouseleave)="this.speechSynthesizer.stop()">{{ ranking.name }}</td>
+          <td (mouseenter)="this.voiceoverService.readingText($event)" (mouseleave)="this.speechSynthesizer.stop()">{{ ranking.points }}</td>
+          <td (mouseenter)="this.voiceoverService.readingText($event)" (mouseleave)="this.speechSynthesizer.stop()">{{ ranking.time }}</td>
+          <td (mouseenter)="this.voiceoverService.readingText($event)" (mouseleave)="this.speechSynthesizer.stop()" style="padding-right: 170px">{{ ranking.date.toDate() | date: 'yyyy.MM.dd. HH:mm:ss':'UTC' }}</td>
         </tr>
         </tbody>
       </table>

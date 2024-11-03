@@ -5,10 +5,9 @@
   <div>
     <h1 (mouseenter)="this.voiceoverService.readingText($event)" (mouseleave)="this.speechSynthesizer.stop()">{{ loadedText.welcome}}</h1>
   </div>
-  <div>
-    <button (mouseenter)="this.voiceoverService.readingText($event)" (mouseleave)="this.speechSynthesizer.stop()" (click)="gotogame()">{{ loadedText.start}}</button>
+  <div class="flexA">
+    <a (mouseenter)="this.voiceoverService.readingText($event)" (mouseleave)="this.speechSynthesizer.stop()" (click)="gotogame()">{{ loadedText.start}}</a>
+    <a (mouseenter)="this.voiceoverService.readingText($event)" (mouseleave)="this.speechSynthesizer.stop()" (click)="gotoresults()">{{ loadedText.rankings}}</a>
   </div>
-  <br><br>
-  <a (mouseenter)="this.voiceoverService.readingText($event)" (mouseleave)="this.speechSynthesizer.stop()" (click)="gotoresults()">{{ loadedText.rankings}}</a>
 </div>
 

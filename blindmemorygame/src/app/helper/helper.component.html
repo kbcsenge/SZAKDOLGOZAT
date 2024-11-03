@@ -1,18 +1,19 @@
 <div class="alertwindow" style="display: flex; flex-direction: column; align-items: center;">
-  <h4>{{this.loadedHelpText.howtoplay}}</h4>
+  <h4 (mouseenter)="this.voiceoverService.readingText($event)" (mouseleave)="this.speechSynthesizer.stop()">{{this.loadedHelpText.howtoplay}}</h4>
   <div class="main">
-    <p>{{this.loadedHelpText.thisis}}</p>
-    <p>{{this.loadedHelpText.speechinputs}}</p>
+    <p (mouseenter)="this.voiceoverService.readingText($event)" (mouseleave)="this.speechSynthesizer.stop()">{{this.loadedHelpText.thisis}}</p>
+    <p (mouseenter)="this.voiceoverService.readingText($event)" (mouseleave)="this.speechSynthesizer.stop()">{{this.loadedHelpText.speechinputs}}</p>
     <ul>
-      <li>{{this.loadedHelpText.mainpage}}</li>
-      <li>{{this.loadedHelpText.game}}</li>
-      <li>{{this.loadedHelpText.settings}}</li>
-      <li>{{this.loadedHelpText.ranglist}}</li>
-      <li>{{this.loadedHelpText.help}}</li>
-      <li>{{this.loadedHelpText.selectcard}}</li>
-      <li>{{this.loadedHelpText.timeleft}}</li>
-      <li>{{this.loadedHelpText.points}}</li>
-      <li>{{this.loadedHelpText.savesettings}}</li>
+      <li (mouseenter)="this.voiceoverService.readingText($event)" (mouseleave)="this.speechSynthesizer.stop()">{{this.loadedHelpText.mainpage}}</li>
+      <li (mouseenter)="this.voiceoverService.readingText($event)" (mouseleave)="this.speechSynthesizer.stop()">{{this.loadedHelpText.game}}</li>
+      <li (mouseenter)="this.voiceoverService.readingText($event)" (mouseleave)="this.speechSynthesizer.stop()">{{this.loadedHelpText.settings}}</li>
+      <li (mouseenter)="this.voiceoverService.readingText($event)" (mouseleave)="this.speechSynthesizer.stop()">{{this.loadedHelpText.ranglist}}</li>
+      <li (mouseenter)="this.voiceoverService.readingText($event)" (mouseleave)="this.speechSynthesizer.stop()">{{this.loadedHelpText.help}}</li>
+      <li (mouseenter)="this.voiceoverService.readingText($event)" (mouseleave)="this.speechSynthesizer.stop()">{{this.loadedHelpText.selectcard}}</li>
+      <li (mouseenter)="this.voiceoverService.readingText($event)" (mouseleave)="this.speechSynthesizer.stop()">{{this.loadedHelpText.timeleft}}</li>
+      <li (mouseenter)="this.voiceoverService.readingText($event)" (mouseleave)="this.speechSynthesizer.stop()">{{this.loadedHelpText.points}}</li>
+      <li (mouseenter)="this.voiceoverService.readingText($event)" (mouseleave)="this.speechSynthesizer.stop()">{{this.loadedHelpText.savesettings}}</li>
+      <li (mouseenter)="this.voiceoverService.readingText($event)" (mouseleave)="this.speechSynthesizer.stop()">{{this.loadedHelpText.return}}</li>
     </ul>
   </div>
   <div>

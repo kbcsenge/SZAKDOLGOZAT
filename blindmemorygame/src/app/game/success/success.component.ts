@@ -1,4 +1,4 @@
-import {Component, Inject, OnInit, ViewChild} from '@angular/core';
+import {Component, Inject, OnInit} from '@angular/core';
 import {Router} from "@angular/router";
 import {AngularFirestore} from "@angular/fire/compat/firestore";
 import {GameService} from "../../services/game.service";
@@ -56,7 +56,7 @@ export class SuccessComponent implements OnInit{
       date: date
     });
     this.dialogRef.close();
-    this.router.navigate(['/rankings']);
+    this.router.navigate(['/rankings', { name: name }]);
   }
 
   gotohome(){
@@ -102,7 +102,7 @@ export class SuccessComponent implements OnInit{
       const languagePatterns = this.regexData[this.currentLanguage];
       let regexGame = new RegExp(languagePatterns.game);
       let regexHome = new RegExp(languagePatterns.home);
-      let regexSubmit = new RegExp(languagePatterns.save);
+      let regexSubmit = new RegExp(languagePatterns.submit);
       let regexRetryname = new RegExp(languagePatterns.retry);
       let testGame = regexGame.test(message);
       let testHome = regexHome.test(message);

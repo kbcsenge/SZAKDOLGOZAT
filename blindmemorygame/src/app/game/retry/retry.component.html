@@ -3,7 +3,7 @@
   <p (mouseenter)="this.voiceoverService.readingText($event)" (mouseleave)="this.speechSynthesizer.stop()" >{{ loadedText.notfoundallpairs}}</p>
   <br>
   <button (mouseenter)="this.voiceoverService.readingText($event)" (mouseleave)="this.speechSynthesizer.stop()" (click)="retrygame()">{{ loadedText.retry }}</button>
-  <br>
+  <br><br>
   <button (mouseenter)="this.voiceoverService.readingText($event)" (mouseleave)="this.speechSynthesizer.stop()" (click)="gotohome()">{{ loadedText.backtomainpage }}</button>
   <br>
 </div>

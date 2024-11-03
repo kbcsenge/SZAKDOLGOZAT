@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Router} from "@angular/router";
 import {AsyncPipe, NgFor} from "@angular/common";
 import {forkJoin, merge, Observable, take} from "rxjs";
@@ -37,7 +37,7 @@ export class GameComponent implements OnInit, OnDestroy{
   flipped: boolean[][]=[];
   selectedCards: {row: number, col: number}[] = [];
   points: number = 0;
-  time: number = 90;
+  time: number = 120;
   gameOver: boolean= false;
   pastTime: number=0;
   matches: number= 0;
@@ -47,7 +47,6 @@ export class GameComponent implements OnInit, OnDestroy{
   transcript$?: Observable<string>;
   listening$?: Observable<boolean>;
   numbersInWords : any;
-
   regexData: any;
   textData: any;
   loadedText: any;
@@ -84,12 +83,13 @@ export class GameComponent implements OnInit, OnDestroy{
   }
   ngOnDestroy(){
     this.stopTimer();
+    this.gameOver= true;
     this.speechSynthesizer.stop();
   }
   speakText(): Promise<void> {
     return new Promise((resolve, reject) => {
       const utterance = new SpeechSynthesisUtterance(
-        this.spokenText.gamestarted + " " + this.spokenText.itsa + " " + this.size + " " + this.spokenText.gameboard + " " + this.spokenText.havetime + ": " + this.time.toString() + " " + this.spokenText.seconds + " " + this.spokenText.goodluck
+        this.spokenText.gamestarted + ". " + this.spokenText.itsa + " " + this.size + " " + this.spokenText.gameboard + ". " + this.spokenText.havetime + ": " + this.time.toString() + " " + this.spokenText.seconds + ". " + this.spokenText.goodluck
       );
       utterance.lang = this.currentLanguage;
       utterance.pitch = 0.5;
@@ -154,7 +154,6 @@ export class GameComponent implements OnInit, OnDestroy{
     }
     this.flipped[row][col] = true;
     this.selectedCards.push({row, col});
-    console.log(this.rows[row][col])
     this.sayCard(this.rows[row][col]);
     if (this.selectedCards.length === 2) {
       const card1 = this.rows[this.selectedCards[0].row][this.selectedCards[0].col];
@@ -238,7 +237,7 @@ export class GameComponent implements OnInit, OnDestroy{
 
   successDialog(): void{
     this.speechSynthesizer.speak(
-      this.spokenText.allpairsfound, this.currentLanguage
+      this.spokenText.allpairsfound + ". " + this.spokenText.gotpoints + this.points.toString() + ". " + this.spokenText.addaname , this.currentLanguage
     );
     const dialogRef = this.dialog.open(SuccessComponent);
 
@@ -300,13 +299,14 @@ export class GameComponent implements OnInit, OnDestroy{
       if (testGame) {
         let row = this.numbersInWords[testGame[1]] - 1;
         let col = this.numbersInWords[testGame[2]] - 1;
-        this.selectCard(row, col);
+        if(!isNaN(col) && !isNaN(row)){
+          this.selectCard(row, col);
+        }
       }
     }
   }
 
   sayCard(cardname: string){
-     console.log(this.currentLanguage)
      if(cardname.includes('cat.png')){
        this.speechSynthesizer.speak(
          this.spokenText.cat, this.currentLanguage

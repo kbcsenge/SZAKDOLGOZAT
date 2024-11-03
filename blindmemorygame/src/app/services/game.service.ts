@@ -7,7 +7,7 @@ import { BehaviorSubject } from 'rxjs';
 export class GameService {
   private timerSource = new BehaviorSubject<number>(90);
   currentTimer = this.timerSource.asObservable();
-  time: number = 90;
+  time: number = 120;
 
   row: number =3;
   col: number = 4;

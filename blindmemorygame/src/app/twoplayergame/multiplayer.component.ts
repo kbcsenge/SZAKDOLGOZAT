@@ -1,5 +1,5 @@
 import {AfterViewInit, Component, OnDestroy, OnInit} from '@angular/core';
-import {forkJoin, merge, Observable, take} from "rxjs";
+import {forkJoin, merge, Observable} from "rxjs";
 import {CardService} from "../services/card.service";
 import {GameService} from "../services/game.service";
 import {Router} from "@angular/router";
@@ -8,7 +8,6 @@ import {SpeechRecognizerService} from "../services/speech-recognizer.service";
 import {SpeechSynthesizerService} from "../services/speech-synthesizer.service";
 import {LanguageService} from "../services/language.service";
 import {cardpictures} from "../game/cardurls/cardurls";
-import {SuccessComponent} from "../game/success/success.component";
 import {map, tap} from "rxjs/operators";
 import {SpeechEvent} from "../model/speech-event";
 import {SpeechNotification} from "../model/speech-notification";
@@ -123,7 +122,6 @@ export class MultiplayerComponent implements OnInit, AfterViewInit, OnDestroy{
     }
     this.flipped[row][col] = true;
     this.selectedCards.push({row, col});
-    console.log(this.rows[row][col])
     this.sayCard(this.rows[row][col]);
     if (this.selectedCards.length === 2) {
       const card1 = this.rows[this.selectedCards[0].row][this.selectedCards[0].col];
@@ -235,7 +233,9 @@ export class MultiplayerComponent implements OnInit, AfterViewInit, OnDestroy{
       if (testGame) {
         let row = this.numbersInWords[testGame[1]] - 1;
         let col = this.numbersInWords[testGame[2]] - 1;
-        this.selectCard(row, col);
+        if(!isNaN(col) && !isNaN(row)){
+          this.selectCard(row, col);
+        }
       }
     }
   }
