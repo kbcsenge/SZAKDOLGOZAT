@@ -1,0 +1,422 @@
+%Oldaltorest is alkalmazhatunk
+% \pagebreak
+%laptores:
+% \newpage
+
+
+\documentclass[12pt]{report}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\def\magyarOptions{defaults=hu-min}
+\usepackage[magyar]{babel}
+
+\usepackage{times}
+\usepackage{tcolorbox}
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+
+\usepackage{fancyhdr}
+
+\usepackage{graphicx}
+\usepackage{psfrag}
+
+\usepackage{setspace}
+
+\graphicspath{ {images/} }
+
+%Margok:
+\hoffset -1in
+\voffset -1in
+\oddsidemargin 35mm
+\textwidth 150mm
+\topmargin 15mm
+\headheight 10mm
+\headsep 5mm
+\textheight 237mm
+
+% \onehalfspacing
+\linespread{1.25}
+
+\begin{document}
+
+
+\thispagestyle{empty}
+
+\begin{center}
+{\Large\bf Szegedi Tudományegyetem}
+
+\vspace{0.5cm}
+
+{\Large\bf Informatikai Intézet}
+
+\vspace*{8.5cm}
+
+
+{\Huge\bf SZAKDOLGOZAT}
+
+
+\vspace*{7cm}
+
+{\LARGE\bf Kovács-Bodó Csenge}
+
+\vspace*{0.6cm}
+
+{\Large\bf 2024}
+
+\end{center}
+
+\newpage
+
+
+\fancypagestyle{plain}{
+\fancyhf{}
+\fancyfoot[R]{\thepage}
+\renewcommand{\headrulewidth}{0pt}
+}
+
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{Beszédfelismerő és képernyő felolvasó játék fejlesztése vakok és látássérültek számára}
+\fancyfoot[R]{\thepage}
+
+
+\thispagestyle{empty}
+
+\begin{center}
+\vspace*{1cm}
+{\Large\bf Szegedi Tudományegyetem}
+
+\vspace{0.5cm}
+
+{\Large\bf Informatikai Intézet}
+
+\vspace*{3cm}
+
+
+{\LARGE\bf Beszédfelismerő és képernyő felolvasó játék fejlesztése vakok és látássérültek számára}
+
+
+\vspace*{3cm}
+
+{\Large Szakdolgozat}
+
+\vspace*{3cm}
+
+{\large
+\begin{tabular}{c@{\hspace{4cm}}c}
+\emph{Készítette:}     &\emph{Témavezető:}\\
+\textbf{Kovács-Bodó Csenge}  &\textbf{Dr. Jánki Zoltán Richárd}\\
+Gazdaságinformatikus         &Egyetemi adjunktus\\
+alapszakos hallgató&\\
+\end{tabular}
+}
+
+\vspace*{1.5cm}
+
+{\Large
+Szeged
+\\
+\vspace{2mm}
+2024
+}
+\end{center}
+
+\renewcommand{\contentsname}{Tartalomjegyzék}
+
+\chapter*{Feladatkiírás}
+\addcontentsline{toc}{section}{Feladatkiírás}
+
+Az esélyegyenlőség jegyében már számos program elérhető az interneten, melyeket kifejezetten vakok és látássérültek számára készítettek el, emellett nagy népszerűségnek örvend általános felhasználók körében is, ha egy program felhasználói ferülete minél könnyebben használható, felhasználóbarát. Szakdolgozatom célja olyan frontend oldali technológiák, módszerek tárgyalása, melyekkel akadálymetesíthetünk egy programot látásukban korlátozott felhasználók számára. Példa proramom egy egyszerű memóriajátékok mutat be, melyet hangvezérléssel irányíthatunk, és a program folyamatos szövegfelolvasással visszajelzést küld és segít a tájékozódásban.
+
+\chapter*{Tartalmi összefoglaló}
+\addcontentsline{toc}{section}{Tartalmi összefoglaló}
+
+\textbf{A téma megnevezése:} \\
+\noindent Beszédfelismerő és képernyő felolvasó játék fejlesztése vakok és látássérültek számára\\
+
+\noindent\textbf{A megadott feladat megfogalmazása:} \\
+\noindent Szakdolgozatom célja olyan módszerek és technológiák bemutatása, amelyekkel vakok és látássérültek számára kényelmesen használható, kiváló felhasználói élményt nyújtó játékot készítek. \\
+
+\noindent\textbf{A megoldási mód:} \\
+\noindent Az alkalmazás célja, hogy a felhasználók billentyűzet és egér nélkül, akusztikus módszerekkel irányíthassák a játékot, mivel nem támaszkodhatnak a látásukra. Ehhez a Web Speech API beszédfelismerő és beszédszintetizáló funkcióit használtam, melyeket a program egyes részein felüldefiniáltam. \\
+
+\noindent\textbf{Alkalmazott eszközök, módszerek:} \\
+\noindent A demonstrációs projekt a legújabb Angular keretrendszerrel készült. Létrehoztam egy Firebase projektet, amelyben Firestore-t használtam a játék eredményeihez, Storage-t a kártyák képeinek tárolására, és Hostingot a program kitelepítéséhez. A beszédfelismerést és szintetizációt a Web Speech API két interfészével valósítottam meg. \\
+
+\noindent\textbf{Elért eredmények:} \\
+\noindent Létrehoztam egy webes memóriajátékot, amelyhez nem szükséges billentyűzet vagy egér, mert hangparancsokkal irányítható, és beszédszintetizációval ad visszajelzést. Az egér mozgatásával az alkalmazás felolvassa a szövegeket és elemek nevét. A játék magyar vagy angol nyelven is játszható, testreszabható beállításokkal. Van egyszemélyes és kétszemélyes mód, az egyéni eredmények pedig ranglistára küldhetők. \\
+
+\noindent \textbf{Kulcsszavak:} \\
+\noindent beszédfelismerés, beszédszintetizáció, szövegfelolvasás, Web Speech API
+
+\tableofcontents
+
+\chapter*{Bevezetés}
+\addcontentsline{toc}{section}{Bevezetés}
+
+Vakok és látássérült emberek számára elérhető eszközök, játékok, könyvek vagy alkalmazások tervezése és készítése napjaink legnagyobb kihívása, viszont az egyik legszebb feladata. Fontos missziója a társadalmunknak ezen emberek integrálása, befogadása közösségünk közé. A testileg vagy szellemileg sérült emberek gyakran szembesülhetnek azzal, hogy a piacon található alkalmazások nem megfelelő számukra, emiatt kirekesztettnek érezhetik magukat, önbecsülésük csökken, szociális készségeik visszamaradottak. Középiskolában volt egy osztálytásam, aki egy ritka szembetegséggel született, ennek eredményéül maximum 10 százalékot látott a külvilágból. Nehezen nyitott mások felé, nehezen tudott tanulni, lassan írt kézzel viszont gépelni egyáltalán nem tudott.
+
+\noindent
+A technológia rohamszerű fejlődésének köszönhetően már számos olyan könyvtár elérhető, amit a legtöbb magaszsintű programozási nyelv is keretrendszer támogat. Az elmúlt évtizedben nagy hangsúlyt fektettek a fejlesztő cégek olyan szoftverek értékesítésébe, melyben különféle akadálymentesítést szolgáló funkciók elérhetőek, és a felhasználói élményt maximalizálták.
+
+\noindent
+Szakdolgozatom célja ezen technológiák, frontend fejlesztési alapelvek, módszerek ismertetése, összegyűjtése, melyekkel vakoknak, látássérültek és színvakoknak is egyaránt tudunk szoftvereket tervezni és fejleszteni. Példaprogramom egy olyan memóriajátékot mutat be, melyben nem szükséges a látásunkra hagyatkozni, illetve billentyűzetre és egérre sem lesz feltétlen szükség, hanem akusztikus módszerekkel tudjuk kezelni az alkalmazást, mégpedig úgy, hogy az a felhasználó szóban kiadott parancsokkal tudja irányítani az egész programot, tehát a játék beszédfelismerésre képes, eközben szövegfelolvasással és beszédszintetizációval segít az oldalon való könnyeb tájékozódásban.
+
+\chapter{Terület áttekintése, jelenleg ismert technológiák}
+Már egyre több új szoftver, létező alkalmazásokban új funkciók elérhetőek a piacon, melyeket kimondottan vakoknak, látássérültek vagy színvakok számára fejlesztettek. Ezek közül bemutatom a legnépszerűbbeket.
+\section{Apple VoiceOver}
+A VoiceOver \cite{voiceover} egy fejlett képernyőfelolvasó funkció Mac Os X operációs rendszerekben, mely lehetővé teszi látássérült felhasználók számára, hogy könnyedén vezérelhessék telefonjukat, táblagépüket vagy számítógépüket billentyűzetparancsokkal \cite{keysforvoiceover} és gesztusokkal. \cite{usingvoiceover} A képernyő tartalmában szakaszosan tud lépegetni a felhasználó, miközben a készülék automatikusan felolvassa a képernyő tartalmát. Mac gépeken a Command-F5 billentyűkombinációval kapcsolható be, Iphone-okon és Ipad-eken a beállításokon belül a kisegítő lehetőségek menüpontban található, vagy Sirinek kiadott utasítással is bekapcsolható. A Braille kijelzők \cite{braille} és a Multi-Touch trackpad \cite{multitouch} megjenése óta már egyszerű kézi gesztusokkal is vezérelhető a felolvasás. \cite{usingvoiceover}
+
+\section{Intelligens személyi asszisztens}
+A VoiceOver-nél említett Siri \cite{siri}, Samsung eszközökön a Bixby \cite{bixby}, Amazon Alexa és Alice mind-mind olyan intelligens személyi asszisztens program okoseszközökön, mely nagy mértékben egyszerűsíti és gyorsítja eszközeink használatát. Elég egyetlen szóban kiadott utasítás és a program a felhasználó helyett elvégzi az eszközön a feladatot, például hívást indít, rákeres bármire a böngészőben, megnyitja a letöltött applikációkat. Ez a funkció rendkívül hasznos látássérülteknek, mivel egyáltalán nem kell a kezüket használni okostelefonjuk kezeléséhez.
+
+\section{SciFY}
+A SciFY (Science For You) \cite{scify} egy görög nemzetközi szervezet, mely ingyenes és nyílt forráskódú LEAP (Listen - LEArn - Play) játékokat fejleszt kifejezetten vakok és gyengénlátó gyermekek számára. A játékok célja, hogy segítsenek a gyerekeknek új készségek elsajátításában, miközben szórakoztatják őket. Hivatalos weboldalukon, az \cite{gamesforblind} oldalon különböző játékokat taláható, mint például a Tic Tac Toe, Tennis és Curve, amelyek különböző nehézségi szinteken játszhatók. Ezek a játékok háromdimenziós binaurális hanggal rendelkeznek, amelyeket a játékosok teljes mértékben kihasználhatnak. A weboldalon kívül a Memor-i Online platformon bármelyik felhasználó könnyedén létrehozhat saját, inkluzív memória játékot, amelyet akár vak, semleges vagy látó játékosok is játszhatnak. A platform célja, hogy lehetővé tegye a vak és látó gyermekek közötti együtt játszást, és segítse a gyerekek fejlődését
+
+\section{Chrome-ban támogatott bővítmények és csomagok}
+Felelehető egy kiváló leírás a Google Codelabs jóvoltából az \cite{a11y} oldalon, ahol pontokba szedve adnak tippeket, hogyan lehet egy Angular-ban írt felhasználó felület minél jobban akadálymentesített, mire figyeljen egy fejlesztő, mikor színvakoknak tervez alkalmazást. Egy egyszerű képernyőolvasó módszert is bemutat, melynek lényege, hogy a HTML elemeinket felcímkézzünk ARIA label-ekkel, ahol megadjuk, hogy a program mit olvasson fel, majd egy Chrome Web Store-ból letöltjük a megfelelő bővítményt \cite{chromevox}, amely felolvassa a label-ök tartalmát.
+
+\pagebreak
+Példa egy ARIA label-el felcímkézett Angular Material elemre:
+
+\begin{verbatim}
+    <mat-slider
+      aria-label="Dumpling order quantity slider"
+      id="quantity"
+      name="quantity"
+      color="primary"
+      class="quantity-slider"
+      [max]="13"
+      [min]="1"
+      [step]="1"
+      [tickInterval]="1"
+      thumbLabel
+      [(ngModel)]="quantity">
+    </mat-slider>
+\end{verbatim}
+\newline
+További akadálymenetsítést elősegítő bővítmények: Chrome Web Store-ban \cite{extensions}.
+
+\section{Referencia alkalmazások}
+Pédaprogramom fejlesztése előtt áttekintettem valamennyi nyilt forráskódú programokat, publikus github repositorykat \cite{web-speech-angular}\cite{pacman}\cite{audio-games}, melyek beszédfelismeréssel és beszédszintetizációval működnek. A kiválasztott technológia, amivel elkészítettem a játékot, a Web Speech API, mely egy követekző fejezetben bemutatásra kerül.
+
+\chapter{A program funkcionális specifikációi}
+\section{Funkcionális elvárások}
+A szakdolgozatomhoz elkészített szoftver egy olyan játékot mutat be, amely a Web Speech API SpeechRecognition és SpeechSynthesis részAPI-jait használja, tehát ismerje fel a felhasználó által adott verbális utasításokat, majd dolgozza fel őket a teljes weboldalon, emellett adjon rendszeres visszajelzést szóban a felhasználónak beszédszintézissel.
+\newline
+A weboldal megnyitásakor a felhasználó kiválaszthatja, hogy magyarul, vagy angol nyelven szeretné használni az alkalmazást, és a program eszerint le lesz fordítva.
+\newline
+A program egy egyszerű memóriajátékot mutat be, melyet egyedül és párban is lehet játszani. Egyszemélyes játékban pontokat lehet gyűjteni időre. Sikeres játék végén egy becenévvel felkerülhet a játékos egy globális ranglistára.
+\newline
+Elérhető egy beállítások menü, ahol a játékos személyre szabhatja a játék méretét, időtartamát, beállíthatja, hogy egyszemélyes vagy kétszemélyes játékkal szeretne játszani, illetve a program hangerejét és lejátszási sebességét is megváltoztathatja.
+\newline
+A játék mögött áll egy Firebase alkalmazás, mellyel eltároltam a kártyák képeit és a ranglista adatait, illetve kitelepítettem publikusan a Webre a Hosting szolgáltatással.
+\pagebreak
+\section{Képernyőtervek}
+\section{Use case diagram}
+\section{Szekvenciális diagram}
+\chapter{Használt technológia-A Web Speech API}
+\section{Gépi beszédfelismerés háttere}
+\section{A Web Speech API}
+A Web Speech API \cite{webspeechapi} egy böngésző alapú API, amely lehetővé teszi beszéd alapú alkalmazások létrehozását webfejlesztők számára. Ez az API különösen hasznos a látássérült felhasználók számára, vagy azoknak az alkalmazásoknak, amelyek interaktívabb élményt szeretnének nyújtani. Két fő eleme:
+\begin{itemize}
+    \item SpeechRecognition:
+    \begin{itemize}
+	   \item lehetővé teszi a weboldalak számára, hogy felismerjék és feldolgozzák a felhasználó beszédét. Ez hasznos lehet például hangalapú keresésekhez vagy hangvezérelt feladatokhoz.
+    \end{itemize}
+    \item SpeechSynthesis:
+    \begin{itemize}
+	   \item lehetővé teszi, hogy a program beszéljen egy adott nyelven. Például, ha egy weboldal szeretne szöveget felolvasni, a SpeechSynthesis segítségével ezt megteheti.
+    \end{itemize}
+\end{itemize}
+\newline
+Használata kizárólag JavaScript-ben biztosított, ezen két funkció a SpeechSynthesisUtterance és a SpeechRecognition objektumok használatával érhető el.\cite{usingwebspeechapi}
+\pagebreak
+
+\subsection{SpeechRecognition}
+A SpeechRecognition \cite{speechrecognition} API a Web Speech API része, amely segítségével webalkalmazások képesek felismerni és feldolgozni a felhasználók beszédét. Az API lehetővé teszi a beszédfelismerési folyamat indítását, amely során a mikrofonon keresztül érkező hangokat elemzi és szöveggé alakítja. Számos eseményt kínál, mint például onresult, onspeechstart, onspeechend, amelyekkel a fejlesztők különböző eseményeket kezelhetnek a felismerési folyamat során. Támogatja a folyamatos felismerést is, ahol a beszédfelismerés nem áll le az első mondat után, hanem folytatódik, amíg a felhasználó beszél.
+\newline
+Támogatottsága böngészőnként eltérő lehet, jelenleg Safari-ban még nem támogatott. Emellett bizonsági kockázatokkal is járhat a mikrofon engedélyezéze. Bármely program inicializálásakor a felhasználó dolga mikrofojának engedélyezése a böngészőnek, ennek hiányában nem fog működni a beszédfelismerés.
+\newline
+Példa kód:
+\begin{verbatim}
+var recognition =
+new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+recognition.lang = 'hu-HU'; recognition.continuous = true;
+recognition.interimResults = false;
+recognition.onresult = function(event) {
+    var transcript = event.results[0][0].transcript;
+    console.log(transcript);
+};
+recognition.start();
+\end{verbatim}
+
+\subsection{SpeechSynthesis}
+A SpeechSynthesis \cite{speechsynthesis} API a Web Speech API része, amely lehetővé teszi, hogy egy weboldal beszédfelismerést és beszédszintetizációt valósítson meg, ezzel akár saját képernyőfelolvasó funkciót is implementálhatunk. Az API szöveget alakít hanggá és lejátssza felhasználóknak. Személyre szabhatjuk a szintetizált beszéd tulajdonságait, mint nyelvét, a beszéd sebességét, hangmagasságát és hangerejét. A SpeechSynthesisUtterance objektum tartalmazza a szintetizált beszéd szövegét és beállításait és a SpeechSynthesis objektum vezérli a beszédszintetizálási szolgáltatást, például elindítja vagy leállítja a beszédet. Legfontosabb függvénye a speak(), mely két paramétert vár: a kimondandó szöveg és a nyelv.
+\pagebreak
+
+Példa kód:
+\begin{verbatim}
+    var msg = new SpeechSynthesisUtterance();
+    msg.text = "Heló Világ!";
+    //msg.lang = "hu-HU" // Nyelv
+    msg.volume = 1; // Hangerő
+    msg.rate = 1; // Lejátszási sebesség
+    msg.pitch = 1; // Hangmagasság
+    window.speechSynthesis.speak(msg, "hu-HU");
+\end{verbatim}
+\pagebreak
+\chapter{A program megvalósítása}
+\section{Adatmodellek}
+\section{Verziókövetés}
+\section{A játék grafikus interfészének elkészítése, jellemzői}
+\section{Beszédfelismerés implementálása}
+\section{Beszédszintetizáció impementálása}
+\section{Képernyőfelolvasás implementálása}
+\section{KAngol-és magyar nyelvre fordítás implementálása}
+\section{A játék logikájának implementálása}
+\section{Egyéb funkciók implementálása}
+
+\chapter{Az elkészült alkalmazás ismertetése}
+\section{A szoftver végleges specifikációi}
+\section{A szoftver hiányosságai, továbbfejlesztési lehetőségek}
+\section{Összefoglalás}
+
+\begin{thebibliography}{99}
+\addtocontents{toc}{\ }
+\addcontentsline{toc}{section}{Irodalomjegyzék}
+\fontsize{10pt}{12pt}\selectfont
+
+\bibitem{voiceover}
+Introducing VoiceOver
+
+\emph{https://www.apple.com/voiceover/info/guide/_1121.html}
+
+\bibitem{usingvoiceover}
+VoiceOver felhasználói útmutató
+
+\emph{https://support.apple.com/hu-hu/guide/iphone/iph3e2e415f/ios}
+
+\bibitem{keysforvoiceover}
+VoiceOver billentyűparancsok
+
+\emph{https://support.apple.com/hu-hu/guide/voiceover/cpvokys01/mac}
+
+\bibitem{braille}
+Braille Screen
+
+\emph{https://support.apple.com/en-us/101637}
+
+\bibitem{multitouch}
+Multi-Touch trackpad
+
+\emph{https://support.apple.com/hu-hu/102482}
+
+\bibitem{siri}
+Siri
+
+\emph{https://www.apple.com/siri/}
+
+\bibitem{bixby}
+Bixby
+
+\emph{https://www.samsung.com/hu/support/mobile-devices/hogyan-hasznalhatom-a-bixby-alkalmazast/}
+
+\bibitem{scify}
+SciFY
+
+\emph{https://scify.org/}
+
+\bibitem{gamesforblind}
+gamesfortheblind
+
+\emph{https://gamesfortheblind.org/}
+
+\bibitem{a11y}
+A11y
+
+\emph{https://codelabs.developers.google.com/angular-a11y#0}
+
+\bibitem{chromevox}
+ChromeVox
+
+\emph{https://chromewebstore.google.com/search/chromevox?hl=en-US&utm_source=ext_sidebar}
+
+\bibitem{extensions}
+További bővítmények
+
+\emph{https://chromewebstore.google.com/category/extensions/make_chrome_yours/accessibility}
+
+\bibitem{web-speech-angular}
+web-speech-angular
+
+\emph{https://github.com/luixaviles/web-speech-angular}
+
+\bibitem{pacman}
+Pacman
+
+\emph{https://github.com/chandradharrao/Voice-Controlled-Games-For-Persons-With-Disabilities}
+
+\bibitem{audio-games}
+Audio Games For Blind/Low Vision Gamers
+
+\emph{https://veroniiiica.com/audio-games-for-blind-low-vision-gamers/}
+
+\bibitem{webspeechapi}
+Web Speech API
+
+\emph{https://developer.mozilla.org/en-US/docs/Web/API/Web_Speech_API}
+
+\bibitem{usingwebspeechapi}
+Using the Web Speech API
+
+\emph{https://developer.mozilla.org/en-US/docs/Web/API/Web_Speech_API/Using_the_Web_Speech_API}
+
+\bibitem{speechrecognition}
+SpeechRecognition
+
+\emph{https://developer.mozilla.org/en-US/docs/Web/API/SpeechRecognition}
+
+\bibitem{speechsynthesis}
+SpeechSynthesis
+
+\emph{https://developer.mozilla.org/en-US/docs/Web/API/SpeechSynthesis}
+\end{thebibliography}
+
+\end{thebibliography}
+
+\chapter*{Nyilatkozat}
+\addcontentsline{toc}{section}{Nyilatkozat}
+
+\noindent
+Alulírott Kovács-Bodó Csenge gazdaságinformatikus BSc szakos hallgató, kijelentem, hogy a dolgozatomat a Szegedi Tudományegyetem, Informatikai Intézet Szoftverfejlesztés Tanszékén készítettem, gazdaságinformatikus BSc diploma megszerzése érdekében. \hfill \break
+
+\noindent
+Kijelentem, hogy a dolgozatot más szakon korábban nem védtem meg, saját munkám eredménye, és csak a hivatkozott forrásokat (szakirodalom, eszközök, stb.) használtam fel. \hfill \break
+
+\noindent
+Tudomásul veszem, hogy szakdolgozatomat a Szegedi Tudományegyetem Diplomamunka Repozitóriumában tárolja.
+
+\vspace*{2cm}
+
+
+\begin{tabular}{lc}
+Szeged, \today\
+\hspace{2cm} & \makebox[6cm]{\dotfill} \\
+& aláíras \\
+\end{tabular}
+
+
+\chapter*{Köszönetnyilvánítás}
+\addcontentsline{toc}{section}{Köszönetnyilvánítás}
+
+Ezúton szeretném kifejezni hálámat Dr. Jánki Zoltán Richárd témavezetőmnek, aki végig támogatta a dolgozat elkészítését. Különösen értékelem a türelmét és a segítőkész hozzáállását, amelyek nélkül nem érhettem volna el a kívánt eredményeket. \\
+
+\noindent
+Hálával tartozom azoknak az oktatóknak, tanároknak és szakembereknek, akik az egyetemi éveim során tanítottak és inspiráltak. Az általuk átadott tudás és tapasztalat nemcsak a szakdolgozatomban, hanem az életem minden területén értékes útmutatóként fog szolgálni. \\
+
+\noindent
+\end{document}
