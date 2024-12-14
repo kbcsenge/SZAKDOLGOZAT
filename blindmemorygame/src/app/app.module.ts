@@ -7,10 +7,10 @@ import { getStorage, provideStorage } from '@angular/fire/storage';
 import {AngularFireModule} from "@angular/fire/compat";
 import {environment} from "../environments/environment";
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
-import { BoardsizeComponent } from './settings/boardsize/boardsize.component';
+import { BoardSizeComponent } from './settings/boardsize/board-size.component';
 import { TimeComponent } from './settings/time/time.component';
-import { NumberofplayersComponent } from './settings/numberofplayers/numberofplayers.component';
-import { VolumeandspeedComponent } from './settings/volumeandspeed/volumeandspeed.component';
+import { NumberOfPlayersComponent } from './settings/numberofplayers/number-of-players.component';
+import { VolumeAndSpeedComponent } from './settings/volumeandspeed/volume-and-speed.component';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatSliderModule } from '@angular/material/slider';
 import {CommonModule} from "@angular/common";
@@ -24,23 +24,23 @@ import {MatSelectModule} from "@angular/material/select";
 import {MatListModule} from "@angular/material/list";
 import {MatSidenavModule} from "@angular/material/sidenav";
 import {MatDialogModule} from "@angular/material/dialog";
-import { SetlanguageComponent } from './setlanguage/setlanguage.component';
+import { SetLanguageComponent } from './setlanguage/set-language.component';
 import { HelperComponent } from './helper/helper.component';
-import { MultiplayerComponent } from './twoplayergame/multiplayer.component';
+import { MultiPlayerComponent } from './twoplayergame/multi-player.component';
 import {HttpClientModule} from "@angular/common/http";
-import { MultiplayersuccessComponent } from './twoplayergame/success/multiplayersuccess.component';
+import { MultiPlayerSuccessComponent } from './twoplayergame/success/multi-player-success.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    BoardsizeComponent,
+    BoardSizeComponent,
     TimeComponent,
-    NumberofplayersComponent,
-    VolumeandspeedComponent,
-    SetlanguageComponent,
+    NumberOfPlayersComponent,
+    VolumeAndSpeedComponent,
+    SetLanguageComponent,
     HelperComponent,
-    MultiplayerComponent,
-    MultiplayersuccessComponent
+    MultiPlayerComponent,
+    MultiPlayerSuccessComponent
   ],
   imports: [
     BrowserModule,

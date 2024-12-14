@@ -1,10 +1,10 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import {Router} from "@angular/router";
-import { BoardsizeComponent } from './boardsize/boardsize.component';
-import { NumberofplayersComponent } from './numberofplayers/numberofplayers.component';
+import { BoardSizeComponent } from './boardsize/board-size.component';
+import { NumberOfPlayersComponent } from './numberofplayers/number-of-players.component';
 import { TimeComponent } from './time/time.component';
-import { VolumeandspeedComponent } from './volumeandspeed/volumeandspeed.component';
+import { VolumeAndSpeedComponent } from './volumeandspeed/volume-and-speed.component';
 import {map, tap} from "rxjs/operators";
 import {merge, Observable} from "rxjs";
 import {SpeechEvent} from "../model/speech-event";
@@ -73,7 +73,7 @@ export class SettingsComponent implements OnInit, OnDestroy{
   }
 
   vandsDialog(): void{
-    const dialogRef = this.dialog.open(VolumeandspeedComponent);
+    const dialogRef = this.dialog.open(VolumeAndSpeedComponent);
 
     dialogRef.afterClosed().subscribe(result => {
       this.speechSynthesizer.speak(
@@ -83,7 +83,7 @@ export class SettingsComponent implements OnInit, OnDestroy{
     });
   }
   nofpDialog(): void{
-    const dialogRef = this.dialog.open(NumberofplayersComponent);
+    const dialogRef = this.dialog.open(NumberOfPlayersComponent);
     dialogRef.afterClosed().subscribe(result => {
       this.speechSynthesizer.speak(
         this.spokenText.numberofplayerssaved, this.currentLanguage
@@ -93,7 +93,7 @@ export class SettingsComponent implements OnInit, OnDestroy{
   }
 
   boardsizeDialog(): void{
-    const dialogRef = this.dialog.open(BoardsizeComponent);
+    const dialogRef = this.dialog.open(BoardSizeComponent);
     dialogRef.afterClosed().subscribe(result => {
       this.speechSynthesizer.speak(
         this.spokenText.gameboardsizesaved, this.currentLanguage

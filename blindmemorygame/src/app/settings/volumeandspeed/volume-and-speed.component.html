@@ -1,0 +1,19 @@
+<div class="alertwindow">
+  <p (mouseenter)="this.voiceoverService.readingText($event)" (mouseleave)="this.speechSynthesizer.stop()">{{ loadedText.vandps}}</p>
+  <div class="bettersytle">
+    <div style="display: flex; align-items: center; margin-bottom: 10px;">
+      <label (mouseenter)="this.voiceoverService.readingText($event)" (mouseleave)="this.speechSynthesizer.stop()" style="width: 200px;">{{ loadedText.volume}}</label>
+      <mat-slider (change)="checkVolume()" showTickMarks discrete [displayWith]="formatLabel" min="0" max="1" step="0.1" style="flex-grow: 1; margin-left: 20px;">
+        <input (mouseenter)="this.speechSynthesizer.speak(volumeInput.value, this.currentLanguage)" (mouseleave)="this.speechSynthesizer.stop()" #volumeInput matSliderThumb [value]="this.speechSynthesizer.getVolume()" />
+      </mat-slider>
+    </div>
+    <div style="display: flex; align-items: center; margin-bottom: 10px;">
+      <label (mouseenter)="this.voiceoverService.readingText($event)" (mouseleave)="this.speechSynthesizer.stop()" style="width: 200px;">{{ loadedText.playbackspeed}}</label>
+      <mat-slider (change)="checkRate()" showTickMarks discrete [displayWith]="formatLabel" min="0.25" max="5" step="0.25" style="flex-grow: 1; margin-left: 20px;">
+        <input (mouseenter)="this.speechSynthesizer.speak(rateInput.value, this.currentLanguage)" (mouseleave)="this.speechSynthesizer.stop()" #rateInput matSliderThumb [value]="this.speechSynthesizer.getRate()"/>
+      </mat-slider>
+    </div>
+  </div>
+  <br>
+  <button (mouseenter)="this.voiceoverService.readingText($event)" (mouseleave)="this.speechSynthesizer.stop()" (click)="submit()">{{ loadedText.save}}</button>
+</div>

@@ -1,0 +1,22 @@
+<div style="display: flex">
+  <img style="height: 150px; width: auto"src="./assets/icon.png" alt="icon" (mouseenter)="this.speechSynthesizer.speak(this.spokenText.mainpage, this.currentLanguage)" (mouseleave)="this.speechSynthesizer.stop()" (click)="gotohome()">
+  <h1 (mouseenter)="this.voiceoverService.readingText($event)" (mouseleave)="this.speechSynthesizer.stop()" class="title">{{showsize}} {{ loadedText.playingfield }}</h1>
+</div>
+<div class="game">
+  <table>
+    <tr *ngFor="let row of rows; let i = index">
+      <ng-container *ngFor="let card of row; let j = index">
+        <td class="card">
+          <img [src]="flipped[i][j] ? card : flipping" (click)="selectCard(i, j)">
+        </td>
+      </ng-container>
+    </tr>
+  </table>
+</div>
+<div class="regex">
+  <h1 (mouseenter)="this.voiceoverService.readingText($event)" (mouseleave)="this.speechSynthesizer.stop()">{{ loadedText.Apairs }} {{Amatches}}</h1>
+  <br>
+  <br>
+  <h1 (mouseenter)="this.voiceoverService.readingText($event)" (mouseleave)="this.speechSynthesizer.stop()">{{ loadedText.Bpairs }} {{Bmatches}}</h1>
+</div>
+
