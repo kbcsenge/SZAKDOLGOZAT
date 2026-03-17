@@ -1,0 +1,14 @@
+{
+  "targets": {
+    "blindmemorygame-b8efa": {
+      "hosting": {
+        "blindmemorygame": [
+          "blindmemorygame-web-app"
+        ]
+      }
+    }
+  },
+  "projects": {
+    "default": "blindmemorygame-b8efa"
+  }
+}

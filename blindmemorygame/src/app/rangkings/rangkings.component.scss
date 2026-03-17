@@ -1,0 +1,74 @@
+.list {
+  border: rgb(255, 255, 255) 15px solid;
+  border-radius: 20px;
+  background: rgba(21, 62, 110);
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  color: white;
+  font-size: 60px;
+  padding: 0px 60px 30px 60px;
+}
+
+th {
+  padding-left: 40px;
+  padding-right: 40px;
+  width: 20%;
+  border-bottom: rgb(255, 255, 255) 10px solid;
+}
+
+.table-container {
+  position: relative;
+  width: 100%;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+thead {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+td {
+  padding-left: 50px;
+  padding-right: 40px;
+  width: 20%;
+  font-size: 50px;
+}
+
+.table-body-container {
+  max-height: 300px;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.table-body-container::-webkit-scrollbar {
+  width: 12px;
+}
+
+.table-body-container::-webkit-scrollbar-thumb {
+  background-color: white;
+  border-radius: 20px;
+}
+
+.table-body-container::-webkit-scrollbar-track {
+  background-color: rgba(255, 255, 255, 0.1);
+  border: rgba(255, 255, 255, 0.75) 3px solid;
+}
+
+.table-body-container table {
+  width: calc(100% - 15px);
+}
+
+.table-body-container tbody tr {
+  display: table;
+  width: 100%;
+  table-layout: fixed;
+}
+

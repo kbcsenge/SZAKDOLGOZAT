@@ -1,0 +1,5 @@
+<div class="alertwindow">
+  <p (mouseenter)="this.voiceoverService.readingText($event)" (mouseleave)="this.speechSynthesizer.stop()" >{{data.successText}}</p>
+  <button (mouseenter)="this.voiceoverService.readingText($event)" (mouseleave)="this.speechSynthesizer.stop()" (click)="retrygame()">{{ loadedText.retry }}</button>
+  <button (mouseenter)="this.voiceoverService.readingText($event)" (mouseleave)="this.speechSynthesizer.stop()" (click)="gotohome()">{{ loadedText.backtomainpage }}</button>
+</div>
